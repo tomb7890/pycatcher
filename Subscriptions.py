@@ -1,16 +1,29 @@
 import os
 
 class Subscription:
-    def __init__(self):
+    def __init__(self, s):
         self.xmlfile = None
-        self.dir = None
         self.url = None
         self.maxeps = None
+        self.dir = None
+        self.subscriptions = s 
 
 class Subscriptions: 
     def __init__(self, b=None):
-        # open an ini file and parse into lines 
+        """A subscriptions file ("podcasts.ini") is a user defined file,
+        it allows the specification of the podcast programs to be downloaded. 
 
+        It contains a number of lines, each of which represent a
+        podcast subscription. A given subscription line has a number
+        of fields, separated by commas.
+
+        The first field is the filename of a program's downloaded RSS
+        (XML) file to be parsed. The second field is the URL for updates. 
+        The third is an integer that stores how many episodes of a given program
+        to keep at a time.
+
+        """
+        # open an ini file and parse into lines 
         self.basedir=b
         f = open(os.path.join(self.basedir, 'podcasts.ini'), 'r')
         data = f.read()
@@ -21,32 +34,35 @@ class Subscriptions:
         self.doomed = []
 
         for l in self.lines:
-            dir = ''
-            chunks = l.split(',')
-            if ( len( chunks ) > 1 ):
-                x = ''
-                d = ''
-                k = 3
-                url = ''
+            fields = l.split(',')
+            if ( len( fields ) > 1 ):
+                pc = self.parse_line(fields)
+                if pc != None:
+                    self.items.append( pc )
 
-                xmlfile = chunks[0].strip()
-                if xmlfile.startswith("#"):
-                    continue
-                if xmlfile.endswith(".xml"):
-                    d = xmlfile[:-4]
+    def parse_line(self, fields):
+        dir = ''
+        maxeps = 3
+        url = ''
 
-                url = chunks[1].strip()
+        xmlfile = fields[0].strip()
+        if xmlfile.startswith("#"):
+            return None
+        if xmlfile.endswith(".xml"):
+            dir = xmlfile[:-4]
 
-                if ( len ( chunks ) > 2 ):
-                    n = chunks[2].strip()
-                    k = n
+        url = fields[1].strip()
 
-                pc = Subscription()
-                pc.dir = d 
-                pc.xmlfile = xmlfile
-                pc.maxeps = int(k)
-                pc.url = url
-                self.items.append( pc )
+        if ( len ( fields ) > 2 ):
+            n = fields[2].strip()
+            maxeps = n
+
+        pc = Subscription(self)
+        pc.dir = dir
+        pc.xmlfile = xmlfile
+        pc.maxeps = int(maxeps)
+        pc.url = url
+        return pc
 
     
     def numtokeep( self, program ):
