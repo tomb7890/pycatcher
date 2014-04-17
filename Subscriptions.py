@@ -27,9 +27,16 @@ class Subscriptions:
         self.doomed = []
         self.basedir=b
 
-        self.parse_file()
+        self._parse_file()
 
-    def parse_file (self ):
+    def find(self,substr):
+        for i in self.items:
+            if substr in i.dir:
+                print i.dir 
+                return i
+        return None
+
+    def _parse_file (self ):
         """ Parse a podcasts.ini file into lines """
         try:
             f = open(os.path.join(self.basedir, 'podcasts.ini'), 'r')
@@ -41,11 +48,11 @@ class Subscriptions:
         for l in self.lines:
             fields = l.split(',')
             if ( len( fields ) > 1 ):
-                pc = self.parse_line(fields)
+                pc = self._parse_line(fields)
                 if pc != None:
                     self.items.append( pc )
 
-    def parse_line(self, fields):
+    def _parse_line(self, fields):
         """ parse_line decodes a filename, a subscription url, and a maximum number of episodes """
         xmlfile = fields[0].strip()
         if xmlfile.startswith("#"):
