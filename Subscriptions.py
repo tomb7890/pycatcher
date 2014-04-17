@@ -64,33 +64,5 @@ class Subscriptions:
         pc.maxeps = int(maxeps)
         return pc
 
-    def numtokeep( self, program ):
-        for pc in self.items:
-            if pc.dir == program:
-                return pc.maxeps
-        return None
-
-    def prunedir( self, d, maxeps ):
-        bdir = os.path.join(self.basedir, d )
-        mask = os.path.join( bdir, '*.*' )
-        l = [(os.stat(i).st_mtime, i) for i in glob.glob(mask)]
-        l.sort()
-        files = [i[1] for i in l]
-
-        # files =  glob.glob("/tmp/*lash*")
-        # video = files[ len( files ) - 1 ]
-        # ommandline = video + ' ' + commandline
-
-        # print "of full list \n" + '\n'.join( files ) 
-        # print "deleteing all but three will leave \n" + '\n'.join( files[-3:] )
-
-        nmaxeps = - int( maxeps )
-        for f in files[:nmaxeps]:
-            self.doomed.append( f )
-
-    def prunestuff(self):
-        # also clean up wnur/thisishell, even though its not in podcasts.ini
-        # TODO: FIX This-> self.dirs.append('wnur') <- no longer fits
-
-        for p in self.items:
-            self.prunedir( p.dir, p.maxeps )
+if __name__ == '__main__':
+    pass
