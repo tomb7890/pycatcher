@@ -10,7 +10,7 @@ class Episode:
         self.description = ""
 
     def localfile( self ): # episode, subscription ):
-        filename = self.filename_from_url()
+        filename = self._filename_from_url()
         subdir = os.path.join( self.subscription.subscriptions.basedir, self.subscription.dir )
         absfile = os.path.join( self.subscription.dir, filename )
         filename = self._clean_up_filename( absfile )
