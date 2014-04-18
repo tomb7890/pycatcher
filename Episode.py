@@ -1,5 +1,10 @@
 import os, re, string
 
+def sort_rev_chron(episodes):
+    """ Reverse chronological sorting is something we want to ensure 
+    most recent things appear at the top"""
+    episodes.sort(key = lambda x: x.mktime, reverse=True )
+
 class Episode:
     def __init__(self, s):
         self.subscription = s
@@ -9,26 +14,34 @@ class Episode:
         self.mktime = None
         self.description = ""
 
-    def localfile( self ): # episode, subscription ):
+    def localfile(self): 
+        ''' Provide a standard local filename for the downloaded media. It is 
+        taken by removing the last component of the enclosure url from an rss file. '''
         filename = self._filename_from_url()
-        subdir = os.path.join( self.subscription.subscriptions.basedir, self.subscription.dir )
         absfile = os.path.join( self.subscription.dir, filename )
         filename = self._clean_up_filename( absfile )
         filename = filename.replace("%20",  " ")
         return filename
 
-    def locallink( self, linkdir  ):
-        src = self.localfile( )
+    def locallink(self, linkdir):
+        '''Provide a standard local filename for the symbolic link to be made
+        to the local media file.  The link name is created using the
+        filesystem-safe characters from the episodes's RSS title
+        attribute; the link's extension is taken from the pointed-to
+        filename, so as to preserve the media type.
 
+        '''
+        prettyname = self.title + self._file_extension()
+        validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+        prettyname = ''.join(c for c in prettyname if c in validchars)
+        filename = os.path.join( linkdir, prettyname )
+        return filename 
+
+    def _file_extension(self):
+        src = self.localfile( )
         thedot = src.rfind(".")
         extension = src[thedot:]
-        prettyname = self.title + extension 
-
-        valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-        prettyname = ''.join(c for c in prettyname if c in valid_chars)
-        dest = os.path.join( linkdir, prettyname )
-        # print "Prettyname is : [%s] " % prettyname
-        return dest
+        return extension
 
     def _filename_from_url(self): # , url ):
         lastslash = self.url.rfind("/") + 1 
