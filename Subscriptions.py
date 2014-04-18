@@ -1,4 +1,7 @@
-import os
+import xml.dom.minidom, os, re, time
+from Episode import Episode
+
+from wget import Wget
 
 class Subscription:
     def __init__(self, s):
@@ -7,10 +10,130 @@ class Subscription:
         self.url = None
         self.maxeps = None
         self.dir = None
+        
+    def get_rss_file( self, localrss ):
+        xmldir = os.path.join(self.subscriptions.basedir, "xml")
+        filename = os.path.join(xmldir, self.xmlfile)
+        if os.path.exists(filename) and True == localrss:
+            return filename
+        wget = Wget()
+        wget.addoption('--output-document', filename)
+        # wget.addoption('--content-disposition', '1')
+        wget.url = self.url
+        wget.execute()
+        return filename
+
+    def use_minidom_to_parse_the_rss_file( self, filename  ):
+        # print " use_minidom_to_parse_the_rss_file: " + filename
+        # turn minidom object into list of url/timestamp pairs 
+        doc = self.minidom_parse( filename )
+        if None == doc:
+            return None, None
+        episodes = self.process_dom_object( doc, filename  )
+        # sort by the mktime attribute; reverse makes most recents at the top
+        # episodes.sort(key=lambda x:x[0], reverse=True )
+        episodes.sort(key = lambda x: x.mktime, reverse=True )
+        neweps = episodes[:self.maxeps]
+        oldeps = episodes[self.maxeps:]
+        return neweps, oldeps
+
+    def minidom_parse( self, filename ):
+        # blank lines causes heartburn for omebody 
+        self._remove_blank_from_head_of_rss_file( filename )
+        doc = None
+        # minidom parse an rss file 
+        f = open( filename, 'r' )
+        try:
+            doc = xml.dom.minidom.parse( f )
+        except xml.parsers.expat.ExpatError, e:
+            vprint( "%s: %s" % ( filename, e ))
+        return doc
+
+    def _remove_blank_from_head_of_rss_file( self, xfile ):
+        # for some reason the toronto vegetarian association 
+        # publishes an rss file with blank first line. This 
+        # otherwise good xmlfile wreaks havoc on minidom parsing
+        if self._blank_at_head( xfile ):
+            lines = linesfromfile( xfile )
+            f = open( xfile, 'w')
+            lines2 = '\n'.join( lines[1:] )
+            f.write( lines2 )
+            f.close()
+
+    def _blank_at_head( self, xfile ):
+        lines = self._linesfromfile( xfile )
+        if '' == lines[0]:
+            return True
+        return False
+
+    def _linesfromfile( self, xfile ):
+        f = open( xfile, 'r' )
+        d = f.read()
+        lines = d.split('\n')
+        return lines
+
+    def process_dom_object( self, doc, filename  ):
+        episodes = []
+
+        items = doc.getElementsByTagName("channel")
+        if None != items:
+            for i in items:
+                for n in i.childNodes:
+                    if n.nodeName == "title":
+                        self.title = n.firstChild.nodeValue
+
+        items = doc.getElementsByTagName("item")
+        for i in items:
+            episode = Episode(self)
+            for n in i.childNodes:
+                if n.nodeName == "title":
+                    if None != n.firstChild:
+                        episode.title = n.firstChild.nodeValue
+
+                if n.nodeName == "description":
+                    if None != n.firstChild:
+                        episode.description = n.firstChild.nodeValue
+
+                if n.nodeName == "pubDate":
+                    try:
+                        fmtstring = r'%a, %d %b %Y %H:%M:%S'
+                        timestamp = n.firstChild.nodeValue
+                        trimmed = trim_tzinfo( timestamp )
+                        pd = time.strptime(trimmed, fmtstring )
+                        episode.mktime = time.mktime(pd) # seconds since the epoch 
+                        episode.pubDate = timestamp
+                    except ValueError, e:
+                        if debug and verbose:
+                            print "pubdate parsing failed: %s using data %s from %s" % \
+                                ( e, timestamp, filename )
+                if n.nodeName == "enclosure":
+                    uattr = n.getAttribute("url")
+                    episode.url = uattr
+
+            if episode.pubDate and episode.url and episode.title:
+                episodes.append(episode)
+
+        return episodes
+
+def trim_tzinfo(t):
+    # [Sat, 29 Apr 2006 20:38:00]
+    # [Sat, 27 Feb 2010 06:00:00 EST]
+    # [Fri, 13 June 2008 22:00:00]
+    timezoneinfo = [ r'\s[+-]\d\d\d\d$', 
+                     r'\sGMT$',
+                     r'\sEDT$',
+                     r'\sCST$',
+                     r'\sPST$',
+                     r'\sEST$' 
+                 ]
+
+    for j in timezoneinfo:
+        t = re.sub(j, '', t )
+    return t
 
 class Subscriptions: 
     def __init__(self, b=None):
-        """A subscriptions file ("podcasts.ini") is a user defined file,
+        """A subscriptions file (podcasts.ini) is a user defined file,
         it allows the specification of the podcast programs to be downloaded. 
 
         Each line in the file describes a podcast subscription. Each line
@@ -22,11 +145,9 @@ class Subscriptions:
         to keep at a time.
 
         """
-
         self.items = []
         self.doomed = []
         self.basedir=b
-
         self._parse_file()
 
     def find(self,substr):
