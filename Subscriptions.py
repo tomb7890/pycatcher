@@ -174,23 +174,28 @@ class Subscriptions:
                     self.items.append( pc )
 
     def _parse_line(self, fields):
-        """ parse_line decodes a filename, a subscription url, and a maximum number of episodes """
+        """ 
+        Decode a filename, a podcast subscription url, and a maximum number of episodes
+        to keep in the local library. 
+        """
         xmlfile = fields[0].strip()
         if xmlfile.startswith("#"):
             return None
         if xmlfile.endswith(".xml"):
             dir = xmlfile[:-4]
         url = fields[1].strip()
+
         maxeps=3 # default to 3 
-        if ( len ( fields ) > 2 ):
+        if len(fields) > 2:
             n = fields[2].strip()
             maxeps = n
-        pc = Subscription(self)
-        pc.xmlfile = xmlfile
-        pc.url = url
-        pc.dir = dir
-        pc.maxeps = int(maxeps)
-        return pc
+
+        sub = Subscription(self)
+        sub.xmlfile = xmlfile
+        sub.url = url
+        sub.dir = dir
+        sub.maxeps = int(maxeps)
+        return sub
 
 if __name__ == '__main__':
     pass
