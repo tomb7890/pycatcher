@@ -23,7 +23,7 @@ class Episode:
         filename = filename.replace("%20",  " ")
         return filename
 
-    def locallink(self, linkdir):
+    def locallink(self):
         '''Provide a standard local filename for the symbolic link to be made
         to the local media file.  The link name is created using the
         filesystem-safe characters from the episodes's RSS title
@@ -34,8 +34,18 @@ class Episode:
         prettyname = self.title + self._file_extension()
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         prettyname = ''.join(c for c in prettyname if c in validchars)
-        filename = os.path.join( linkdir, prettyname )
+        filename = os.path.join( self.subscription.linkdir(), prettyname )
         return filename 
+
+    def prune_file(self): 
+        filename = self.localfile() 
+        if os.path.exists( filename ):
+            os.unlink( filename )
+
+    def prune_link(self):
+        link = self.locallink() 
+        if os.path.exists( link ):
+            os.unlink( link )
 
     def _file_extension(self):
         src = self.localfile( )
