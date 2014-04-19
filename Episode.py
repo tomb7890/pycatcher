@@ -1,8 +1,10 @@
 import os, re, string
 
 def sort_rev_chron(episodes):
-    """ Reverse chronological sorting is something we want to ensure 
-    most recent things appear at the top"""
+    """ 
+    Reverse chronological sorting is something we want to ensure 
+    most recent things appear at the top.
+    """
     episodes.sort(key = lambda x: x.mktime, reverse=True )
 
 class Episode:
@@ -15,8 +17,10 @@ class Episode:
         self.description = ""
 
     def localfile(self): 
-        ''' Provide a standard local filename for the downloaded media. It is 
-        taken by removing the last component of the enclosure url from an rss file. '''
+        ''' 
+        Provide a standard local filename for the downloaded media. It is 
+        taken by removing the last component of the enclosure url from an rss file. 
+        '''
         filename = self._filename_from_url()
         absfile = os.path.join( self.subscription.dir, filename )
         filename = self._clean_up_filename( absfile )
@@ -24,12 +28,12 @@ class Episode:
         return filename
 
     def locallink(self):
-        '''Provide a standard local filename for the symbolic link to be made
+        '''
+        Provide a standard local filename for the symbolic link to be made
         to the local media file.  The link name is created using the
         filesystem-safe characters from the episodes's RSS title
         attribute; the link's extension is taken from the pointed-to
         filename, so as to preserve the media type.
-
         '''
         prettyname = self.title + self._file_extension()
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
