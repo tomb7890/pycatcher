@@ -1,4 +1,5 @@
 import xml.dom.minidom, os, re, time
+from ConfigParser import ConfigParser
 from Episode import Episode
 
 from wget import Wget
@@ -10,7 +11,7 @@ class Subscription:
         self.url = None
         self.maxeps = None
         self.dir = None
-        
+
     def get_rss_file( self, localrss ):
         xmldir = os.path.join(self.subscriptions.basedir, "xml")
         filename = os.path.join(xmldir, self.xmlfile)
@@ -150,6 +151,12 @@ class Subscriptions:
         self.basedir=b
         self._parse_file()
 
+
+    def podcastsdir(self):
+        cf = ConfigParser() 
+        cf.read(self._get_ini_file_name())
+        return cf.get('general', 'podcast-directory', 0) 
+
     def find(self,substr):
         for i in self.items:
             if substr in i.dir:
@@ -157,10 +164,19 @@ class Subscriptions:
                 return i
         return None
 
+    def _get_ini_file_name(self):
+        fullpath= os.path.join(self.basedir, 'podcasts.ini')
+        return fullpath
+
+    def _get_subs_file_name(self):
+        fullpath= os.path.join(self.basedir, 'subscriptions.ini')
+        return fullpath
+
     def _parse_file (self ):
         """ Parse a podcasts.ini file into lines """
+        f = None
         try:
-            f = open(os.path.join(self.basedir, 'podcasts.ini'), 'r')
+            f = open( self._get_subs_file_name(), 'r' )
         except IOError, err:
             # print "can't find subscriptions file"
             raise err

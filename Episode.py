@@ -34,7 +34,10 @@ class Episode:
         prettyname = self.title + self._file_extension()
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         prettyname = ''.join(c for c in prettyname if c in validchars)
-        filename = os.path.join( self.subscription.linkdir(), prettyname )
+
+        dir = self.subscription.subscriptions.podcastsdir() 
+        subdir = os.path.join(dir, self.subscription.subdir())
+        filename = os.path.join( subdir, prettyname )
         return filename 
 
     def prune_file(self): 
