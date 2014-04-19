@@ -36,7 +36,7 @@ class Episode:
         prettyname = ''.join(c for c in prettyname if c in validchars)
 
         dir = self.subscription.subscriptions.podcastsdir() 
-        subdir = os.path.join(dir, self.subscription.subdir())
+        subdir = os.path.join(dir, self.subscription.dir )
         filename = os.path.join( subdir, prettyname )
         return filename 
 

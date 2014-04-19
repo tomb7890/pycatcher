@@ -1,6 +1,6 @@
 import xml.dom.minidom, os, re, time
 from ConfigParser import ConfigParser
-from Episode import Episode
+from Episode import Episode, sort_rev_chron
 
 from wget import Wget
 
@@ -31,9 +31,7 @@ class Subscription:
         if None == doc:
             return None, None
         episodes = self.process_dom_object( doc, filename  )
-        # sort by the mktime attribute; reverse makes most recents at the top
-        # episodes.sort(key=lambda x:x[0], reverse=True )
-        episodes.sort(key = lambda x: x.mktime, reverse=True )
+        sort_rev_chron( episodes )
         neweps = episodes[:self.maxeps]
         oldeps = episodes[self.maxeps:]
         return neweps, oldeps
