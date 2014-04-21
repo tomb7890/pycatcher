@@ -1,8 +1,8 @@
 import xml.dom.minidom, os, re, time
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
+import Library
 
-from wget import Wget
 
 class Subscription:
     def __init__(self, s):
@@ -12,9 +12,13 @@ class Subscription:
         self.maxeps = None
         self.dir = None
 
-    def get_rss_file( self, localrss ):
+    def get_rss_path(self):
         xmldir = os.path.join(self.subscriptions.basedir, "xml")
         filename = os.path.join(xmldir, self.xmlfile)
+        return filename 
+
+    def get_rss_file( self, localrss ):
+        filename = self.get_rss_path()
         if os.path.exists(filename) and True == localrss:
             return filename
         wget = Wget()
@@ -45,7 +49,7 @@ class Subscription:
         try:
             doc = xml.dom.minidom.parse( f )
         except xml.parsers.expat.ExpatError, e:
-            vprint( "%s: %s" % ( filename, e ))
+            Library.vprint( "minidom parsing error in %s: %s" % ( filename, e ))
         return doc
 
     def _remove_blank_from_head_of_rss_file( self, xfile ):
@@ -150,10 +154,19 @@ class Subscriptions:
         self._parse_file()
 
 
-    def podcastsdir(self):
+    def datadir ( self ):
         cf = ConfigParser() 
         cf.read(self._get_ini_file_name())
-        return cf.get('general', 'podcast-directory', 0) 
+        dir = cf.get('general', 'data-directory', 0) 
+        return dir
+
+    def podcastsdir(self):
+        if not hasattr(self, '_podcastdir' ):
+            cf = ConfigParser() 
+            cf.read(self._get_ini_file_name())
+            self._podcastdir = cf.get('general', 'podcasts-directory', 0) 
+        return self._podcastdir
+
 
     def find(self,substr):
         for i in self.items:
