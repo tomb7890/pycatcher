@@ -17,19 +17,23 @@ class Episode:
         self.description = ""
 
     def localfile(self): 
-        ''' 
-        Provide a standard local filename for the downloaded media. It is 
-        taken by removing the last component of the enclosure url from an rss file. 
+        '''
+        Provide an absolute filename for the downloaded media. It is
+        taken by removing the last component of the enclosure url from
+        an rss file.
         '''
         filename = self._filename_from_url()
-        absfile = os.path.join( self.subscription.dir, filename )
+        subdir = os.path.join( 
+            self.subscription.subscriptions.datadir(), 
+            self.subscription.dir )
+        absfile = os.path.join( subdir, filename )
         filename = self._clean_up_filename( absfile )
         filename = filename.replace("%20",  " ")
         return filename
 
     def locallink(self):
         '''
-        Provide a standard local filename for the symbolic link to be made
+        Provide an absolute filename for the symbolic link to be made
         to the local media file.  The link name is created using the
         filesystem-safe characters from the episodes's RSS title
         attribute; the link's extension is taken from the pointed-to
@@ -74,10 +78,6 @@ class Episode:
         return xfile
 
 
-def link_creation_test( src, dst ):
-    if os.path.exists( src ) and not os.path.exists ( dst ):
-        return True
-    return False
 
 if __name__ == '__main__':
     pass
