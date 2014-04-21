@@ -28,18 +28,6 @@ class Subscription:
         wget.execute()
         return filename
 
-    def use_minidom_to_parse_the_rss_file( self, filename  ):
-        # print " use_minidom_to_parse_the_rss_file: " + filename
-        # turn minidom object into list of url/timestamp pairs 
-        doc = self.minidom_parse( filename )
-        if None == doc:
-            return None, None
-        episodes = self.process_dom_object( doc, filename  )
-        sort_rev_chron( episodes )
-        neweps = episodes[:self.maxeps]
-        oldeps = episodes[self.maxeps:]
-        return neweps, oldeps
-
     def minidom_parse( self, filename ):
         # blank lines causes heartburn for omebody 
         self._remove_blank_from_head_of_rss_file( filename )
