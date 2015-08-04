@@ -1,10 +1,8 @@
 import unittest, os, sys, re
 
-sys.path.append("/home/tomb/streamrip")
-
 from Subscriptions import Subscriptions
 import Command
-import Library 
+import Library
 import argparse
 class ApplicationTest (unittest.TestCase):
 
@@ -21,20 +19,18 @@ class ApplicationTest (unittest.TestCase):
         for s in subs.items:
             s.minidom_parse(s.get_rss_path())
 
-        # test something weird 
+        # test something weird
         f = open('/tmp/tmp123456789.txt', 'w')
         f.write('blah blah blah blah blah')
-        
         partial = open(s.get_rss_path(), 'r').read()
         f.write(partial)
         f.close()
 
-        # expected behavior; print out a message but don't 
-        # stop the application 
+        # expected behavior; print out a message but don't
+        # stop the application
         s.minidom_parse('/tmp/tmp123456789.txt')
 
     def test_create_links(self):
-
         subs = Subscriptions(self.standardpath)
         asub = subs.find("tvo_the_agenda")
         filename = asub.get_rss_file(  True )
@@ -46,8 +42,7 @@ class ApplicationTest (unittest.TestCase):
         Command.args = parser.parse_args(a)
 
         self.assertTrue('agenda' in filename)
-        self.assertEqual( asub.subscriptions.datadir(), '/home/tomb/streamrip')
-
+        self.assertEqual( asub.subscriptions.datadir(), os.path.expanduser('~/.podcasts-data'))
         asub.subscriptions._podcastdir = '/tmp/blahfoo'
         self.assertEqual('/tmp/blahfoo', asub.subscriptions.podcastsdir())
 
@@ -55,7 +50,7 @@ class ApplicationTest (unittest.TestCase):
         newfiles = open('/tmp/blahfoofiles', 'r').read()
 
         Library.create_links(eps, asub )
-        
+
         newfiles = newfiles.split("\n")
 
         for n in newfiles:
@@ -67,4 +62,3 @@ class ApplicationTest (unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
