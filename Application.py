@@ -11,7 +11,7 @@ def main():
     global args
     '''
     Entry point of application examines command arguments
-    and routes execution accordingly 
+    and routes execution accordingly
     '''
     # parser = Command.getparser()
     # args = parser.parse_args()
@@ -32,22 +32,22 @@ def get_all_ep(filename, sub):
 def vprint(msg):
     if Command.args:
         if Command.args.verbose:
-            print msg 
+            print msg
 
 def trim_junk_from_filename(filename, subscription):
     '''
     Rename file on disk from the actual file name (sometimes with a
-    query string appended by the file downloader) to the expected 
-    name taken from the url of the RSS enclosure. 
+    query string appended by the file downloader) to the expected
+    name taken from the url of the RSS enclosure.
     '''
-    fileptrn = filename + '?*' # extra junk 
+    fileptrn = filename + '?*' # extra junk
     g = glob.glob(fileptrn)
-    if len(g) > 0: 
+    if len(g) > 0:
         actual = g[0]
         # print "[%s], [%s] " % (actual, episode.localfile())
         if not os.path.exists(filename):
             os.rename(actual, filename)
-    
+
 def create_links( episodes, sub ):
     for e in episodes:
 
@@ -81,19 +81,21 @@ def dodownload(basedir):
                 continue
         filename = sub.get_rss_file(Command.args.localrss)
         episodes = get_all_ep(filename, sub)
-        Episode.sort_rev_chron(episodes)
-        saved = episodes[:sub.maxeps]
-        expired = episodes[sub.maxeps:]
-        if None == saved:
-            continue
-        Download.download_new_files(sub, saved, basedir)
-        create_links(saved, sub)
-        prunefiles(expired)
+
+        if episodes != None:
+            Episode.sort_rev_chron(episodes)
+            saved = episodes[:sub.maxeps]
+            expired = episodes[sub.maxeps:]
+            if None == saved:
+                continue
+            Download.download_new_files(sub, saved, basedir)
+            create_links(saved, sub)
+            prunefiles(expired)
 
 def appdir():
     path=os.path.dirname(os.path.realpath(__file__))
     return path
-    
+
 def doreport(basedir):
     '''
     Collect all episodes from all subscriptions and sort them
@@ -104,9 +106,10 @@ def doreport(basedir):
     for sub in subs.items:
         filename = sub.get_rss_file(True)
         episodes = get_all_ep(filename, sub)
-        for ep in episodes:
-            if os.path.exists(ep.localfile()):
-                alleps.append(ep)
+        if episodes != None:
+            for ep in episodes:
+                if os.path.exists(ep.localfile()):
+                    alleps.append(ep)
     Episode.sort_rev_chron(alleps)
 
 
@@ -144,5 +147,3 @@ def prunefiles(doomedeps):
 
 if __name__ == '__main__':
     main()
-
-
