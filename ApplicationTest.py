@@ -1,14 +1,21 @@
 import unittest, os, sys, re
 
 from Subscriptions import Subscriptions
-import Command
 import Library
+import Command
+from Application import get_all_ep
+# import Library
 import argparse
 class ApplicationTest (unittest.TestCase):
 
     def setUp(self):
         self.standardpath = os.environ['PODCASTROOT']
         pass
+
+    def test_dirs_exist(self):
+        subs = Subscriptions(self.standardpath)
+        asub = subs.find("tvo_the_agenda")
+        self.assertTrue( os.path.exists(asub.subscriptions.podcastsdir()))
 
     def test_minidom_parse(self):
         parser = Command.getparser()
@@ -17,6 +24,8 @@ class ApplicationTest (unittest.TestCase):
         Command.args = parser.parse_args(a)
         subs = Subscriptions(self.standardpath)
         for s in subs.items:
+            if not os.path.exists(s.get_rss_path()):
+                s.get_rss_file(False)
             s.minidom_parse(s.get_rss_path())
 
         # test something weird
@@ -34,7 +43,7 @@ class ApplicationTest (unittest.TestCase):
         subs = Subscriptions(self.standardpath)
         asub = subs.find("tvo_the_agenda")
         filename = asub.get_rss_file(  True )
-        eps = Library.get_all_ep(filename, asub)
+        eps = get_all_ep(filename, asub)
 
         parser = Command.getparser()
         argstring = "--debug --localrss"

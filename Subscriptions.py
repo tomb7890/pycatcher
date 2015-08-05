@@ -2,37 +2,44 @@ import xml.dom.minidom, os, re, time
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
 import Library
-
+from wget import Wget
 
 class Subscription:
     def __init__(self, s):
-        self.subscriptions = s 
+        self.subscriptions = s
         self.xmlfile = None
         self.url = None
         self.maxeps = None
         self.dir = None
 
-    def get_rss_path(self):
+    def get_xml_dir(self):
         xmldir = os.path.join(self.subscriptions.basedir, "xml")
-        filename = os.path.join(xmldir, self.xmlfile)
-        return filename 
+        return xmldir
+
+    def get_rss_path(self):
+        filename = os.path.join(self.get_xml_dir(), self.xmlfile)
+        return filename
 
     def get_rss_file( self, localrss ):
         filename = self.get_rss_path()
         if os.path.exists(filename) and True == localrss:
             return filename
+        if not os.path.exists(self.get_xml_dir()):
+            os.mkdir ( self.get_xml_dir() )
+
         wget = Wget()
         wget.addoption('--output-document', filename)
         # wget.addoption('--content-disposition', '1')
         wget.url = self.url
         wget.execute()
+        Library.vprint(">>>>>>>>>>>>>>>" + wget.getCmd())
         return filename
 
     def minidom_parse( self, filename ):
-        # blank lines causes heartburn for omebody 
+        # blank lines causes heartburn for omebody
         self._remove_blank_from_head_of_rss_file( filename )
         doc = None
-        # minidom parse an rss file 
+        # minidom parse an rss file
         f = open( filename, 'r' )
         try:
             doc = xml.dom.minidom.parse( f )
@@ -41,11 +48,11 @@ class Subscription:
         return doc
 
     def _remove_blank_from_head_of_rss_file( self, xfile ):
-        # for some reason the toronto vegetarian association 
-        # publishes an rss file with blank first line. This 
+        # for some reason the toronto vegetarian association
+        # publishes an rss file with blank first line. This
         # otherwise good xmlfile wreaks havoc on minidom parsing
         if self._blank_at_head( xfile ):
-            lines = linesfromfile( xfile )
+            lines = self._linesfromfile( xfile )
             f = open( xfile, 'w')
             lines2 = '\n'.join( lines[1:] )
             f.write( lines2 )
@@ -91,7 +98,7 @@ class Subscription:
                         timestamp = n.firstChild.nodeValue
                         trimmed = trim_tzinfo( timestamp )
                         pd = time.strptime(trimmed, fmtstring )
-                        episode.mktime = time.mktime(pd) # seconds since the epoch 
+                        episode.mktime = time.mktime(pd) # seconds since the epoch
                         episode.pubDate = timestamp
                     except ValueError, e:
                         if debug and verbose:
@@ -110,28 +117,28 @@ def trim_tzinfo(t):
     # [Sat, 29 Apr 2006 20:38:00]
     # [Sat, 27 Feb 2010 06:00:00 EST]
     # [Fri, 13 June 2008 22:00:00]
-    timezoneinfo = [ r'\s[+-]\d\d\d\d$', 
+    timezoneinfo = [ r'\s[+-]\d\d\d\d$',
                      r'\sGMT$',
                      r'\sEDT$',
                      r'\sCST$',
                      r'\sPST$',
-                     r'\sEST$' 
+                     r'\sEST$'
                  ]
 
     for j in timezoneinfo:
         t = re.sub(j, '', t )
     return t
 
-class Subscriptions: 
+class Subscriptions:
     def __init__(self, b=None):
         """A subscriptions file (podcasts.ini) is a user defined file,
-        it allows the specification of the podcast programs to be downloaded. 
+        it allows the specification of the podcast programs to be downloaded.
 
         Each line in the file describes a podcast subscription. Each line
-        is made up of fields separated by commas. 
+        is made up of fields separated by commas.
 
         The first field is the filename of a program's downloaded RSS
-        (XML) file to be parsed. The second field is the URL for updates. 
+        (XML) file to be parsed. The second field is the URL for updates.
         The third is an integer that stores how many episodes of a given program
         to keep at a time.
 
@@ -143,23 +150,23 @@ class Subscriptions:
 
 
     def datadir ( self ):
-        cf = ConfigParser() 
+        cf = ConfigParser()
         cf.read(self._get_ini_file_name())
-        dir = cf.get('general', 'data-directory', 0) 
+        dir = cf.get('general', 'data-directory', 0)
         return dir
 
     def podcastsdir(self):
         if not hasattr(self, '_podcastdir' ):
-            cf = ConfigParser() 
+            cf = ConfigParser()
             cf.read(self._get_ini_file_name())
-            self._podcastdir = cf.get('general', 'podcasts-directory', 0) 
+            self._podcastdir = cf.get('general', 'podcasts-directory', 0)
         return self._podcastdir
 
 
     def find(self,substr):
         for i in self.items:
             if substr in i.dir:
-                print i.dir 
+                print i.dir
                 return i
         return None
 
@@ -189,9 +196,9 @@ class Subscriptions:
                     self.items.append( pc )
 
     def _parse_line(self, fields):
-        """ 
+        """
         Decode a filename, a podcast subscription url, and a maximum number of episodes
-        to keep in the local library. 
+        to keep in the local library.
         """
         xmlfile = fields[0].strip()
         if xmlfile.startswith("#"):
@@ -200,7 +207,7 @@ class Subscriptions:
             dir = xmlfile[:-4]
         url = fields[1].strip()
 
-        maxeps=3 # default to 3 
+        maxeps=3 # default to 3
         if len(fields) > 2:
             n = fields[2].strip()
             maxeps = n

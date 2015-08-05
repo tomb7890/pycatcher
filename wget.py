@@ -1,10 +1,8 @@
 import os
 import sys
-
 import Library
 
-
-class Download:
+class Wget:
     def __init__(self):
         self.url = None
         self.cmd = 'wget'
@@ -54,7 +52,7 @@ class Download:
 
 
 def download_new_files(subscription, episodes, basedir):
-    wget = Download()
+    wget = Wget()
     inputfile = 'urls.dat'
     wget.addoption('--input-file', inputfile)
     # wget.addoption('--content-disposition', '1')
@@ -67,7 +65,15 @@ def download_new_files(subscription, episodes, basedir):
     # wget.addoption('--limit-rate', '110k')
     if os.path.exists(inputfile):
         os.unlink(inputfile)
-    dirx = os.path.join(basedir, subscription.dir)
+
+    if not os.path.exists(subscription.subscriptions.datadir()):
+        if not 'debug' in sys.argv:
+            os.mkdir(subscription.subscriptions.datadir())
+
+    dirx  = os.path.join(
+        subscription.subscriptions.datadir(),
+        subscription.dir )
+
     if not os.path.exists(dirx):
         if not 'debug' in sys.argv:
             os.mkdir(dirx)
@@ -88,6 +94,7 @@ def download_new_files(subscription, episodes, basedir):
     f.close()
     if dodownload:
         wget.execute()
+        Library.vprint(wget.getCmd())
     if os.path.exists(inputfile):
         os.unlink(inputfile)
 
