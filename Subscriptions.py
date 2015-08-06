@@ -20,9 +20,9 @@ class Subscription:
         filename = os.path.join(self.get_xml_dir(), self.xmlfile)
         return filename
 
-    def get_rss_file( self, localrss ):
+    def get_rss_file( self, use_local ):
         filename = self.get_rss_path()
-        if os.path.exists(filename) and True == localrss:
+        if os.path.exists(filename) and True == use_local:
             return filename
         if not os.path.exists(self.get_xml_dir()):
             os.mkdir ( self.get_xml_dir() )
@@ -32,7 +32,7 @@ class Subscription:
         # wget.addoption('--content-disposition', '1')
         wget.url = self.url
         wget.execute()
-        Library.vprint(">>>>>>>>>>>>>>>" + wget.getCmd())
+        Library.vprint(wget.getCmd())
         return filename
 
     def minidom_parse( self, filename ):
