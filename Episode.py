@@ -1,11 +1,17 @@
 import os, re, string
 
+
 def sort_rev_chron(episodes):
-    """ 
-    Reverse chronological sorting is something we want to ensure 
+
+    """
+    Reverse chronological sorting is something we want to ensure
     most recent things appear at the top.
     """
+
+    if episodes is None:
+        return None
     episodes.sort(key = lambda x: x.mktime, reverse=True )
+
 
 class Episode:
     def __init__(self, s):
