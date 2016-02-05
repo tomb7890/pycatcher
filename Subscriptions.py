@@ -41,10 +41,7 @@ class Subscription:
         doc = None
         # minidom parse an rss file
         f = open( filename, 'r' )
-        try:
-            doc = xml.dom.minidom.parse( f )
-        except xml.parsers.expat.ExpatError, e:
-            Library.vprint( "minidom parsing error in %s: %s" % ( filename, e ))
+        doc = xml.dom.minidom.parse( f )
         return doc
 
     def _remove_blank_from_head_of_rss_file( self, xfile ):
