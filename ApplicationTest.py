@@ -17,27 +17,29 @@ class ApplicationTest (unittest.TestCase):
         asub = subs.find("tvo_the_agenda")
         self.assertTrue( os.path.exists(asub.subscriptions.podcastsdir()))
 
-    def test_minidom_parse(self):
-        parser = Command.getparser()
-        argstring = "--verbose --debug --localrss --program=wbur"
-        a = argstring.split(" ")
-        Command.args = parser.parse_args(a)
-        subs = Subscriptions(self.standardpath)
-        for s in subs.items:
-            if not os.path.exists(s.get_rss_path()):
-                s.get_rss_file(False)
-            s.minidom_parse(s.get_rss_path())
+    def test_minidom_parse_success(self):
+        matchpattern = 'wbur'
+        basedir = self.standardpath
+        subs = get_list_of_subscriptions(basedir, matchpattern)
+        for s in subs:
+            try:
+                s.minidom_parse(s.get_rss_path())
+            except xml.parsers.expat.ExpatError:
+                self.assertFalse(True)
 
-        # test something weird
-        f = open('/tmp/tmp123456789.txt', 'w')
+    def test_minidom_parse_fail(self):
+        basedir = self.standardpath
+        s = get_list_of_subscriptions(basedir)[0]
+        temp = tempfile.mktemp()
+        f = open(temp, 'w')
         f.write('blah blah blah blah blah')
         partial = open(s.get_rss_path(), 'r').read()
         f.write(partial)
         f.close()
-
-        # expected behavior; print out a message but don't
-        # stop the application
-        s.minidom_parse('/tmp/tmp123456789.txt')
+        try:
+            s.minidom_parse(temp)
+        except xml.parsers.expat.ExpatError:
+            self.assertTrue(True)
 
     def test_create_links(self):
         subs = Subscriptions(self.standardpath)
