@@ -1,15 +1,19 @@
-import unittest, os, sys, re
+import os
+import tempfile
+import unittest
+import xml
 
-from Subscriptions import Subscriptions
-import Library
 import Command
-from Application import get_all_ep
-# import Library
-import argparse
-class ApplicationTest (unittest.TestCase):
+from Application import get_list_of_subscriptions, get_latest_episodes
+from Subscriptions import Subscriptions
+from Library import create_links
 
+class ApplicationTest (unittest.TestCase):
     def setUp(self):
-        self.standardpath = os.environ['PODCASTROOT']
+        if 'PODCASTROOT' in os.environ:
+            self.standardpath = os.environ['PODCASTROOT']
+        else:
+            self.standardpath = os.path.expanduser('~/podcasts')
         pass
 
     def test_dirs_exist(self):
