@@ -25,12 +25,6 @@ def main():
     else:
         dodownload(basedir)
 
-def get_all_ep(filename, sub):
-    doc = sub.minidom_parse( filename )
-    if None == doc:
-        return None
-    episodes = sub.process_dom_object( doc, filename  )
-    return episodes
 
 
 def dodownload(basedir):
@@ -95,12 +89,17 @@ def doreport(basedir):
     alleps = []
     subs = Subscriptions.Subscriptions(basedir)
     for sub in subs.items:
-        filename = sub.get_rss_file(True)
-        episodes = get_all_ep(filename, sub)
-        if episodes != None:
-            for ep in episodes:
-                if os.path.exists(ep.localfile()):
-                    alleps.append(ep)
+        try:
+            filename = sub.get_rss_file(True)
+            episodes = sub.get_all_ep(filename)
+            if episodes != None:
+                for ep in episodes:
+                    if os.path.exists(ep.localfile()):
+                        alleps.append(ep)
+        except xml.parsers.expat.ExpatError, e:
+            Library.vprint("minidom parsing error:"+repr(e) +
+                           'with subscription ' + repr(sub.get_rss_path()))
+
     Episode.sort_rev_chron(alleps)
 
 
