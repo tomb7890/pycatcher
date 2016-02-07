@@ -35,23 +35,51 @@ def dodownload(basedir):
     '''
     Download files
     '''
-    subs = Subscriptions.Subscriptions(basedir)
-    for sub in subs.items:
-        if Command.args and Command.args.program:
-            if -1 == sub.dir.find(Command.args.program):
-                continue
-        filename = sub.get_rss_file(Command.args.localrss)
-        episodes = get_all_ep(filename, sub)
+    for sub in get_list_of_subscriptions_production(basedir):
+        try:
+            episodes = get_sorted_list_of_episodes(sub, False)
+            new = episodes[:sub.maxeps]
+            old = episodes[sub.maxeps:]
+            get_new_episodes(sub, new, basedir)
+            release_old_episodes(old)
+        except xml.parsers.expat.ExpatError, e:
+            Library.vprint("minidom parsing error:"+repr(e) +
+                           'with subscription ' + repr(sub.get_rss_path()))
 
-        if episodes != None:
-            Episode.sort_rev_chron(episodes)
-            saved = episodes[:sub.maxeps]
-            expired = episodes[sub.maxeps:]
-            if None == saved:
-                continue
-            wget.download_new_files(sub, saved, basedir)
-            Library.create_links(saved, sub)
-            prunefiles(expired)
+
+def get_list_of_subscriptions_production(basedir):
+    matchpattern = Command.args.program
+    return get_list_of_subscriptions(basedir, matchpattern)
+
+
+def get_list_of_subscriptions(basedir, match=None):
+    subs = []
+    subs = Subscriptions.Subscriptions(basedir,  match)
+    return subs.items
+
+
+def release_old_episodes(expired):
+    prunefiles(expired)
+
+
+def get_sorted_list_of_episodes(sub, use_local):
+    episodes = sub.get_all_ep(use_local)
+    Episode.sort_rev_chron(episodes)
+    return episodes
+
+
+def get_latest_episodes(sub):
+    episodes = get_sorted_list_of_episodes(sub, True)
+    new = episodes[:sub.maxeps]
+    return new
+
+
+def get_new_episodes(sub, saved, basedir):
+    wget.download_new_files(sub, saved, basedir)
+    Library.create_links(saved, sub)
+
+
+
 
 def appdir():
     path=os.path.dirname(os.path.realpath(__file__))
