@@ -3,6 +3,7 @@ from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
 import Library
 from wget import Wget
+import Command
 
 class Subscription:
     def __init__(self, s):
@@ -22,7 +23,7 @@ class Subscription:
 
     def get_rss_file( self, use_local ):
         filename = self.get_rss_path()
-        if os.path.exists(filename) and True == use_local:
+        if os.path.exists(filename) and use_local:
             return filename
         if not os.path.exists(self.get_xml_dir()):
             os.mkdir ( self.get_xml_dir() )
@@ -34,6 +35,14 @@ class Subscription:
         wget.execute()
         Library.vprint(wget.getCmd())
         return filename
+
+    def get_all_ep(self, use_local = True):
+        filename = self.get_rss_file(use_local)
+        # get the xml Document from a filename
+        doc = self.minidom_parse(filename)
+        # make episode objects from a XML Doucment
+        episodes = self.process_dom_object( doc, filename  )
+        return episodes
 
     def minidom_parse( self, filename ):
         # blank lines causes heartburn for omebody
@@ -127,7 +136,7 @@ def trim_tzinfo(t):
     return t
 
 class Subscriptions:
-    def __init__(self, b=None):
+    def __init__(self, b=None, match=None):
         """A subscriptions file (podcasts.ini) is a user defined file,
         it allows the specification of the podcast programs to be downloaded.
 
@@ -143,14 +152,16 @@ class Subscriptions:
         self.items = []
         self.doomed = []
         self.basedir=b
-        self._parse_file()
+        self._parse_file(match)
 
 
     def datadir ( self ):
-        cf = ConfigParser()
-        cf.read(self._get_ini_file_name())
-        dir = cf.get('general', 'data-directory', 0)
-        return dir
+        if not hasattr(self, '_datadir'):
+            cf = ConfigParser()
+            cf.read(self._get_ini_file_name())
+            dir = cf.get('general', 'data-directory', 0)
+            self._datadir = dir
+        return self._datadir
 
     def podcastsdir(self):
         if not hasattr(self, '_podcastdir' ):
@@ -175,11 +186,11 @@ class Subscriptions:
         fullpath= os.path.join(self.basedir, 'subscriptions.ini')
         return fullpath
 
-    def _parse_file (self ):
+    def _parse_file(self, match):
         """ Parse a podcasts.ini file into lines """
         f = None
         try:
-            f = open( self._get_subs_file_name(), 'r' )
+            f = open(self._get_subs_file_name(), 'r' )
         except IOError, err:
             # print "can't find subscriptions file"
             raise err
@@ -187,15 +198,15 @@ class Subscriptions:
         self.lines = data.split('\n')
         for l in self.lines:
             fields = l.split(',')
-            if ( len( fields ) > 1 ):
-                pc = self._parse_line(fields)
+            if (len(fields) > 1 ):
+                pc = self._parse_line(fields, match)
                 if pc != None:
-                    self.items.append( pc )
+                    self.items.append(pc)
 
-    def _parse_line(self, fields):
+    def _parse_line(self, fields, match):
         """
         Decode a filename, a podcast subscription url, and a maximum number of episodes
-        to keep in the local library.
+        to keep in the local library. Takes an optional match string.
         """
         xmlfile = fields[0].strip()
         if xmlfile.startswith("#"):
@@ -214,6 +225,10 @@ class Subscriptions:
         sub.url = url
         sub.dir = dir
         sub.maxeps = int(maxeps)
+
+        if match != None:
+            if -1 == sub.dir.find(match):
+                return None
         return sub
 
 if __name__ == '__main__':
