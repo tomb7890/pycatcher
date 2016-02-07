@@ -1,12 +1,14 @@
-import argparse
-
+import xml
+import xml.parsers.expat
 import os
 import StringIO
+
 import Subscriptions
 import Episode
 import wget
 import Command
 import Library
+
 
 def main():
     global args
