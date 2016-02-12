@@ -51,10 +51,6 @@ class ApplicationTest (unittest.TestCase):
         filename = asub.get_rss_file(  True )
         eps = get_all_ep(filename, asub)
 
-        parser = Command.getparser()
-        argstring = "--debug --localrss"
-        a = argstring.split(" ")
-        Command.args = parser.parse_args(a)
 
         self.assertTrue('agenda' in filename)
         self.assertEqual( asub.subscriptions.datadir(), os.path.expanduser('~/.podcasts-data'))
