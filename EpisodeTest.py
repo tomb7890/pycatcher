@@ -2,11 +2,11 @@ import unittest, os
 from Episode import Episode
 from Subscriptions import Subscriptions
 
-from ApplicationTest import helper
+from ApplicationTest import init_config
 
 class EpisodeTest (unittest.TestCase):
     def setUp(self):
-        self.standardpath = helper()
+        self.standardpath = init_config()
 
     def test_episodes(self):
         pass
