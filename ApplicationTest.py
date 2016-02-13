@@ -21,6 +21,11 @@ class ApplicationTest (unittest.TestCase):
         asub = subs.find("tvo_the_agenda")
         self.assertTrue( os.path.exists(asub.subscriptions.podcastsdir()))
 
+    def test_doreport(self):
+        report = doreport(self.standardpath)
+        self.assertTrue(len(report) > 0)
+        self.assertTrue('<HTML>' in report)
+
     def test_minidom_parse_success(self):
         matchpattern = 'wbur'
         basedir = self.standardpath
