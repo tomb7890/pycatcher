@@ -21,7 +21,8 @@ def main():
     Command.init_args()
     basedir = os.environ['PODCASTROOT']
     if Command.args.report:
-        doreport(basedir)
+        report = doreport(basedir)
+        write_report_file(report)
     else:
         dodownload(basedir)
 
@@ -90,8 +91,7 @@ def doreport(basedir):
     subs = Subscriptions.Subscriptions(basedir)
     for sub in subs.items:
         try:
-            filename = sub.get_rss_file(True)
-            episodes = sub.get_all_ep(filename)
+            episodes = sub.get_all_ep(True)
             if episodes != None:
                 for ep in episodes:
                     if os.path.exists(ep.localfile()):
@@ -109,7 +109,7 @@ def doreport(basedir):
     for e in alleps:
         write_episode_to_report(f, e)
     report = report.replace("_BODY", f.getvalue())
-    write_report_file(report)
+    return report
 
 
 def write_episode_to_report(f, ep):
