@@ -2,24 +2,30 @@ import os
 import tempfile
 import unittest
 import xml
+import mock
 
-import Command
-from Application import get_list_of_subscriptions, get_latest_episodes
+from Application import get_list_of_subscriptions, doreport
+from Episode import sort_rev_chron
 from Subscriptions import Subscriptions
 from Library import create_links
 
+
+def init_config():
+    if 'PODCASTROOT' in os.environ:
+        return os.environ['PODCASTROOT']
+    else:
+        return os.path.expanduser('~/podcasts')
+
+
 class ApplicationTest (unittest.TestCase):
+
     def setUp(self):
-        if 'PODCASTROOT' in os.environ:
-            self.standardpath = os.environ['PODCASTROOT']
-        else:
-            self.standardpath = os.path.expanduser('~/podcasts')
-        pass
+        self.standardpath = init_config()
 
     def test_dirs_exist(self):
         subs = Subscriptions(self.standardpath)
         asub = subs.find("tvo_the_agenda")
-        self.assertTrue( os.path.exists(asub.subscriptions.podcastsdir()))
+        self.assertTrue(os.path.exists(asub.subscriptions.podcastsdir()))
 
     def test_doreport(self):
         report = doreport(self.standardpath)
@@ -50,31 +56,30 @@ class ApplicationTest (unittest.TestCase):
         except xml.parsers.expat.ExpatError:
             self.assertTrue(True)
 
-    def test_create_links(self):
-        subs = Subscriptions(self.standardpath)
-        asub = subs.find("tvo_the_agenda")
-        filename = asub.get_rss_file(  True )
-        eps = get_all_ep(filename, asub)
+    @mock.patch('Library.os.link')
+    def test_create_links(self, mock_link):
+        # get a set of episodes
+        episodes = self._get_list_of_eps()
+        # get a subscriptions object
+        sobj = episodes[0].subscription.subscriptions
 
+        self.assertEqual(sobj.datadir(),
+                         os.path.expanduser('~/.podcasts-data'))
 
-        self.assertTrue('agenda' in filename)
-        self.assertEqual( asub.subscriptions.datadir(), os.path.expanduser('~/.podcasts-data'))
-        asub.subscriptions._podcastdir = '/tmp/blahfoo'
-        self.assertEqual('/tmp/blahfoo', asub.subscriptions.podcastsdir())
+        sobj._podcastdir = '/tmp/blahfoo'
+        create_links(episodes, episodes[0].subscription)
+        last_episode = episodes[-1]
+        mock_link.assert_called_with(last_episode.localfile(),
+                                     last_episode.locallink())
 
-        os.system('find /tmp/blahfoo/ -type f -iname \*mp4 > /tmp/blahfoofiles')
-        newfiles = open('/tmp/blahfoofiles', 'r').read()
+    def _get_list_of_eps(self):
+        subs = get_list_of_subscriptions(self.standardpath, "agenda")
+        asub = subs[0]
+        eps = asub.get_all_ep()
+        sort_rev_chron(eps)
+        new = eps[:asub.maxeps]
+        return new
 
-        Library.create_links(eps, asub )
-
-        newfiles = newfiles.split("\n")
-
-        for n in newfiles:
-            m = re.match('.*(/tmp.*mp4).*', n )
-            if m:
-                file= m.group(1)
-                print file
-                self.assertTrue(os.path.exists(file))
 
 if __name__ == '__main__':
     unittest.main()
