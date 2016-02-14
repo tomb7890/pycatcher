@@ -4,20 +4,13 @@ import unittest
 import xml
 import mock
 
-from Application import get_list_of_subscriptions, doreport
+from Application import get_list_of_subscriptions, doreport, init_config
 from Episode import sort_rev_chron
 from Subscriptions import Subscriptions
 from Library import create_links
 
 
-def init_config():
-    if 'PODCASTROOT' in os.environ:
-        return os.environ['PODCASTROOT']
-    else:
-        return os.path.expanduser('~/podcasts')
-
-
-class ApplicationTest (unittest.TestCase):
+class ApplicationTest(unittest.TestCase):
 
     def setUp(self):
         self.standardpath = init_config()
@@ -42,19 +35,6 @@ class ApplicationTest (unittest.TestCase):
             except xml.parsers.expat.ExpatError:
                 self.assertFalse(True)
 
-    def test_minidom_parse_fail(self):
-        basedir = self.standardpath
-        s = get_list_of_subscriptions(basedir)[0]
-        temp = tempfile.mktemp()
-        f = open(temp, 'w')
-        f.write('blah blah blah blah blah')
-        partial = open(s.get_rss_path(), 'r').read()
-        f.write(partial)
-        f.close()
-        try:
-            s.minidom_parse(temp)
-        except xml.parsers.expat.ExpatError:
-            self.assertTrue(True)
 
     @mock.patch('Library.os.link')
     def test_create_links(self, mock_link):
