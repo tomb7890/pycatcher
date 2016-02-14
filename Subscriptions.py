@@ -152,7 +152,7 @@ class Subscriptions:
         self.items = []
         self.doomed = []
         self.basedir=b
-        self._parse_file(match)
+        self._initialize_subscriptions(match)
 
 
     def datadir ( self ):
@@ -186,8 +186,8 @@ class Subscriptions:
         fullpath= os.path.join(self.basedir, 'subscriptions.ini')
         return fullpath
 
-    def _parse_file(self, match):
-        """ Parse a podcasts.ini file into lines """
+    def _initialize_subscriptions(self, match):
+        """ Parse a subscriptions.ini file into lines """
         f = None
         try:
             f = open(self._get_subs_file_name(), 'r' )
