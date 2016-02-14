@@ -101,10 +101,12 @@ def doreport(basedir):
                            'with subscription ' + repr(sub.get_rss_path()))
 
     Episode.sort_rev_chron(alleps)
+    return make_report_from_eps(alleps)
 
 
-    template = os.path.join(appdir(), 'report.html.template' )
-    report = open(template, 'r').read()
+def make_report_from_eps(alleps):
+    template = "<HTML>\n_BODY\n</HTML>"
+    report = template
     f = StringIO.StringIO()
     for e in alleps:
         write_episode_to_report(f, e)
