@@ -2,15 +2,17 @@ import Command
 import glob
 import os
 
-def link_creation_test( src, dst ):
-    if os.path.exists( src ) and not os.path.exists ( dst ):
+
+def link_creation_test(src, dst):
+    if os.path.exists(src) and not os.path.exists(dst):
         return True
     return False
 
-def create_links( episodes, sub ):
+
+def create_links(episodes, sub):
     for e in episodes:
-        src = e.localfile( )
-        trim_junk_from_filename(src,sub)
+        src = e.localfile()
+        trim_junk_from_filename(src, sub)
         pd = sub.subscriptions.podcastsdir()
         if not os.path.exists(pd):
             os.mkdir(pd)
@@ -21,9 +23,10 @@ def create_links( episodes, sub ):
             os.mkdir(subdir)
         dest = e.locallink()
 
-        vprint( "making link from %s to  %s " % ( src, dest ))
+        vprint("making link from %s to  %s " % (src, dest))
         if True == link_creation_test(src, dest):
-            os.link( src, dest )
+            os.link(src, dest)
+
 
 def trim_junk_from_filename(filename, subscription):
     '''
@@ -31,7 +34,7 @@ def trim_junk_from_filename(filename, subscription):
     query string appended by the file downloader) to the expected
     name taken from the url of the RSS enclosure.
     '''
-    fileptrn = filename + '?*' # question mark is a query string thing
+    fileptrn = filename + '?*'  # question mark is a query string thing
     g = glob.glob(fileptrn)
     x = "trim_junk_from_filename: %s using fileptrn %s" % (filename, fileptrn)
     vprint(x)
@@ -41,6 +44,7 @@ def trim_junk_from_filename(filename, subscription):
             vprint("[%s], [%s] " % (actual, filename))
             if not os.path.exists(filename):
                 os.rename(actual, filename)
+
 
 def vprint(msg):
     if Command.args:
