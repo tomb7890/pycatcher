@@ -1,11 +1,16 @@
-import xml.dom.minidom, os, re, time
+import xml.dom.minidom
+import os
+import re
+import time
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
 import Library
 from wget import Wget
 import Command
 
+
 class Subscription:
+
     def __init__(self, s):
         self.subscriptions = s
         self.xmlfile = None
@@ -21,12 +26,12 @@ class Subscription:
         filename = os.path.join(self.get_xml_dir(), self.xmlfile)
         return filename
 
-    def get_rss_file( self, use_local ):
+    def get_rss_file(self, use_local):
         filename = self.get_rss_path()
         if os.path.exists(filename) and use_local:
             return filename
         if not os.path.exists(self.get_xml_dir()):
-            os.mkdir ( self.get_xml_dir() )
+            os.mkdir(self.get_xml_dir())
 
         wget = Wget()
         wget.addoption('--output-document', filename)
@@ -36,47 +41,47 @@ class Subscription:
         Library.vprint(wget.getCmd())
         return filename
 
-    def get_all_ep(self, use_local = True):
+    def get_all_ep(self, use_local=True):
         filename = self.get_rss_file(use_local)
         # get the xml Document from a filename
         doc = self.minidom_parse(filename)
         # make episode objects from a XML Doucment
-        episodes = self.process_dom_object( doc, filename  )
+        episodes = self.process_dom_object(doc, filename)
         return episodes
 
-    def minidom_parse( self, filename ):
+    def minidom_parse(self, filename):
         # blank lines causes heartburn for omebody
-        self._remove_blank_from_head_of_rss_file( filename )
+        self._remove_blank_from_head_of_rss_file(filename)
         doc = None
         # minidom parse an rss file
-        f = open( filename, 'r' )
-        doc = xml.dom.minidom.parse( f )
+        f = open(filename, 'r')
+        doc = xml.dom.minidom.parse(f)
         return doc
 
-    def _remove_blank_from_head_of_rss_file( self, xfile ):
+    def _remove_blank_from_head_of_rss_file(self, xfile):
         # for some reason the toronto vegetarian association
         # publishes an rss file with blank first line. This
         # otherwise good xmlfile wreaks havoc on minidom parsing
-        if self._blank_at_head( xfile ):
-            lines = self._linesfromfile( xfile )
-            f = open( xfile, 'w')
-            lines2 = '\n'.join( lines[1:] )
-            f.write( lines2 )
+        if self._blank_at_head(xfile):
+            lines = self._linesfromfile(xfile)
+            f = open(xfile, 'w')
+            lines2 = '\n'.join(lines[1:])
+            f.write(lines2)
             f.close()
 
-    def _blank_at_head( self, xfile ):
-        lines = self._linesfromfile( xfile )
+    def _blank_at_head(self, xfile):
+        lines = self._linesfromfile(xfile)
         if '' == lines[0]:
             return True
         return False
 
-    def _linesfromfile( self, xfile ):
-        f = open( xfile, 'r' )
+    def _linesfromfile(self, xfile):
+        f = open(xfile, 'r')
         d = f.read()
         lines = d.split('\n')
         return lines
 
-    def process_dom_object( self, doc, filename  ):
+    def process_dom_object(self, doc, filename):
         episodes = []
 
         items = doc.getElementsByTagName("channel")
@@ -102,14 +107,15 @@ class Subscription:
                     try:
                         fmtstring = r'%a, %d %b %Y %H:%M:%S'
                         timestamp = n.firstChild.nodeValue
-                        trimmed = trim_tzinfo( timestamp )
-                        pd = time.strptime(trimmed, fmtstring )
-                        episode.mktime = time.mktime(pd) # seconds since the epoch
+                        trimmed = trim_tzinfo(timestamp)
+                        pd = time.strptime(trimmed, fmtstring)
+                        episode.mktime = time.mktime(
+                            pd)  # seconds since the epoch
                         episode.pubDate = timestamp
                     except ValueError, e:
                         if debug and verbose:
                             print "pubdate parsing failed: %s using data %s from %s" % \
-                                ( e, timestamp, filename )
+                                (e, timestamp, filename)
                 if n.nodeName == "enclosure":
                     uattr = n.getAttribute("url")
                     episode.url = uattr
@@ -119,23 +125,26 @@ class Subscription:
 
         return episodes
 
+
 def trim_tzinfo(t):
     # [Sat, 29 Apr 2006 20:38:00]
     # [Sat, 27 Feb 2010 06:00:00 EST]
     # [Fri, 13 June 2008 22:00:00]
-    timezoneinfo = [ r'\s[+-]\d\d\d\d$',
-                     r'\sGMT$',
-                     r'\sEDT$',
-                     r'\sCST$',
-                     r'\sPST$',
-                     r'\sEST$'
-                 ]
+    timezoneinfo = [r'\s[+-]\d\d\d\d$',
+                    r'\sGMT$',
+                    r'\sEDT$',
+                    r'\sCST$',
+                    r'\sPST$',
+                    r'\sEST$'
+                    ]
 
     for j in timezoneinfo:
-        t = re.sub(j, '', t )
+        t = re.sub(j, '', t)
     return t
 
+
 class Subscriptions:
+
     def __init__(self, b=None, match=None):
         """A subscriptions file (podcasts.ini) is a user defined file,
         it allows the specification of the podcast programs to be downloaded.
@@ -151,11 +160,10 @@ class Subscriptions:
         """
         self.items = []
         self.doomed = []
-        self.basedir=b
+        self.basedir = b
         self._initialize_subscriptions(match)
 
-
-    def datadir ( self ):
+    def datadir(self):
         if not hasattr(self, '_datadir'):
             cf = ConfigParser()
             cf.read(self._get_ini_file_name())
@@ -164,14 +172,13 @@ class Subscriptions:
         return self._datadir
 
     def podcastsdir(self):
-        if not hasattr(self, '_podcastdir' ):
+        if not hasattr(self, '_podcastdir'):
             cf = ConfigParser()
             cf.read(self._get_ini_file_name())
             self._podcastdir = cf.get('general', 'podcasts-directory', 0)
         return self._podcastdir
 
-
-    def find(self,substr):
+    def find(self, substr):
         for i in self.items:
             if substr in i.dir:
                 print i.dir
@@ -179,18 +186,18 @@ class Subscriptions:
         return None
 
     def _get_ini_file_name(self):
-        fullpath= os.path.join(self.basedir, 'podcasts.ini')
+        fullpath = os.path.join(self.basedir, 'podcasts.ini')
         return fullpath
 
     def _get_subs_file_name(self):
-        fullpath= os.path.join(self.basedir, 'subscriptions.ini')
+        fullpath = os.path.join(self.basedir, 'subscriptions.ini')
         return fullpath
 
     def _initialize_subscriptions(self, match):
         """ Parse a subscriptions.ini file into lines """
         f = None
         try:
-            f = open(self._get_subs_file_name(), 'r' )
+            f = open(self._get_subs_file_name(), 'r')
         except IOError, err:
             # print "can't find subscriptions file"
             raise err
@@ -198,7 +205,7 @@ class Subscriptions:
         self.lines = data.split('\n')
         for l in self.lines:
             fields = l.split(',')
-            if (len(fields) > 1 ):
+            if (len(fields) > 1):
                 pc = self._parse_line(fields, match)
                 if pc != None:
                     self.items.append(pc)
@@ -215,7 +222,7 @@ class Subscriptions:
             dir = xmlfile[:-4]
         url = fields[1].strip()
 
-        maxeps=3 # default to 3
+        maxeps = 3  # default to 3
         if len(fields) > 2:
             n = fields[2].strip()
             maxeps = n
