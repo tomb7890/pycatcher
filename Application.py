@@ -19,14 +19,18 @@ def main():
     # parser = Command.getparser()
     # args = parser.parse_args()
     Command.init_args()
-    basedir = os.environ['PODCASTROOT']
+    basedir = init_config()
     if Command.args.report:
         report = doreport(basedir)
         write_report_file(report)
     else:
         dodownload(basedir)
 
-
+def init_config():
+    if 'PODCASTROOT' in os.environ:
+        return os.environ['PODCASTROOT']
+    else:
+        return os.path.expanduser('~/podcasts')
 
 def dodownload(basedir):
     '''
@@ -39,8 +43,8 @@ def dodownload(basedir):
             old = episodes[sub.maxeps:]
             get_new_episodes(sub, new, basedir)
             release_old_episodes(old)
-        except xml.parsers.expat.ExpatError, e:
-            Library.vprint("minidom parsing error:"+repr(e) +
+        except xml.parsers.expat.ExpatError, error:
+            Library.vprint("minidom parsing error:"+repr(error) +
                            'with subscription ' + repr(sub.get_rss_path()))
 
 
@@ -51,7 +55,7 @@ def get_list_of_subscriptions_production(basedir):
 
 def get_list_of_subscriptions(basedir, match=None):
     subs = []
-    subs = Subscriptions.Subscriptions(basedir,  match)
+    subs = Subscriptions.Subscriptions(basedir, match)
     return subs.items
 
 
@@ -75,11 +79,8 @@ def get_new_episodes(sub, saved, basedir):
     wget.download_new_files(sub, saved, basedir)
     Library.create_links(saved, sub)
 
-
-
-
 def appdir():
-    path=os.path.dirname(os.path.realpath(__file__))
+    path = init_config()
     return path
 
 def doreport(basedir):
