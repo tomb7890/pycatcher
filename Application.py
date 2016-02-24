@@ -11,20 +11,21 @@ import Library
 
 
 def main():
-    global args
     '''
     Entry point of application examines command arguments
     and routes execution accordingly
     '''
-    # parser = Command.getparser()
-    # args = parser.parse_args()
-    Command.init_args()
+    Command.Args().parse(sys.argv[1:])
     basedir = init_config()
-    if Command.args.report:
+    if Command.Args().parser.report:
         report = doreport(basedir)
         write_report_file(report)
     else:
-        dodownload(basedir)
+        if Command.Args().parser.debug:
+            downloader = wget.MockWget()
+        else:
+            downloader = Wget()
+        dodownload(basedir, downloader)
 
 def init_config():
     if 'PODCASTROOT' in os.environ:
