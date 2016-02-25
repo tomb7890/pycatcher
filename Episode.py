@@ -22,7 +22,7 @@ class Episode:
         self.mktime = None
         self.description = ""
 
-    def localfile(self): 
+    def localfile(self):
         '''
         Provide an absolute filename for the downloaded media. It is
         taken by removing the last component of the enclosure url from
@@ -52,15 +52,15 @@ class Episode:
         dir = self.subscription.subscriptions.podcastsdir()
         subdir = os.path.join(dir, self.subscription.dir())
         filename = os.path.join( subdir, prettyname )
-        return filename 
+        return filename
 
-    def prune_file(self): 
-        filename = self.localfile() 
+    def prune_file(self):
+        filename = self.localfile()
         if os.path.exists( filename ):
             os.unlink( filename )
 
     def prune_link(self):
-        link = self.locallink() 
+        link = self.locallink()
         if os.path.exists( link ):
             os.unlink( link )
 
@@ -71,7 +71,7 @@ class Episode:
         return extension
 
     def _filename_from_url(self): # , url ):
-        lastslash = self.url.rfind("/") + 1 
+        lastslash = self.url.rfind("/") + 1
         filename = self.url[lastslash:]
         return filename
 
@@ -87,7 +87,3 @@ class Episode:
 
 if __name__ == '__main__':
     pass
-
-
-
-
