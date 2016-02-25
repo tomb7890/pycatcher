@@ -91,6 +91,20 @@ class Subscription:
         episodes = self.process_dom_object(rssfile)
         return episodes
 
+    def prepare_directories_for_downloaing(self):
+        ''' make the data directory if need be. '''
+        if not os.path.exists(self.subscriptions.datadir()):
+            if not 'debug' in Command.Args().argv:
+                os.mkdir(self.subscriptions.datadir())
+
+                ''' make '''
+        dirx  = os.path.join(
+            self.subscriptions.datadir(),
+            self.dir())
+
+        if not os.path.exists(dirx):
+            if not 'debug' in Command.Args().argv:
+                os.mkdir(dirx)
 
     def minidom_parse(self, filename):
         self._remove_blank_from_head_of_rss_file(filename)

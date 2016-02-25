@@ -76,8 +76,9 @@ def get_latest_episodes(sub):
     return new
 
 
-def get_new_episodes(sub, saved, basedir):
-    wget.download_new_files(sub, saved, basedir)
+def get_new_episodes(sub, saved, basedir, downloader):
+    sub.prepare_directories_for_downloaing()
+    downloader.download_new_files(sub, saved, basedir)
     Library.create_links(saved, sub)
 
 def appdir():
