@@ -1,6 +1,7 @@
 import os
-import sys
 import Library
+import Command
+
 
 class Wget:
     def __init__(self):
@@ -9,7 +10,7 @@ class Wget:
         self.options = {}
 
     def verbose(self):
-        if 'verbose' in sys.argv:
+        if Command.Args().parser.verbose:
             return True
         return False
 
@@ -40,63 +41,62 @@ class Wget:
             self.cmd = self.cmd + " %s='%s'" % (o, self.options[o])
 
         fullcmd = "%s  '%s' " % (self.cmd, self.url)
-        if 'verbose' in sys.argv:
+        if Command.Args().parser.verbose:
             print fullcmd
 
         return fullcmd
 
     def execute(self):
         fullcmd = self.getCmd()
-        if not 'debug' in sys.argv:
+        if not  Command.Args().parser.debug:
             os.system(fullcmd)
+            print fullcmd
 
 
-def download_new_files(subscription, episodes, basedir):
-    wget = Wget()
-    inputfile = 'urls.dat'
-    wget.addoption('--input-file', inputfile)
-    # wget.addoption('--content-disposition', '1')
 
-    #    `--limit-rate=AMOUNT'
+    def download_new_files(self, subscription, episodes, basedir):
+        wget = Wget()
+        inputfile = 'urls.dat'
+        wget.addoption('--input-file', inputfile)
+        # wget.addoption('--content-disposition', '1')
 
-     # with the `m' suffix.  For example, `--limit-rate=20k' will limit
-     # the retrieval rate to 20KB/s.  This is useful when, for whatever
+        #    `--limit-rate=AMOUNT'
 
-    # wget.addoption('--limit-rate', '110k')
-    if os.path.exists(inputfile):
-        os.unlink(inputfile)
+         # with the `m' suffix.  For example, `--limit-rate=20k' will limit
+         # the retrieval rate to 20KB/s.  This is useful when, for whatever
 
-    if not os.path.exists(subscription.subscriptions.datadir()):
-        if not 'debug' in sys.argv:
-            os.mkdir(subscription.subscriptions.datadir())
+        # wget.addoption('--limit-rate', '110k')
+        if os.path.exists(inputfile):
+            os.unlink(inputfile)
 
-    dirx  = os.path.join(
-        subscription.subscriptions.datadir(),
-        subscription.dir )
+        wget.addoption('--no-clobber', '1')
+        wget.addoption('--directory-prefix', dirx)
+        wget.url = subscription.url
+        f = open(inputfile, 'w')
+        dodownload = False
+        for episode in episodes:
+            lf = episode.localfile()
+            if os.path.exists(lf):
+                Library.vprint("file already exists: " + lf)
+            else:
+                # at least one download required:
+                dodownload = True
+                Library.vprint("queuing: " + lf)
+                f.write('%s\n' % episode.url)
+        f.close()
+        if dodownload:
+            wget.execute()
+            Library.vprint(wget.getCmd())
+        if os.path.exists(inputfile):
+            os.unlink(inputfile)
 
-    if not os.path.exists(dirx):
-        if not 'debug' in sys.argv:
-            os.mkdir(dirx)
-    wget.addoption('--no-clobber', '1')
-    wget.addoption('--directory-prefix', dirx)
-    wget.url = subscription.url
-    f = open(inputfile, 'w')
-    dodownload = False
-    for episode in episodes:
-        lf = episode.localfile()
-        if os.path.exists(lf):
-            Library.vprint("file already exists: " + lf)
-        else:
-            # at least one download required:
-            dodownload = True
-            Library.vprint("queuing: " + lf)
-            f.write('%s\n' % episode.url)
-    f.close()
-    if dodownload:
-        wget.execute()
-        Library.vprint(wget.getCmd())
-    if os.path.exists(inputfile):
-        os.unlink(inputfile)
+class MockWget (Wget):
+    def __init__(self):
+        Wget.__init__(self)
+
+    def download_new_files(self, subscription, episodes, basedir):
+        ''' override download_new_files as a no-op '''
+        pass
 
 
 if __name__ == '__main__':
