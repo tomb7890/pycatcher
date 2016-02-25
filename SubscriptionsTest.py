@@ -20,7 +20,7 @@ class SubscriptionsTest (unittest.TestCase):
 
         try:
             s.minidom_parse(temp)
-        except xml.parsers.expat.ExpatError:
+        except xml.etree.ElementTree.ParseError, e:
             self.assertTrue(True)
 
     def test_empty_rss_file(self):
@@ -33,7 +33,7 @@ class SubscriptionsTest (unittest.TestCase):
 
         try:
             s.minidom_parse(temp)
-        except xml.parsers.expat.ExpatError:
+        except xml.etree.ElementTree.ParseError, e:
             self.assertTrue(True)
 
     def set_up_minidom_test(self):

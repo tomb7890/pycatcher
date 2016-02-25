@@ -31,7 +31,7 @@ class ApplicationTest(unittest.TestCase):
         for s in subs:
             try:
                 s.minidom_parse(s.get_rss_path())
-            except xml.parsers.expat.ExpatError:
+            except xml.etree.ElementTree.ParseError, p:
                 self.assertFalse(True)
 
 

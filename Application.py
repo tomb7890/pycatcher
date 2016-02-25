@@ -44,7 +44,7 @@ def dodownload(basedir):
             old = episodes[sub.maxeps:]
             get_new_episodes(sub, new, basedir)
             release_old_episodes(old)
-        except xml.parsers.expat.ExpatError, error:
+        except xml.etree.ElementTree.ParseError, error:
             Library.vprint("minidom parsing error:"+repr(error) +
                            'with subscription ' + repr(sub.get_rss_path()))
 
@@ -98,9 +98,10 @@ def doreport(basedir):
                 for ep in episodes:
                     if os.path.exists(ep.localfile()):
                         alleps.append(ep)
-        except xml.parsers.expat.ExpatError, e:
-            Library.vprint("minidom parsing error:"+repr(e) +
-                           'with subscription ' + repr(sub.get_rss_path()))
+        except xml.etree.ElementTree.ParseError, e:
+            if Command.Args().parser.verbose:
+                print ("minidom parsing error:"+repr(e) +
+                       'with subscription ' + repr(sub.get_rss_path()))
 
     Episode.sort_rev_chron(alleps)
     return make_report_from_eps(alleps)
