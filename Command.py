@@ -14,6 +14,7 @@ class Args:
                             action='store',help='program x')
         parser.add_argument('-d', '--debug',  action='store_true')
         parser.add_argument('-r', '--report', action='store_true')
+        parser.add_argument('-t', '--test', action='store_true')
         parser.add_argument('--localrss',
                             action='store_true',  default=False )
         self.parser = parser.parse_args(args)

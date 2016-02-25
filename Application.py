@@ -19,10 +19,10 @@ def main():
         report = doreport(basedir)
         write_report_file(report)
     else:
-        if Command.Args().parser.debug:
+        if Command.Args().parser.test:
             downloader = wget.MockWget()
         else:
-            downloader = Wget()
+            downloader = wget.Wget()
         dodownload(basedir, downloader)
 
 def init_config():
