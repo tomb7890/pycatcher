@@ -45,6 +45,9 @@ class Subscription:
         '''Download and store the most recent RSS file '''
         pass
 
+    def dir(self):
+        return self.rssfile.replace('.xml', '')
+
     def get_rss_dir(self):
         '''Returns the full path of the RSS subdirectory.
 
@@ -192,7 +195,7 @@ class Subscriptions:
     def find(self, substr):
         ''' find a matching subscription'''
         for i in self.items:
-            if substr in i.dir:
+            if substr in i.dir():
                 return i
         return None
 
@@ -249,8 +252,7 @@ class Subscriptions:
         rssfile = fields[0].strip()
         if rssfile.startswith("#"):
             return None
-        if rssfile.endswith(".xml"):
-            dir = rssfile[:-4]
+
         url = fields[1].strip()
 
         maxeps = 3  # default to 3
@@ -261,11 +263,10 @@ class Subscriptions:
         sub = Subscription(self)
         sub.rssfile = rssfile
         sub.url = url
-        sub.dir = dir
         sub.maxeps = int(maxeps)
 
         if match != None:
-            if -1 == sub.dir.find(match):
+            if -1 == sub.dir().find(match):
                 return None
         return sub
 

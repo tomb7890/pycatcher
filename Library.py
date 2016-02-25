@@ -18,7 +18,7 @@ def create_links(episodes, sub):
             os.mkdir(pd)
             os.mkdir(os.path.join(pd, 'xml'))
 
-        subdir = os.path.join(pd, sub.dir)
+        subdir = os.path.join(pd, sub.dir())
         if not os.path.exists(subdir):
             os.mkdir(subdir)
         dest = e.locallink()

@@ -29,9 +29,9 @@ class Episode:
         an rss file.
         '''
         filename = self._filename_from_url()
-        subdir = os.path.join( 
-            self.subscription.subscriptions.datadir(), 
-            self.subscription.dir )
+        subdir = os.path.join(
+            self.subscription.subscriptions.datadir(),
+            self.subscription.dir() )
         absfile = os.path.join( subdir, filename )
         filename = self._clean_up_filename( absfile )
         filename = filename.replace("%20",  " ")
@@ -49,8 +49,8 @@ class Episode:
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         prettyname = ''.join(c for c in prettyname if c in validchars)
 
-        dir = self.subscription.subscriptions.podcastsdir() 
-        subdir = os.path.join(dir, self.subscription.dir )
+        dir = self.subscription.subscriptions.podcastsdir()
+        subdir = os.path.join(dir, self.subscription.dir())
         filename = os.path.join( subdir, prettyname )
         return filename 
 
