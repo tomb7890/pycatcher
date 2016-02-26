@@ -48,9 +48,8 @@ class Wget:
 
     def execute(self):
         fullcmd = self.getCmd()
-        if not  Command.Args().parser.debug:
-            os.system(fullcmd)
-            print fullcmd
+        os.system(fullcmd)
+
 
 
 
@@ -69,9 +68,8 @@ class Wget:
         if os.path.exists(inputfile):
             os.unlink(inputfile)
 
-        wget.addoption('--no-clobber', '1')
-        wget.addoption('--directory-prefix', dirx)
-        wget.url = subscription.url
+        self.addoption('--directory-prefix', subscription.dirx())
+        self.url = subscription.url
         f = open(inputfile, 'w')
         dodownload = False
         for episode in episodes:
@@ -85,8 +83,8 @@ class Wget:
                 f.write('%s\n' % episode.url)
         f.close()
         if dodownload:
-            wget.execute()
-            Library.vprint(wget.getCmd())
+            self.execute()
+            Library.vprint(self.getCmd())
         if os.path.exists(inputfile):
             os.unlink(inputfile)
 
@@ -94,9 +92,13 @@ class MockWget (Wget):
     def __init__(self):
         Wget.__init__(self)
 
-    def download_new_files(self, subscription, episodes, basedir):
-        ''' override download_new_files as a no-op '''
-        pass
+    def execute(self):
+        print 'MockWget.execute: %s' % self.getCmd()
+
+
+
+
+
 
 
 if __name__ == '__main__':
