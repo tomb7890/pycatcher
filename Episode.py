@@ -29,11 +29,9 @@ class Episode:
         an rss file.
         '''
         filename = self._filename_from_url()
-        subdir = os.path.join(
-            self.subscription.subscriptions.datadir(),
-            self.subscription.dir() )
-        absfile = os.path.join( subdir, filename )
-        filename = self._clean_up_filename( absfile )
+        subdir = self.subscription.dir()
+        absfile = os.path.join(subdir, filename)
+        filename = self._clean_up_filename(absfile)
         filename = filename.replace("%20",  " ")
         return filename
 

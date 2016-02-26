@@ -3,15 +3,17 @@ import unittest
 import xml
 import mock
 
-from Application import get_list_of_subscriptions, doreport, init_config
+from Application import get_list_of_subscriptions, doreport, init_config, dodownload
 from Episode import sort_rev_chron
 from Subscriptions import Subscriptions
 from Library import create_links
-
+from wget import  MockWget
+import Command
 
 class ApplicationTest(unittest.TestCase):
 
     def setUp(self):
+        self.parser = Command.Args().parse('--program wbur --test'.split())
         self.standardpath = init_config()
 
     def test_dirs_exist(self):
@@ -24,6 +26,10 @@ class ApplicationTest(unittest.TestCase):
         self.assertTrue(len(report) > 0)
         self.assertTrue('<HTML>' in report)
 
+    def test_dodownload(self):
+        wget = MockWget()
+        dodownload(self.standardpath, wget)
+
     def test_minidom_parse_success(self):
         matchpattern = 'wbur'
         basedir = self.standardpath
@@ -34,6 +40,11 @@ class ApplicationTest(unittest.TestCase):
             except xml.etree.ElementTree.ParseError, p:
                 self.assertFalse(True)
 
+    def test_fetch_latest_onpoints(self):
+        basedir = self.standardpath
+        subs = Subscriptions(self.standardpath)
+        asub = subs.find("wbur")
+
 
     @mock.patch('Library.os.link')
     def test_create_links(self, mock_link):
@@ -42,7 +53,7 @@ class ApplicationTest(unittest.TestCase):
         # get a subscriptions object
         sobj = episodes[0].subscription.subscriptions
 
-        self.assertEqual(sobj.datadir(),
+        self.assertEqual(sobj._data_base_dir(),
                          os.path.expanduser('~/.podcasts-data'))
 
         sobj._podcastdir = '/tmp/blahfoo'
@@ -54,7 +65,8 @@ class ApplicationTest(unittest.TestCase):
     def _get_list_of_eps(self):
         subs = get_list_of_subscriptions(self.standardpath, "agenda")
         asub = subs[0]
-        eps = asub.get_all_ep()
+        mock = MockWget()
+        eps = asub.get_all_episodes()
         sort_rev_chron(eps)
         new = eps[:asub.maxeps]
         return new

@@ -41,11 +41,12 @@ class Subscription:
                 queue.append(ep.localfile())
         return queue
 
-    def refresh(self):
+    def refresh(self, downloader):
+        print 'refresh'
         '''Download and store the most recent RSS file '''
-        pass
+        self.download_rss_file(downloader)
 
-    def dir(self):
+    def _data_sub_dir(self):
         return self.rssfile.replace('.xml', '')
 
     def get_rss_dir(self):
@@ -66,8 +67,6 @@ class Subscription:
     def download_rss_file(self, downloader):
         ''' Downloads an RSS file. '''
         filename = self.get_rss_path()
-        if os.path.exists(filename) and Command.Args().parser.debug:
-            return
 
         if not os.path.exists(self.get_rss_dir()):
             os.mkdir(self.get_rss_dir())
@@ -91,20 +90,19 @@ class Subscription:
         episodes = self.process_dom_object(rssfile)
         return episodes
 
+    def dir(self):
+        return os.path.join(self.subscriptions._data_base_dir(),
+                            self._data_sub_dir())
+
     def prepare_directories_for_downloaing(self):
         ''' make the data directory if need be. '''
-        if not os.path.exists(self.subscriptions.datadir()):
+        if not os.path.exists(self.subscriptions._data_base_dir()):
             if not 'debug' in Command.Args().argv:
-                os.mkdir(self.subscriptions.datadir())
+                os.mkdir(self.subscriptions._data_base_dir())
 
-                ''' make '''
-        dirx  = os.path.join(
-            self.subscriptions.datadir(),
-            self.dir())
-
-        if not os.path.exists(dirx):
+        if not os.path.exists(self.dir()):
             if not 'debug' in Command.Args().argv:
-                os.mkdir(dirx)
+                os.mkdir(self.dir())
 
     def minidom_parse(self, filename):
         self._remove_blank_from_head_of_rss_file(filename)
@@ -213,7 +211,7 @@ class Subscriptions:
                 return i
         return None
 
-    def datadir(self):
+    def _data_base_dir(self):
         ''' return the directory used for storing the media data '''
         if not hasattr(self, '_datadir'):
             cf = ConfigParser()

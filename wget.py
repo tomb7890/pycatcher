@@ -68,7 +68,7 @@ class Wget:
         if os.path.exists(inputfile):
             os.unlink(inputfile)
 
-        self.addoption('--directory-prefix', subscription.dirx())
+        self.addoption('--directory-prefix', subscription.dir())
         self.url = subscription.url
         f = open(inputfile, 'w')
         dodownload = False
