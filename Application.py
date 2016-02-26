@@ -92,7 +92,7 @@ def doreport(basedir):
     subs = Subscriptions.Subscriptions(basedir)
     for sub in subs.items:
         try:
-            episodes = sub.get_all_ep(True)
+            episodes = sub.get_all_ep()
             if episodes != None:
                 for ep in episodes:
                     if os.path.exists(ep.localfile()):

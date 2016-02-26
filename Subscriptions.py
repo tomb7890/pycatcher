@@ -77,7 +77,7 @@ class Subscription:
         downloader.execute()
         Library.vprint(downloader.getCmd())
 
-    def get_all_ep(self, downloader):
+    def get_all_ep(self):
         filename = self.get_rss_path()
         # get the rss Document from a filename
         self.minidom_parse(filename)
