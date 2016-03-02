@@ -217,7 +217,7 @@ class Subscriptions:
             cf = ConfigParser()
             cf.read(self._get_ini_file_name())
             dir = cf.get('general', 'data-directory', 0)
-            self._datadir = dir
+            self._datadir = os.path.expanduser(dir)
         return self._datadir
 
     def podcastsdir(self):
@@ -225,7 +225,7 @@ class Subscriptions:
         if not hasattr(self, '_podcastdir'):
             cf = ConfigParser()
             cf.read(self._get_ini_file_name())
-            self._podcastdir = cf.get('general', 'podcasts-directory', 0)
+            self._podcastdir = os.path.expanduser(cf.get('general', 'podcasts-directory', 0))
         return self._podcastdir
 
     #  private methods
