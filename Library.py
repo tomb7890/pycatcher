@@ -22,6 +22,9 @@ def create_links(episodes, sub):
         if not os.path.exists(subdir):
             os.mkdir(subdir)
         dest = e.locallink()
+        if not os.path.exists(e.locallink_dir()):
+            os.mkdir(e.locallink_dir())
+
 
         vprint("making link from %s to  %s " % (src, dest))
         if True == link_creation_test(src, dest):

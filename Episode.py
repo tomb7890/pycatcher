@@ -35,6 +35,12 @@ class Episode:
         filename = filename.replace("%20",  " ")
         return filename
 
+    def locallink_dir(self):
+        subdir = os.path.join(self.subscription.subscriptions.
+                              podcastsdir(), self.subscription._data_sub_dir())
+
+        return subdir
+
     def locallink(self):
         '''
         Provide an absolute filename for the symbolic link to be made
@@ -47,9 +53,8 @@ class Episode:
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         prettyname = ''.join(c for c in prettyname if c in validchars)
 
-        dir = self.subscription.subscriptions.podcastsdir()
-        subdir = os.path.join(dir, self.subscription.dir())
-        filename = os.path.join( subdir, prettyname )
+        subdir = self.locallink_dir()
+        filename = os.path.join(subdir, prettyname)
         return filename
 
     def prune_file(self):
