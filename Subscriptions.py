@@ -97,11 +97,11 @@ class Subscription:
     def prepare_directories_for_downloaing(self):
         ''' make the data directory if need be. '''
         if not os.path.exists(self.subscriptions._data_base_dir()):
-            if not 'debug' in Command.Args().argv:
+            if not Command.Args().parser.debug:
                 os.mkdir(self.subscriptions._data_base_dir())
 
         if not os.path.exists(self.dir()):
-            if not 'debug' in Command.Args().argv:
+            if not Command.Args().parser.debug:
                 os.mkdir(self.dir())
 
     def minidom_parse(self, filename):
