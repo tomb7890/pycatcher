@@ -5,6 +5,9 @@ import Command
 
 class Wget:
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.url = None
         self.cmd = 'wget'
         self.options = {}
@@ -54,9 +57,8 @@ class Wget:
 
 
     def download_new_files(self, subscription, episodes, basedir):
-        wget = Wget()
         inputfile = 'urls.dat'
-        wget.addoption('--input-file', inputfile)
+        self.addoption('--input-file', inputfile)
         # wget.addoption('--content-disposition', '1')
 
         #    `--limit-rate=AMOUNT'
@@ -84,7 +86,7 @@ class Wget:
         f.close()
         if dodownload:
             self.execute()
-            Library.vprint(self.getCmd())
+            # Library.vprint(self.getCmd())
         if os.path.exists(inputfile):
             os.unlink(inputfile)
 
@@ -93,7 +95,7 @@ class MockWget (Wget):
         Wget.__init__(self)
 
     def execute(self):
-        print 'MockWget.execute: %s' % self.getCmd()
+        Library.vprint( 'MockWget.execute: %s' % self.getCmd())
 
 
 
