@@ -231,56 +231,39 @@ class Subscriptions:
     #  private methods
 
     def _get_ini_file_name(self):
-        fullpath = os.path.join(self.basedir, 'podcasts.ini')
+        fullpath = 'pycatcher.conf'
         return fullpath
 
     def _get_subs_file_name(self):
-        fullpath = os.path.join(self.basedir, 'subscriptions.ini')
+        fullpath = 'pycatcher.conf'
         return fullpath
 
+
     def _initialize_subscriptions(self, match):
-        """ Parse a subscriptions.ini file into lines """
-        f = None
-        try:
-            f = open(self._get_subs_file_name(), 'r')
-        except IOError, err:
-            # print "can't find subscriptions file"
-            raise err
 
-        data = f.read()
-        self.lines = data.split('\n')
-        for l in self.lines:
-            fields = l.split(',')
-            if (len(fields) > 1):
-                pc = self._parse_line(fields, match)
-                if pc != None:
-                    self.items.append(pc)
+        config = ConfigParser()
+        config.read(self._get_subs_file_name())
 
-    def _parse_line(self, fields, match):
-        """
-        Decode a filename, a podcast subscription url, and a maximum number of episodes
-        to keep in the local library. Takes an optional match string.
-        """
-        rssfile = fields[0].strip()
-        if rssfile.startswith("#"):
-            return None
+        for s in config.sections():
+            maxeps = rssfile = url = None
+            if config.has_option(s, 'maxeps'):
+                maxeps = config.getint(s, 'maxeps')
+            if config.has_option(s, 'rssfile'):
+                rssfile = config.get(s, 'rssfile')
+            if config.has_option(s, 'url'):
+                url = config.get(s, 'url')
+            if maxeps and rssfile and url:
+                sub = Subscription(self)
+                sub = Subscription(self)
+                sub.rssfile = rssfile
+                sub.url = url
+                sub.maxeps = int(maxeps)
 
-        url = fields[1].strip()
-
-        maxeps = 3  # default to 3
-        if len(fields) > 2:
-            n = fields[2].strip()
-            maxeps = n
-
-        sub = Subscription(self)
-        sub.rssfile = rssfile
-        sub.url = url
-        sub.maxeps = int(maxeps)
-
-        if match != None:
-            if -1 == sub.dir().find(match):
-                return None
-        return sub
+                if match:
+                    if match.lower() in repr(s).lower():
+                        self.items.append(sub)
+                else:
+                    self.items.append(sub)
 
 if __name__ == '__main__':
     pass
