@@ -52,11 +52,11 @@ class Subscription:
     def get_rss_dir(self):
         '''Returns the full path of the RSS subdirectory.
 
-        The rss subdirectory is where the RSS files for the
+        The RSS subdirectory is where the RSS files for the
         subscriptions are stored.
 
         '''
-        rssdir = os.path.join(self.subscriptions.basedir, "rss")
+        rssdir = os.path.join(self.subscriptions._data_base_dir(), "rss/")
         return rssdir
 
     def get_rss_path(self):
