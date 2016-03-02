@@ -47,8 +47,9 @@ def trim_junk_from_filename(filename, subscription):
 
 
 def vprint(msg):
-    if Command.args:
-        if Command.args.verbose:
+    # parser = Command.get_sorted_list_of_episodes
+    if True: # parser.args:
+        if Command.Args().parser.verbose:
             print msg
 
 if __name__ == '__main__':
