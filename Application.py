@@ -13,16 +13,22 @@ def main():
     Entry point of application examines command arguments
     and routes execution accordingly
     '''
-    Command.Args().parse(sys.argv[1:])
+
     basedir = init_config()
+
+    Command.Args().parse(sys.argv[1:])
+    downloader = None
+    if Command.Args().parser.test:
+        downloader = wget.MockWget()
+    else:
+        downloader = wget.Wget()
+
     if Command.Args().parser.report:
         report = doreport(basedir)
         write_report_file(report)
+    elif Command.Args().parser.refresh:
+        dorefresh(basedir)
     else:
-        if Command.Args().parser.test:
-            downloader = wget.MockWget()
-        else:
-            downloader = wget.Wget()
         dodownload(basedir, downloader)
 
 def init_config():
@@ -31,16 +37,27 @@ def init_config():
     else:
         return os.path.expanduser('~/podcasts')
 
-def dodownload(basedir):
+
+def dorefresh(basedir):
+    downloader = wget.Wget()
+    for sub in get_list_of_subscriptions_production(basedir):
+        downloader.reset()
+        sub.refresh(downloader)
+
+
+def dodownload(basedir, downloader):
     '''
     Download files
     '''
     for sub in get_list_of_subscriptions_production(basedir):
+        downloader.reset()
+        sub.refresh(downloader)
+        downloader.reset()
         try:
-            episodes = get_sorted_list_of_episodes(sub, False)
+            episodes = get_sorted_list_of_episodes(sub)
             new = episodes[:sub.maxeps]
             old = episodes[sub.maxeps:]
-            get_new_episodes(sub, new, basedir)
+            get_new_episodes(sub, new, basedir, downloader)
             release_old_episodes(old)
         except xml.etree.ElementTree.ParseError, error:
             Library.vprint("minidom parsing error:"+repr(error) +
@@ -48,8 +65,10 @@ def dodownload(basedir):
 
 
 def get_list_of_subscriptions_production(basedir):
-    matchpattern = Command.args.program
-    return get_list_of_subscriptions(basedir, matchpattern)
+    match = None
+    if Command.Args().parser.program:
+        match = Command.Args().parser.program
+    return get_list_of_subscriptions(basedir, match)
 
 
 def get_list_of_subscriptions(basedir, match=None):
@@ -62,8 +81,8 @@ def release_old_episodes(expired):
     prunefiles(expired)
 
 
-def get_sorted_list_of_episodes(sub, use_local):
-    episodes = sub.get_all_ep(use_local)
+def get_sorted_list_of_episodes(sub):
+    episodes = sub.get_all_episodes()
     Episode.sort_rev_chron(episodes)
     return episodes
 
@@ -92,7 +111,7 @@ def doreport(basedir):
     subs = Subscriptions.Subscriptions(basedir)
     for sub in subs.items:
         try:
-            episodes = sub.get_all_ep()
+            episodes = sub.get_all_episodes()
             if episodes != None:
                 for ep in episodes:
                     if os.path.exists(ep.localfile()):
