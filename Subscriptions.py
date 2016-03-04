@@ -2,7 +2,6 @@ import os
 import re
 import time
 import xml.etree.ElementTree as ET
-import xml
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
 import Library
@@ -47,7 +46,7 @@ class Subscription:
         for which there is not downloaded media, where N is from maxeps.
         '''
 
-        allepisodes = self.get_all_episodes(self.get_rss_path())
+        allepisodes = self.get_all_episodes()
         sort_rev_chron(allepisodes)
         queue = []
         for ep in allepisodes[:self.maxeps]:
@@ -64,62 +63,40 @@ class Subscription:
         # return re.sub(r'\W', '_', self.title).lower()
         return self.rssfile.replace('.xml', '')
 
-    def get_rss_dir(self):
-        '''Returns the full path of the RSS subdirectory.
-
-        The RSS subdirectory is where the RSS files for the
-        subscriptions are stored.
-
-        '''
-        rssdir = os.path.join(self.subscriptions._data_basedir(), "rss/")
-        return rssdir
-
     def get_rss_path(self):
         ''' Returns the full path of an RSS file.  '''
-        filename = os.path.join(self.get_rss_dir(), self.rssfile)
+        filename = os.path.join(self.subscriptions.get_rss_dir(), self.rssfile)
         return filename
+
 
     def download_rss_file(self, downloader):
         ''' Downloads an RSS file. '''
         filename = self.get_rss_path()
-
-        if not os.path.exists(self.get_rss_dir()):
-            os.mkdir(self.get_rss_dir())
 
         downloader.addoption('--output-document', filename)
         downloader.url = self.url
         downloader.execute()
         Library.vprint(downloader.getCmd())
 
-    def get_all_ep(self):
-        filename = self.get_rss_path()
-        # get the rss Document from a filename
-        self.minidom_parse(filename)
-        # make episode objects from a RSS Doucment
+    # def get_all_ep(self):
+    #     rss_file_name = self.get_rss_path()
+    #     # get the rss Document from a filename
+    #     self.minidom_parse(rss_file_name)
+    #     # make episode objects from a RSS Doucment
 
-    def get_all_episodes(self, rssfile= None):
-        '''This function has too many responsibilities. '''
-        if rssfile == None:
-            rssfile= self.get_rss_path()
-        print 'calling get_all_episodes with rss file' + repr(rssfile)
-        episodes = self.process_dom_object(rssfile)
+    def get_all_episodes(self):
+        rssfile= self.get_rss_path()
+        Library.vprint( 'calling get_all_episodes with rss file' + repr(rssfile))
+        episodes = self.parse_rss_file(rssfile)
         return episodes
 
-    def dir(self):
-        return os.path.join(self.subscriptions._data_base_dir(),
-                            self._data_sub_dir())
 
-
-        if not os.path.exists(self.dir()):
-            if not Command.Args().parser.debug:
-                os.mkdir(self.dir())
-
-    def minidom_parse(self, filename):
-        self._remove_blank_from_head_of_rss_file(filename)
-        doc = None
-        f = open(filename, 'r')
-        doc = xml.etree.ElementTree.parse(f)
-        return
+    # def minidom_parse(self, filename):
+    #     self._remove_blank_from_head_of_rss_file(filename)
+    #     doc = None
+    #     f = open(filename, 'r')
+    #     doc = xml.etree.ElementTree.parse(f)
+    #     return
 
     def _remove_blank_from_head_of_rss_file(self, xfile):
         # for some reason the toronto vegetarian association
@@ -159,20 +136,22 @@ class Subscription:
                 %s using data %s from %s" % \
                     (e, timestamp, filename)
 
-    def process_dom_object(self, filename):
+    def parse_rss_file(self, filename):
         episodes = []
         tree = ET.parse(filename)
         root = tree.getroot()
         self.title = (root.findall("./channel/title")[0].text)
+        #
         elements = root.findall("./channel/item")
         for el in elements:
             episode = Episode(self)
             self.pubdate_to_timestamp(el.findall('pubDate')[0].text, episode)
             episode.title = el.findall('title')[0].text
             episode.description = el.findall('description')[0].text
-            e = episode.url = el.findall('enclosure')
+            e = el.findall('enclosure')
             if e and len(e) > 0:
                 episode.url = e[0].get('url')
+                episode.enclosure_length = e[0].get('length')
             if episode.pubDate and episode.url and episode.title:
                 episodes.append(episode)
 
@@ -223,11 +202,8 @@ class Subscriptions:
             os.mkdir(self._datadir)
         if not os.path.exists( self._podcastdir):
             os.mkdir(self._podcastdir)
-        if not os.path.exists( self.rss_dir()):
-            os.mkdir(self.rss_dir())
-
-    def rss_dir(self):
-        return os.path.join(self._datadir, 'rss')
+        if not os.path.exists( self.get_rss_dir()):
+            os.mkdir(self.get_rss_dir())
 
     def find(self, substr):
         ''' find a matching subscription'''
@@ -235,6 +211,18 @@ class Subscriptions:
             if substr in i._sub_dir():
                 return i
         return None
+
+    def get_rss_dir(self):
+        '''Returns the full path of the RSS subdirectory.
+
+        The RSS subdirectory is where the RSS files for the
+        subscriptions are stored.
+
+        '''
+        rssdir = os.path.join(self._data_basedir(), "rss/")
+        return rssdir
+
+
 
     def _data_basedir(self):
         ''' return the directory used for storing the media data '''
@@ -254,6 +242,8 @@ class Subscriptions:
         return self._podcastdir
 
     #  private methods
+
+
 
     def _get_ini_file_name(self):
         fullpath = 'pycatcher.conf'
