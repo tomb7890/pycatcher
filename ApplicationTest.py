@@ -19,7 +19,7 @@ class ApplicationTest(unittest.TestCase):
     def test_dirs_exist(self):
         subs = Subscriptions(self.standardpath)
         asub = subs.find("tvo_the_agenda")
-        self.assertTrue(os.path.exists(asub.subscriptions.podcastsdir()))
+        self.assertTrue(os.path.exists(asub.subscriptions._podcasts_basedir()))
 
     def test_doreport(self):
         report = doreport(self.standardpath)
@@ -53,8 +53,8 @@ class ApplicationTest(unittest.TestCase):
         # get a subscriptions object
         sobj = episodes[0].subscription.subscriptions
 
-        self.assertEqual(sobj._data_base_dir(),
-                         os.path.expanduser('~/.podcasts-data'))
+            self.assertEqual(sobj._data_basedir(),
+                             os.path.expanduser('~/.podcasts-data'))
 
         sobj._podcastdir = '/tmp/blahfoo'
         create_links(episodes, episodes[0].subscription)

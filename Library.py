@@ -12,34 +12,35 @@ def link_creation_test(src, dst):
 def create_links(episodes, sub):
     for e in episodes:
         src = e.localfile()
-        trim_junk_from_filename(src, sub)
-        pd = sub.subscriptions.podcastsdir()
-        if not os.path.exists(pd):
-            os.mkdir(pd)
-            os.mkdir(os.path.join(pd, 'xml'))
 
-        subdir = os.path.join(pd, sub.dir())
-        if not os.path.exists(subdir):
-            os.mkdir(subdir)
+        trim_querystring_from_filename(src, sub)
+
         dest = e.locallink()
-        if not os.path.exists(e.locallink_dir()):
-            os.mkdir(e.locallink_dir())
 
+        if os.path.exists(src):
+            disksize = os.path.getsize(src)
+            if int(disksize) != int(e.enclosure_length ):
+                vprint("!!!! episdode %s's length is %d, expected to be %d " %
+                       (src, disksize, int(e.enclosure_length)))
 
         vprint("making link from %s to  %s " % (src, dest))
         if True == link_creation_test(src, dest):
             os.link(src, dest)
 
 
-def trim_junk_from_filename(filename, subscription):
+def trim_querystring_from_filename(filename, subscription):
     '''
     Rename file on disk from the actual file name (sometimes with a
     query string appended by the file downloader) to the expected
     name taken from the url of the RSS enclosure.
     '''
-    fileptrn = filename + '?*'  # question mark is a query string thing
+
+    QUERY_STRING_MARKER = '?'
+    WILDCARD = '*'
+
+    fileptrn = filename + QUERY_STRING_MARKER + WILDCARD
     g = glob.glob(fileptrn)
-    x = "trim_junk_from_filename: %s using fileptrn %s" % (filename, fileptrn)
+    x = "trim_querystring_from_filename: %s using fileptrn %s" % (filename, fileptrn)
     vprint(x)
     if len(g) > 0:
         actual = g[0]

@@ -19,11 +19,25 @@ class Subscription:
     maxeps: number of episodes to store on local disk
     rssfile:'''
 
-    def __init__(self, s):
+    def __init__(self, s, r, u, m):
         self.subscriptions = s
-        self.rssfile = None
-        self.url = None
-        self.maxeps = None
+        self.rssfile = r
+        self.url = u
+        self.maxeps = m
+        self._make_directories()
+
+    def _podcasts_subdir(self): # podcasts/ffrf/
+        return os.path.join(self.subscriptions._podcasts_basedir(), self._sub_dir())
+
+    def _data_subdir(self): # eg ~/.podcast-data/ffrf/
+        return os.path.join(self.subscriptions._data_basedir(), self._sub_dir())
+
+    def _make_directories(self):
+        if not os.path.exists(self._podcasts_subdir()):
+            os.mkdir(self._podcasts_subdir())
+
+        if not os.path.exists(self._data_subdir()):
+            os.mkdir(self._data_subdir())
 
     def queue(self):
         '''The queue method returns pending episodes.
@@ -42,11 +56,12 @@ class Subscription:
         return queue
 
     def refresh(self, downloader):
-        print 'refresh'
+        Library.vprint( 'refresh')
         '''Download and store the most recent RSS file '''
         self.download_rss_file(downloader)
 
-    def _data_sub_dir(self):
+    def _sub_dir(self):
+        # return re.sub(r'\W', '_', self.title).lower()
         return self.rssfile.replace('.xml', '')
 
     def get_rss_dir(self):
@@ -56,7 +71,7 @@ class Subscription:
         subscriptions are stored.
 
         '''
-        rssdir = os.path.join(self.subscriptions._data_base_dir(), "rss/")
+        rssdir = os.path.join(self.subscriptions._data_basedir(), "rss/")
         return rssdir
 
     def get_rss_path(self):
@@ -94,11 +109,6 @@ class Subscription:
         return os.path.join(self.subscriptions._data_base_dir(),
                             self._data_sub_dir())
 
-    def prepare_directories_for_downloaing(self):
-        ''' make the data directory if need be. '''
-        if not os.path.exists(self.subscriptions._data_base_dir()):
-            if not Command.Args().parser.debug:
-                os.mkdir(self.subscriptions._data_base_dir())
 
         if not os.path.exists(self.dir()):
             if not Command.Args().parser.debug:
@@ -202,16 +212,31 @@ class Subscriptions:
         """
         self.items = []
         self.basedir = b
+        self._initialize_directories()
         self._initialize_subscriptions(match)
+
+
+    def _initialize_directories(self):
+        self._data_basedir()
+        self._podcasts_basedir()
+        if not os.path.exists( self._datadir):
+            os.mkdir(self._datadir)
+        if not os.path.exists( self._podcastdir):
+            os.mkdir(self._podcastdir)
+        if not os.path.exists( self.rss_dir()):
+            os.mkdir(self.rss_dir())
+
+    def rss_dir(self):
+        return os.path.join(self._datadir, 'rss')
 
     def find(self, substr):
         ''' find a matching subscription'''
         for i in self.items:
-            if substr in i.dir():
+            if substr in i._sub_dir():
                 return i
         return None
 
-    def _data_base_dir(self):
+    def _data_basedir(self):
         ''' return the directory used for storing the media data '''
         if not hasattr(self, '_datadir'):
             cf = ConfigParser()
@@ -220,7 +245,7 @@ class Subscriptions:
             self._datadir = os.path.expanduser(dir)
         return self._datadir
 
-    def podcastsdir(self):
+    def _podcasts_basedir(self):
         ''' return the directory of podcast shows '''
         if not hasattr(self, '_podcastdir'):
             cf = ConfigParser()
@@ -253,11 +278,7 @@ class Subscriptions:
             if config.has_option(s, 'url'):
                 url = config.get(s, 'url')
             if maxeps and rssfile and url:
-                sub = Subscription(self)
-                sub = Subscription(self)
-                sub.rssfile = rssfile
-                sub.url = url
-                sub.maxeps = int(maxeps)
+                sub = Subscription(self, rssfile, url, int(maxeps))
 
                 if match:
                     if match.lower() in repr(s).lower():

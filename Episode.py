@@ -29,17 +29,12 @@ class Episode:
         an rss file.
         '''
         filename = self._filename_from_url()
-        subdir = self.subscription.dir()
+
+        subdir = self.subscription._data_subdir()
         absfile = os.path.join(subdir, filename)
         filename = self._clean_up_filename(absfile)
         filename = filename.replace("%20",  " ")
         return filename
-
-    def locallink_dir(self):
-        subdir = os.path.join(self.subscription.subscriptions.
-                              podcastsdir(), self.subscription._data_sub_dir())
-
-        return subdir
 
     def locallink(self):
         '''
@@ -53,7 +48,7 @@ class Episode:
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         prettyname = ''.join(c for c in prettyname if c in validchars)
 
-        subdir = self.locallink_dir()
+        subdir = self.subscription._podcasts_subdir()
         filename = os.path.join(subdir, prettyname)
         return filename
 
