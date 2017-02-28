@@ -19,7 +19,7 @@ class SubscriptionsTest (unittest.TestCase):
         f.close()
 
         try:
-            s.minidom_parse(temp)
+            s.parse_rss_file(temp)
         except xml.etree.ElementTree.ParseError, e:
             self.assertTrue(True)
 
@@ -32,7 +32,7 @@ class SubscriptionsTest (unittest.TestCase):
         f.close()
 
         try:
-            s.minidom_parse(temp)
+            s.parse_rss_file(temp)
         except xml.etree.ElementTree.ParseError, e:
             self.assertTrue(True)
 

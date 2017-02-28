@@ -36,7 +36,7 @@ class ApplicationTest(unittest.TestCase):
         subs = get_list_of_subscriptions(basedir, matchpattern)
         for s in subs:
             try:
-                s.minidom_parse(s.get_rss_path())
+                s.parse_rss_file(s.get_rss_path())
             except xml.etree.ElementTree.ParseError, p:
                 self.assertFalse(True)
 
