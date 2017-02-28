@@ -53,8 +53,8 @@ class ApplicationTest(unittest.TestCase):
         # get a subscriptions object
         sobj = episodes[0].subscription.subscriptions
 
-            self.assertEqual(sobj._data_basedir(),
-                             os.path.expanduser('~/.podcasts-data'))
+        self.assertEqual(sobj._data_basedir(),
+                         os.path.expanduser('~/.podcasts-data'))
 
         sobj._podcastdir = '/tmp/blahfoo'
         create_links(episodes, episodes[0].subscription)
