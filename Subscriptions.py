@@ -68,7 +68,6 @@ class Subscription:
         filename = os.path.join(self.subscriptions.get_rss_dir(), self.rssfile)
         return filename
 
-
     def download_rss_file(self, downloader):
         ''' Downloads an RSS file. '''
         filename = self.get_rss_path()
@@ -157,6 +156,7 @@ class Subscription:
 
         return episodes
 
+
 def trim_tzinfo(t):
     # [Sat, 29 Apr 2006 20:38:00]
     # [Sat, 27 Feb 2010 06:00:00 EST]
@@ -194,7 +194,6 @@ class Subscriptions:
         self._initialize_directories()
         self._initialize_subscriptions(match)
 
-
     def _initialize_directories(self):
         self._data_basedir()
         self._podcasts_basedir()
@@ -221,8 +220,6 @@ class Subscriptions:
         '''
         rssdir = os.path.join(self._data_basedir(), "rss/")
         return rssdir
-
-
 
     def _data_basedir(self):
         ''' return the directory used for storing the media data '''
