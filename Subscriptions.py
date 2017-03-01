@@ -189,6 +189,8 @@ class Subscriptions:
         to keep at a time.
 
         """
+
+
         self.items = []
         self.basedir = b
         self._initialize_directories()
@@ -245,7 +247,6 @@ class Subscriptions:
         return self._get_ini_file_name()
 
     def _initialize_subscriptions(self, match):
-
         config = ConfigParser()
         config.read(self._get_subs_file_name())
 
@@ -262,9 +263,14 @@ class Subscriptions:
 
                 if match:
                     if match.lower() in repr(s).lower():
-                        self.items.append(sub)
+                         self.items.append(sub)
                 else:
                     self.items.append(sub)
+
+        if match is not None and len(match) > 0:
+            if len(self.items) == 0:
+                raise ValueError("could not find subscription " + match )
+
 
 if __name__ == '__main__':
     pass

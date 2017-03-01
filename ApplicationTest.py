@@ -20,11 +20,17 @@ class ApplicationTest(unittest.TestCase):
 
     def test_localrss_option_suspends_download_of_rss_file(self):
         self.fake = MockWget()
-
         self.parser = Command.Args().parse('--localrss --program wbur   '.split())
         self.assertTrue(Command.Args().parser.localrss)
         dodownload(self.standardpath, self.fake)
         self.assertFalse(self._wbur_rss_file_was_downloaded())
+
+    def test_unmatched_program_halts_app_execution_with_exception(self):
+        with self.assertRaises(ValueError):
+            self.fake = MockWget()
+            self.parser = Command.Args().parse(' --program asodmxcwew  '.split())
+            dodownload(self.standardpath, self.fake)
+
 
     def test_localrss_conditions(self):
         localrss_flag_is_set = False

@@ -2,11 +2,18 @@ import unittest
 from Application import init_config, get_list_of_subscriptions
 import tempfile
 import xml
+import Subscriptions
 
 
 class SubscriptionsTest (unittest.TestCase):
     def setUp(self):
         self.standardpath = init_config()
+
+    def test_assertion_raised_when_match_attempt_fails(self):
+        with self.assertRaises(ValueError):
+            basedir = self.standardpath
+            match = 'nklfewcjdisoafsdklewjidso'
+            s = Subscriptions.Subscriptions(basedir, match)
 
     def test_junk_in_header(self):
         '''test processing an RSS file with junk at the top of the header'''
