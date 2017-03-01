@@ -1,7 +1,7 @@
 import os
 import unittest
 import xml
-
+import mock
 
 from Application import get_list_of_subscriptions, doreport, init_config, dodownload
 from Application import get_list_of_subscriptions_production, localrss_conditions
@@ -19,7 +19,7 @@ class ApplicationTest(unittest.TestCase):
 
     def test_localrss_option_suspends_download_of_rss_file(self):
         self.fake = MockWget()
-        self.parser = Command.Args().parse('--localrss --program wbur  --test --verbose'.split())
+        self.parser = Command.Args().parse('--localrss --program wbur  --test '.split())
         self.assertTrue(Command.Args().parser.localrss)
         dodownload(self.standardpath, self.fake)
         self.assertFalse( self._wbur_rss_file_was_downloaded())
