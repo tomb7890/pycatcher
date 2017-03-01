@@ -8,6 +8,7 @@ import Command
 import Library
 import sys
 
+
 def main():
     '''
     Entry point of application examines command arguments
@@ -17,12 +18,7 @@ def main():
     basedir = init_config()
 
     Command.Args().parse(sys.argv[1:])
-    downloader = None
-    if Command.Args().parser.test:
-        downloader = wget.MockWget()
-    else:
-        downloader = wget.Wget()
-
+    downloader = wget.Wget()
     if Command.Args().parser.report:
         report = doreport(basedir)
         write_report_file(report)
@@ -30,6 +26,7 @@ def main():
         dorefresh(basedir)
     else:
         dodownload(basedir, downloader)
+
 
 def init_config():
     if 'PODCASTROOT' in os.environ:
@@ -44,11 +41,13 @@ def dorefresh(basedir):
         downloader.reset()
         sub.refresh(downloader)
 
+
 def localrss_conditions(local_rssfile_exists, localrss_flag_is_set):
     if localrss_flag_is_set:
         if local_rssfile_exists:
             return False
     return True
+
 
 def dodownload(basedir, downloader):
     '''
@@ -57,7 +56,7 @@ def dodownload(basedir, downloader):
     for sub in get_list_of_subscriptions_production(basedir):
         downloader.reset()
         if localrss_conditions(os.path.exists(sub.get_rss_path()),
-                               Command.Args().parser.localrss ):
+                               Command.Args().parser.localrss):
             sub.refresh(downloader)
         downloader.reset()
         try:
@@ -104,9 +103,11 @@ def get_new_episodes(sub, saved, basedir, downloader):
     downloader.download_new_files(sub, saved, basedir)
     Library.create_links(saved, sub)
 
+
 def appdir():
     path = init_config()
     return path
+
 
 def doreport(basedir):
     '''
