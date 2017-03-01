@@ -93,9 +93,13 @@ class Wget:
 class MockWget (Wget):
     def __init__(self):
         Wget.__init__(self)
+        self.url = ''
+        self.history = []
 
     def execute(self):
         Library.vprint( 'MockWget.execute: %s' % self.getCmd())
+        self.history.append(self.url)
+
 
 
 

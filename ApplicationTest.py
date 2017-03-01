@@ -1,20 +1,59 @@
 import os
 import unittest
 import xml
-import mock
+
 
 from Application import get_list_of_subscriptions, doreport, init_config, dodownload
+from Application import get_list_of_subscriptions_production, localrss_conditions
 from Episode import sort_rev_chron
 from Subscriptions import Subscriptions
 from Library import create_links
-from wget import  MockWget
+from wget import MockWget, Wget
 import Command
 
 class ApplicationTest(unittest.TestCase):
 
     def setUp(self):
-        self.parser = Command.Args().parse('--program wbur --test'.split())
+        self.parser = Command.Args().parse('--program  wbur --test'.split())
         self.standardpath = init_config()
+
+    def test_localrss_option_suspends_download_of_rss_file(self):
+        self.fake = MockWget()
+        self.parser = Command.Args().parse('--localrss --program wbur  --test --verbose'.split())
+        self.assertTrue(Command.Args().parser.localrss)
+        dodownload(self.standardpath, self.fake)
+        self.assertFalse( self._wbur_rss_file_was_downloaded())
+
+    def test_localrss_conditions(self):
+        localrss_flag_is_set = False
+        local_rssfile_exists = False
+        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
+        self.assertTrue(actual)
+
+        localrss_flag_is_set = True
+        local_rssfile_exists = False
+        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
+        self.assertTrue(actual)
+
+        localrss_flag_is_set = False
+        local_rssfile_exists = True
+        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
+        self.assertTrue(actual)
+
+        localrss_flag_is_set = True
+        local_rssfile_exists = True
+        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
+        self.assertFalse(actual)
+
+    def _wbur_rss_file_was_downloaded(self):
+        x = False
+        url = None
+        for sub in get_list_of_subscriptions_production(self.standardpath):
+            url = sub.url
+        for el in self.fake.history:
+            if url in el:
+                x = True
+        return x
 
     def test_dirs_exist(self):
         subs = Subscriptions(self.standardpath)

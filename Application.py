@@ -44,6 +44,11 @@ def dorefresh(basedir):
         downloader.reset()
         sub.refresh(downloader)
 
+def localrss_conditions(local_rssfile_exists, localrss_flag_is_set):
+    if localrss_flag_is_set:
+        if local_rssfile_exists:
+            return False
+    return True
 
 def dodownload(basedir, downloader):
     '''
@@ -51,7 +56,9 @@ def dodownload(basedir, downloader):
     '''
     for sub in get_list_of_subscriptions_production(basedir):
         downloader.reset()
-        sub.refresh(downloader)
+        if localrss_conditions(os.path.exists(sub.get_rss_path()),
+                               Command.Args().parser.localrss ):
+            sub.refresh(downloader)
         downloader.reset()
         try:
             episodes = get_sorted_list_of_episodes(sub)
