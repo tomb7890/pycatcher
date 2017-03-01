@@ -241,18 +241,11 @@ class Subscriptions:
             self._podcastdir = os.path.expanduser(cf.get('general', 'podcasts-directory', 0))
         return self._podcastdir
 
-    #  private methods
-
-
-
     def _get_ini_file_name(self):
-        fullpath = 'pycatcher.conf'
-        return fullpath
+        return 'pycatcher.conf'
 
     def _get_subs_file_name(self):
-        fullpath = 'pycatcher.conf'
-        return fullpath
-
+        return self._get_ini_file_name()
 
     def _initialize_subscriptions(self, match):
 
