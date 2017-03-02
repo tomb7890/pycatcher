@@ -75,7 +75,6 @@ class Subscription:
         downloader.addoption('--output-document', filename)
         downloader.url = self.url
         downloader.execute()
-        Library.vprint(downloader.getCmd())
 
     # def get_all_ep(self):
     #     rss_file_name = self.get_rss_path()
