@@ -1,7 +1,7 @@
 import os
 import Library
 import Command
-
+import logging
 
 class Wget:
     def __init__(self):
@@ -55,40 +55,49 @@ class Wget:
 
 
 
-
-    def download_new_files(self, subscription, episodes, basedir):
-        inputfile = 'urls.dat'
-        self.addoption('--input-file', inputfile)
-        # wget.addoption('--content-disposition', '1')
-
-        #    `--limit-rate=AMOUNT'
-
-         # with the `m' suffix.  For example, `--limit-rate=20k' will limit
-         # the retrieval rate to 20KB/s.  This is useful when, for whatever
-
-        # wget.addoption('--limit-rate', '110k')
-        if os.path.exists(inputfile):
-            os.unlink(inputfile)
-
-        self.addoption('--directory-prefix', subscription._data_subdir())
-        self.url = subscription.url
-        f = open(inputfile, 'w')
-        dodownload = False
+    def prepare_queue(self, episodes):
+        self.queue = []
         for episode in episodes:
             lf = episode.localfile()
             if os.path.exists(lf):
-                Library.vprint("file already exists: " + lf)
+                logging.info("file already exists: " + lf)
             else:
-                # at least one download required:
-                dodownload = True
-                Library.vprint("queuing: " + lf)
-                f.write('%s\n' % episode.url)
-        f.close()
-        if dodownload:
+                logging.info("queuing: " + lf)
+                self.queue.append(episode.url)
+
+    def download_new_files(self, subscription, episodes, basedir):
+        self.prepare_queue(episodes)
+        if len(self.queue) > 0 :
+
+            inputfile = 'urls.dat'
+            self.addoption('--input-file', inputfile)
+            # wget.addoption('--content-disposition', '1')
+
+            #    `--limit-rate=AMOUNT'
+
+             # with the `m' suffix.  For example, `--limit-rate=20k' will limit
+             # the retrieval rate to 20KB/s.  This is useful when, for whatever
+
+            # wget.addoption('--limit-rate', '110k')
+
+            if os.path.exists(inputfile):
+                os.unlink(inputfile)
+
+            self.addoption('--directory-prefix', subscription._data_subdir())
+
+            self.url = subscription.url
+
+            f = open(inputfile, 'w')
+
+            f.write('%s\n' % ('\n'.join(self.queue)))
+
+            f.close()
+
             self.execute()
-            # Library.vprint(self.getCmd())
-        if os.path.exists(inputfile):
-            os.unlink(inputfile)
+            logging.info(self.getCmd)
+
+            if os.path.exists(inputfile):
+                os.unlink(inputfile)
 
 class MockWget (Wget):
     def __init__(self):
