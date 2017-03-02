@@ -100,9 +100,40 @@ def get_latest_episodes(sub):
 
 
 def get_new_episodes(sub, saved, basedir, downloader):
-    downloader.download_new_files(sub, saved)
+    download_new_files(downloader, sub, saved)
     Library.create_links(saved, sub)
 
+
+def prepare_queue(episodes):
+    queue = []
+    for episode in episodes:
+        lf = episode.localfile()
+        if os.path.exists(lf):
+            logging.info("file already exists: " + lf)
+        else:
+            logging.info("queuing: " + lf)
+            queue.append(episode.url)
+    return queue
+
+
+def download_new_files(downloader, subscription, episodes):
+    logging.info("downloader ")
+    queue = prepare_queue(episodes)
+    if len(queue) > 0 :
+        inputfile = 'urls.dat'
+
+        downloader.addoption('--input-file', inputfile)
+        downloader.addoption('--directory-prefix', subscription._data_subdir())
+        # downloader.addoption('--limit-rate', '130k')
+
+        downloader.url = subscription.url
+        f = open(inputfile, 'w')
+        f.write('%s\n' % ('\n'.join(queue)))
+        f.close()
+        downloader.execute()
+        logging.info(downloader.getCmd)
+        if os.path.exists(inputfile):
+            os.unlink(inputfile)
 
 def appdir():
     path = init_config()
