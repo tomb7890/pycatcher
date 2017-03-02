@@ -65,7 +65,7 @@ class Wget:
                 logging.info("queuing: " + lf)
                 self.queue.append(episode.url)
 
-    def download_new_files(self, subscription, episodes, basedir):
+    def download_new_files(self, subscription, episodes):
         self.prepare_queue(episodes)
         if len(self.queue) > 0 :
 
