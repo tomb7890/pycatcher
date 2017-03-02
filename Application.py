@@ -124,7 +124,8 @@ def download_new_files(downloader, subscription, episodes):
 
         downloader.addoption('--input-file', inputfile)
         downloader.addoption('--directory-prefix', subscription._data_subdir())
-        # downloader.addoption('--limit-rate', '130k')
+        if Command.Args().parser.limitrate:
+            downloader.addoption('--limit-rate', Command.Args().parser.limitrate)
 
         downloader.url = subscription.url
         f = open(inputfile, 'w')
