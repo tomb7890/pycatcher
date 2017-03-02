@@ -28,18 +28,6 @@ class Wget:
         else:
             self.cmd = self.cmd + " --quiet"
 
-        # if self.no_clobber :
-        #     self.cmd = self.cmd + " --no-clobber "
-
-        # if self.directoryprefix:
-        #     self.cmd = self.cmd + " --directory-prefix '%s' " % self.directoryprefix
-
-        # if self.outputdocument:
-        #     self.cmd = self.cmd + " --output-document='%s' " % self.outputdocument
-
-        # if self.inputfile:
-        #     self.cmd = self.cmd + " --input-file='%s' " % self.inputfile
-
         for o in self.options:
             self.cmd = self.cmd + " %s='%s'" % (o, self.options[o])
 
