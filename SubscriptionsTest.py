@@ -3,6 +3,7 @@ from Application import init_config, get_list_of_subscriptions
 import tempfile
 import xml
 import Subscriptions
+import Command
 
 
 class SubscriptionsTest (unittest.TestCase):
@@ -31,6 +32,28 @@ class SubscriptionsTest (unittest.TestCase):
             f.close()
             s.parse_rss_file(filename)
 
+    def test_reject_blanks_in_header(self):
+        '''test rejecting an RSS file with a blank line at the top'''
+        with self.assertRaises(xml.etree.ElementTree.ParseError):
+            s = self.set_up_minidom_test()
+            f, filename = self.get_temp_file()
+            f.write('\n')
+            partial = open(s.get_rss_path(), 'r').read()
+            f.write(partial)
+            f.close()
+            s.parse_rss_file(filename)
+
+    def test_tolerate_blanks_in_header(self):
+        '''test tolerating an RSS file with a blank line at the top'''
+        parser = Command.Args().parse(' --tolerant '.split())
+        s = self.set_up_minidom_test()
+        f, filename = self.get_temp_file()
+        f.write('\n')
+        partial = open(s.get_rss_path(), 'r').read()
+        f.write(partial)
+        f.close()
+        s.parse_rss_file(filename)
+
     def test_empty_rss_file(self):
         '''test processing an empty RSS file'''
         with self.assertRaises(xml.etree.ElementTree.ParseError):
@@ -44,9 +67,6 @@ class SubscriptionsTest (unittest.TestCase):
         basedir = self.standardpath
         s = get_list_of_subscriptions(basedir)[0]
         return s
-
-    def test_get_rss_file(self):
-        pass
 
 
 if __name__ == '__main__':

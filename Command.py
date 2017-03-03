@@ -19,4 +19,14 @@ class Args:
         parser.add_argument('-f', '--refresh', action='store_true')
         parser.add_argument('--localrss',
                             action='store_true',  default=False )
+
+
+        parser.add_argument('-t', '--tolerant',
+                            action='store_true',  default=False,
+                            help =
+                            """
+                            Allow blank lines to appear in header of RSS file
+                            """
+        )
+
         self.parser = parser.parse_args(args)

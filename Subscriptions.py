@@ -97,9 +97,6 @@ class Subscription:
     #     return
 
     def _remove_blank_from_head_of_rss_file(self, xfile):
-        # for some reason the toronto vegetarian association
-        # publishes an rss file with blank first line. This
-        # otherwise good xmlfile wreaks havoc on minidom parsing
         if self._blank_at_head(xfile):
             lines = self._linesfromfile(xfile)
             f = open(xfile, 'w')
@@ -136,6 +133,8 @@ class Subscription:
 
     def parse_rss_file(self, filename):
         episodes = []
+        if Command.Args().parser.tolerant:
+            self._remove_blank_from_head_of_rss_file(filename)
         tree = ET.parse(filename)
         root = tree.getroot()
         self.title = (root.findall("./channel/title")[0].text)
