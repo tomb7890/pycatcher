@@ -9,6 +9,11 @@ class SubscriptionsTest (unittest.TestCase):
     def setUp(self):
         self.standardpath = init_config()
 
+    def get_temp_file(self):
+        filename = tempfile.mktemp()
+        f = open(filename, 'w')
+        return f, filename
+
     def test_assertion_raised_when_match_attempt_fails(self):
         with self.assertRaises(ValueError):
             basedir = self.standardpath
@@ -18,28 +23,27 @@ class SubscriptionsTest (unittest.TestCase):
     def test_junk_in_header(self):
         '''test processing an RSS file with junk at the top of the header'''
         s = self.set_up_minidom_test()
-        temp = tempfile.mktemp()
-        f = open(temp, 'w')
+        f, filename = self.get_temp_file()
         f.write('blah blah blah blah blah')
         partial = open(s.get_rss_path(), 'r').read()
         f.write(partial)
         f.close()
 
         try:
-            s.parse_rss_file(temp)
+            s.parse_rss_file(filename)
         except xml.etree.ElementTree.ParseError, e:
             self.assertTrue(True)
 
     def test_empty_rss_file(self):
         '''test processing an empty RSS file'''
         s = self.set_up_minidom_test()
-        temp = tempfile.mktemp()
-        f = open(temp, 'w')
+
+        f, filename = self.get_temp_file()
         f.write('')
         f.close()
 
         try:
-            s.parse_rss_file(temp)
+            s.parse_rss_file(filename)
         except xml.etree.ElementTree.ParseError, e:
             self.assertTrue(True)
 
