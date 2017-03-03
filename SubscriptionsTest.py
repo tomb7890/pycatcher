@@ -22,30 +22,23 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_junk_in_header(self):
         '''test processing an RSS file with junk at the top of the header'''
-        s = self.set_up_minidom_test()
-        f, filename = self.get_temp_file()
-        f.write('blah blah blah blah blah')
-        partial = open(s.get_rss_path(), 'r').read()
-        f.write(partial)
-        f.close()
-
-        try:
+        with self.assertRaises(xml.etree.ElementTree.ParseError):
+            s = self.set_up_minidom_test()
+            f, filename = self.get_temp_file()
+            f.write('blah blah blah blah blah')
+            partial = open(s.get_rss_path(), 'r').read()
+            f.write(partial)
+            f.close()
             s.parse_rss_file(filename)
-        except xml.etree.ElementTree.ParseError, e:
-            self.assertTrue(True)
 
     def test_empty_rss_file(self):
         '''test processing an empty RSS file'''
-        s = self.set_up_minidom_test()
-
-        f, filename = self.get_temp_file()
-        f.write('')
-        f.close()
-
-        try:
+        with self.assertRaises(xml.etree.ElementTree.ParseError):
+            s = self.set_up_minidom_test()
+            f, filename = self.get_temp_file()
+            f.write('')
+            f.close()
             s.parse_rss_file(filename)
-        except xml.etree.ElementTree.ParseError, e:
-            self.assertTrue(True)
 
     def set_up_minidom_test(self):
         basedir = self.standardpath
