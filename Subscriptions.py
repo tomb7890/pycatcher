@@ -76,25 +76,11 @@ class Subscription:
         downloader.url = self.url
         downloader.execute()
 
-    # def get_all_ep(self):
-    #     rss_file_name = self.get_rss_path()
-    #     # get the rss Document from a filename
-    #     self.minidom_parse(rss_file_name)
-    #     # make episode objects from a RSS Doucment
-
     def get_all_episodes(self):
         rssfile= self.get_rss_path()
         Library.vprint( 'calling get_all_episodes with rss file' + repr(rssfile))
         episodes = self.parse_rss_file(rssfile)
         return episodes
-
-
-    # def minidom_parse(self, filename):
-    #     self._remove_blank_from_head_of_rss_file(filename)
-    #     doc = None
-    #     f = open(filename, 'r')
-    #     doc = xml.etree.ElementTree.parse(f)
-    #     return
 
     def _remove_blank_from_head_of_rss_file(self, xfile):
         if self._blank_at_head(xfile):
