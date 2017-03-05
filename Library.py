@@ -1,6 +1,7 @@
 import Command
 import glob
 import os
+import logging
 
 
 def link_creation_test(src, dst):
@@ -20,10 +21,10 @@ def create_links(episodes, sub):
         if os.path.exists(src):
             disksize = os.path.getsize(src)
             if int(disksize) != int(e.enclosure_length ):
-                vprint("!!!! episdode %s's length is %d, expected to be %d " %
+                logging.warning("episdode %s's length is %d, expected to be %d " %
                        (src, disksize, int(e.enclosure_length)))
 
-        vprint("making link from %s to  %s " % (src, dest))
+        logging.info("making link from %s to  %s " % (src, dest))
         if True == link_creation_test(src, dest):
             os.link(src, dest)
 
@@ -41,7 +42,7 @@ def trim_querystring_from_filename(filename, subscription):
     fileptrn = filename + QUERY_STRING_MARKER + WILDCARD
     g = glob.glob(fileptrn)
     x = "trim_querystring_from_filename: %s using fileptrn %s" % (filename, fileptrn)
-    vprint(x)
+    logging.info(x)
     if len(g) > 0:
         actual = g[0]
         if actual:
@@ -49,12 +50,6 @@ def trim_querystring_from_filename(filename, subscription):
             if not os.path.exists(filename):
                 os.rename(actual, filename)
 
-
-def vprint(msg):
-    # parser = Command.get_sorted_list_of_episodes
-    if True: # parser.args:
-        if Command.Args().parser.verbose:
-            print msg
 
 if __name__ == '__main__':
     main()

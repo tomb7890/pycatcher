@@ -7,6 +7,7 @@ import wget
 import Command
 import Library
 import sys
+import logging
 
 
 def main():

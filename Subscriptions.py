@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import logging
 import xml.etree.ElementTree as ET
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
@@ -55,7 +56,7 @@ class Subscription:
         return queue
 
     def refresh(self, downloader):
-        Library.vprint( 'refresh')
+        logging.info( 'refresh')
         '''Download and store the most recent RSS file '''
         self.download_rss_file(downloader)
 
@@ -78,7 +79,7 @@ class Subscription:
 
     def get_all_episodes(self):
         rssfile= self.get_rss_path()
-        Library.vprint( 'calling get_all_episodes with rss file' + repr(rssfile))
+        logging.info( 'calling get_all_episodes with rss file' + repr(rssfile))
         episodes = self.parse_rss_file(rssfile)
         return episodes
 
@@ -225,7 +226,16 @@ class Subscriptions:
         return self._podcastdir
 
     def _get_ini_file_name(self):
-        return 'pycatcher.conf'
+        basename = 'pycatcher.conf'
+        alternative1 = os.path.join(
+            os.path.expanduser("~/podcasts/"),
+            basename )
+
+        if os.path.exists(basename):
+            return basename
+        elif  os.path.exists(alternative1):
+            return alternative1
+
 
     def _get_subs_file_name(self):
         return self._get_ini_file_name()

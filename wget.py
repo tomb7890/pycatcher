@@ -48,7 +48,7 @@ class MockWget (Wget):
         self.history = []
 
     def execute(self):
-        Library.vprint( 'MockWget.execute: %s' % self.getCmd())
+        logging.info( 'MockWget.execute: %s' % self.getCmd())
         self.history.append(self.url)
 
 
