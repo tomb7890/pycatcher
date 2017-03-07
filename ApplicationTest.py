@@ -10,6 +10,7 @@ from Subscriptions import Subscriptions
 from Library import create_links
 from wget import MockWget, Wget
 import Command
+from Report import make_report_text
 
 
 class ApplicationTest(unittest.TestCase):
@@ -69,7 +70,7 @@ class ApplicationTest(unittest.TestCase):
         self.assertTrue(os.path.exists(asub.subscriptions._podcasts_basedir()))
 
     def test_doreport(self):
-        report = doreport(self.standardpath)
+        report = make_report_text(self.standardpath)
         self.assertTrue(len(report) > 0)
         self.assertTrue('<HTML>' in report)
 
