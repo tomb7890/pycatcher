@@ -151,7 +151,8 @@ def trim_tzinfo(t):
                     r'\sEDT$',
                     r'\sCST$',
                     r'\sPST$',
-                    r'\sEST$'
+                    r'\sEST$',
+                    r'\s+PDT$'
                     ]
 
     for j in timezoneinfo:
