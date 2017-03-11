@@ -56,6 +56,7 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_empty_rss_file(self):
         '''test processing an empty RSS file'''
+        Command.Args().parse('')
         with self.assertRaises(xml.etree.ElementTree.ParseError):
             s = self.set_up_minidom_test()
             f, filename = self.get_temp_file()
