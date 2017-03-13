@@ -45,7 +45,7 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_tolerate_blanks_in_header(self):
         '''test tolerating an RSS file with a blank line at the top'''
-        parser = Command.Args().parse(' --tolerant '.split())
+        Command.Args().parse(' --tolerant '.split())
         s = self.set_up_minidom_test()
         f, filename = self.get_temp_file()
         f.write('\n')
