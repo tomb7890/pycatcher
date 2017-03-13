@@ -66,7 +66,7 @@ def dodownload(basedir, downloader):
             get_new_episodes(sub, new, basedir, downloader)
             release_old_episodes(old)
         except xml.etree.ElementTree.ParseError, error:
-            Library.vprint("minidom parsing error:"+repr(error) +
+            logging.info("minidom parsing error:"+repr(error) +
                            'with subscription ' + repr(sub.get_rss_path()))
 
 
