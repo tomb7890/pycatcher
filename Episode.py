@@ -24,9 +24,7 @@ class Episode:
 
     def localfile(self):
         '''
-        Provide an absolute filename for the downloaded media. It is
-        taken by removing the last component of the enclosure url from
-        an rss file.
+        Return the full path to the downloaded media file.
         '''
         filename = self._filename_from_url()
 
@@ -38,18 +36,18 @@ class Episode:
 
     def locallink(self):
         '''
-        Provide an absolute filename for the symbolic link to be made
-        to the local media file.  The link name is created using the
-        filesystem-safe characters from the episodes's RSS title
-        attribute; the link's extension is taken from the pointed-to
-        filename, so as to preserve the media type.
+        Return the full path to the symbolic link that will serve as
+        the user presentation of a downloaded media file.
         '''
-        prettyname = self.title + self._file_extension()
+
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-        prettyname = ''.join(c for c in prettyname if c in validchars)
+        basename = ''
+        for char in self.title:
+            if char in validchars:
+                basename = basename + char
 
         subdir = self.subscription._podcasts_subdir()
-        filename = os.path.join(subdir, prettyname)
+        filename = os.path.join(subdir, basename) + self._file_extension()
         return filename
 
     def prune_file(self):
