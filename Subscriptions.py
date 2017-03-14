@@ -207,6 +207,14 @@ class Subscriptions:
                 return i
         return None
 
+    def find_by_title_text(self, substr):
+        ''' find a subscription by partial text match of subscription title  '''
+        subscription = None
+        for i in self.items:
+            if substr in i.title:
+                subscription = i
+        return subscription
+
     def get_rss_dir(self):
         '''Returns the full path of the RSS subdirectory.
 
