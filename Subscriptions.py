@@ -120,12 +120,8 @@ class Subscription:
 
     def parse_rss_file(self, filename):
         episodes = []
-        if Command.Args().parser.tolerant:
-            self._remove_blank_from_head_of_rss_file(filename)
-        tree = ET.parse(filename)
-        root = tree.getroot()
+        root = self._fetch_root(filename)
         self.title = (root.findall("./channel/title")[0].text)
-        #
         elements = root.findall("./channel/item")
         for el in elements:
             episode = Episode(self)
@@ -138,8 +134,19 @@ class Subscription:
                 episode.enclosure_length = e[0].get('length')
             if episode.pubDate and episode.url and episode.title:
                 episodes.append(episode)
-
         return episodes
+
+    def set_title(self, filename):
+        root = self._fetch_root(filename)
+        self.title = (root.findall("./channel/title")[0].text)
+
+    def _fetch_root(self, filename):
+        if Command.Args().parser.tolerant:
+            self._remove_blank_from_head_of_rss_file(filename)
+        tree = ET.parse(filename)
+        root = tree.getroot()
+        return root
+
 
 
 def trim_tzinfo(t):
@@ -181,6 +188,7 @@ class Subscriptions:
         self.basedir = b
         self._initialize_directories()
         self._initialize_subscriptions(match)
+        self._initialize_subscription_titles()
 
     def _initialize_directories(self):
         self._data_basedir()
@@ -265,6 +273,13 @@ class Subscriptions:
         if match is not None and len(match) > 0:
             if len(self.items) == 0:
                 raise ValueError("could not find subscription " + match )
+
+    def _initialize_subscription_titles(self):
+        for s in self.items:
+            s.set_title(s.get_rss_path())
+        return None
+
+
 
 
 if __name__ == '__main__':
