@@ -1,4 +1,4 @@
-import unittest
+import unittest, os
 from Application import init_config
 from Subscriptions import Subscriptions
 from Filesystem import FileSystem
@@ -58,9 +58,9 @@ class DuplicatesTest(unittest.TestCase):
     def test_of_locallink(self):
         # make sure I don't break anything while extracting basename from locallink
         first_dupe = self.episodes[self.dupes[0]]
-        expected = '/home/tomb/podcasts/tvo_the_agenda/The Agendas Week in Review.mp4'
+        expected = '~/podcasts/tvo_the_agenda/The Agendas Week in Review.mp4'
         actual = first_dupe.locallink()
-        self.assertEqual(expected, actual)
+        self.assertEqual(os.path.expanduser(expected), actual)
 
     def gtest_second_dupe_has_disambiguator(self):
         second_dupe = self.episodes[self.dupes[1]]
