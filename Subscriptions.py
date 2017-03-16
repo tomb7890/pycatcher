@@ -127,12 +127,13 @@ class Subscription:
             episode = Episode(self)
             self.pubdate_to_timestamp(el.findall('pubDate')[0].text, episode)
             episode.title = el.findall('title')[0].text
+            episode.guid = el.findall('guid')[0].text
             episode.description = el.findall('description')[0].text
             e = el.findall('enclosure')
             if e and len(e) > 0:
                 episode.url = e[0].get('url')
                 episode.enclosure_length = e[0].get('length')
-            if episode.pubDate and episode.url and episode.title:
+            if episode.pubDate and episode.url and episode.title and episode.guid:
                 episodes.append(episode)
         return episodes
 
