@@ -2,6 +2,7 @@ import os
 import re
 import time
 import logging
+import LookupTable
 import xml.etree.ElementTree as ET
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
@@ -67,6 +68,14 @@ class Subscription:
     def get_rss_path(self):
         ''' Returns the full path of an RSS file.  '''
         filename = os.path.join(self.subscriptions.get_rss_dir(), self.rssfile)
+        return filename
+
+    def get_idx_path(self):
+        ''' Returns the full path of an IDX file.  '''
+
+        idxfile = self.rssfile.replace("xml", LookupTable.file_extension())
+        filename = os.path.join(self.subscriptions.get_rss_dir(),
+                                idxfile )
         return filename
 
     def download_rss_file(self, downloader):

@@ -11,7 +11,7 @@ class DuplicatesTest(unittest.TestCase):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
         self.sub = subscriptions.find("Agenda")
-        self.sub.lut = LookupTable()
+        self.sub.lut = LookupTable(self.sub.get_idx_path())
         self.episodes = self.sub.get_all_episodes()
         self.gather_dupe_indices()
 
@@ -71,7 +71,9 @@ class DuplicatesTest(unittest.TestCase):
         # Go through and simulate the writing to disk a big chunk of the episodes--at least
         # as many so as to include the first 3 occurrences of "Week in Review"
 
+        os.system("rm ~/.podcasts-data/rss/tvo_the_agenda.idx")
         fs = FileSystem()
+        self.sub.lut.load()
 
         chunk = self.dupes[3]
         for i in range(chunk):
@@ -89,6 +91,8 @@ class DuplicatesTest(unittest.TestCase):
         first_follower = self.episodes[index_of_folower_of_first_dupe]
         expected = "Ontarios Pothole Pains.mp4" # find out via inspection of RSS file
         self.assertEqual(expected, first_follower.reallink())
+
+        self.sub.lut.save()
 
     def simulate_writing_episode_to_disk(self, episode, fs):
         table = episode.subscription.lut.table
