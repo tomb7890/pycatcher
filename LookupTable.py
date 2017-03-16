@@ -1,6 +1,8 @@
 """Lookup Table
 
-For a given RSS Subscription, tell us what absolute file path where the hard link will be found. Methods are included for serializing to and from storage.
+For a given RSS Subscription, tell us what absolute file path where
+the hard link will be found. Methods are included for serializing to
+and from storage.
 
 """
 
