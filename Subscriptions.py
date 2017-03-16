@@ -204,7 +204,7 @@ class Subscriptions:
     def find(self, substr):
         ''' find a matching subscription'''
         for i in self.items:
-            if substr in i._sub_dir():
+            if substr.lower() in i._sub_dir().lower():
                 return i
         return None
 
