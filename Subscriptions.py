@@ -189,7 +189,7 @@ class Subscriptions:
         self.basedir = b
         self._initialize_directories()
         self._initialize_subscriptions(match)
-        self._initialize_subscription_titles()
+        # self._initialize_subscription_titles()
 
     def _initialize_directories(self):
         self._data_basedir()

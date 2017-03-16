@@ -34,21 +34,31 @@ class Episode:
         filename = filename.replace("%20",  " ")
         return filename
 
-    def locallink(self):
-        '''
-        Return the full path to the symbolic link that will serve as
-        the user presentation of a downloaded media file.
-        '''
-
+    def base_sans_extension(self):
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         basename = ''
         for char in self.title:
             if char in validchars:
                 basename = basename + char
+        return basename
 
+
+    def basename(self):
+        basename = self.base_sans_extension()
+        return basename + self._file_extension()
+
+    def locallink(self):
+        '''
+        Return an ideal or desired link name for the file system. The desired link however
+        may not be available.
+        '''
         subdir = self.subscription._podcasts_subdir()
-        filename = os.path.join(subdir, basename) + self._file_extension()
+        filename = os.path.join(subdir, self.basename())
         return filename
+
+    def reallink(self):
+        return self.subscription.lut.table[self.guid]
+
 
     def prune_file(self):
         filename = self.localfile()
