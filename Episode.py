@@ -48,17 +48,7 @@ class Episode:
         return basename + self._file_extension()
 
     def locallink(self):
-        '''
-        Return an ideal or desired link name for the file system. The desired link however
-        may not be available.
-        '''
-        subdir = self.subscription._podcasts_subdir()
-        filename = os.path.join(subdir, self.basename())
-        return filename
-
-    def reallink(self):
-        return self.subscription.lut.table[self.guid]
-
+        return self._link_name
 
     def prune_file(self):
         filename = self.localfile()
