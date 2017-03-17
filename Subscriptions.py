@@ -26,6 +26,11 @@ class Subscription:
         self.url = u
         self.maxeps = m
         self._make_directories()
+        self.lut = LookupTable.LookupTable(self.get_idx_path())
+
+    def _lookup_table_path(self):
+        return os.path.join( self.get_rss_dir(), LookupTable.file_extension() )
+
 
     def _podcasts_subdir(self): # podcasts/ffrf/
         return os.path.join(self.subscriptions._podcasts_basedir(), self._sub_dir())
@@ -90,7 +95,51 @@ class Subscription:
         rssfile= self.get_rss_path()
         logging.info( 'calling get_all_episodes with rss file' + repr(rssfile))
         episodes = self.parse_rss_file(rssfile)
+        self._max_episode_count =  len(episodes)
+        self.set_linknames(episodes)
         return episodes
+
+    def max_episode_count(self):
+        return self._max_episode_count
+
+    def set_linkname(self, episode):
+        if not self.lut.table.has_key(episode.guid):
+            link_name = self.generate_link_name(episode)
+            self.lut.table[episode.guid] = link_name
+            full_link_path = os.path.join(self._podcasts_subdir(), link_name)
+            episode._link_name = full_link_path
+
+    def set_linknames(self, episodes):
+        for e in episodes:
+            self.set_linkname(e)
+
+    def generate_link_name(self, episode):
+        ''''
+        Generate a new link name that is not yet in use
+
+        A link name is typically a composition of the usable text from
+        an episode's TITLE element.  However sometimes there are
+        duplicate (repeating) TITLE. In this case a modified version
+        must be generated to avoid a collision, using a numerical suffix
+
+        '''
+        table = self.lut.table
+
+        count = 1
+        # while link name is unavailable...
+        proposal = episode.base_sans_extension() + episode._file_extension()
+        while True:
+            if count > self.max_episode_count():
+                raise RuntimeError
+
+            count = count + 1
+            if proposal not in table.values():
+                break
+            proposal = episode.base_sans_extension() \
+                       + "-%d" % count + episode._file_extension()
+
+        # return the link name
+        return proposal
 
     def _remove_blank_from_head_of_rss_file(self, xfile):
         if self._blank_at_head(xfile):
