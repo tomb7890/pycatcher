@@ -92,11 +92,15 @@ class Subscription:
         downloader.execute()
 
     def get_all_episodes(self):
+        episodes = self.fetch_episodes()
+        self._max_episode_count =  len(episodes)
+        self.set_linknames(episodes)
+        return episodes
+
+    def fetch_episodes(self):
         rssfile= self.get_rss_path()
         logging.info( 'calling get_all_episodes with rss file' + repr(rssfile))
         episodes = self.parse_rss_file(rssfile)
-        self._max_episode_count =  len(episodes)
-        self.set_linknames(episodes)
         return episodes
 
     def max_episode_count(self):
@@ -347,6 +351,14 @@ class Subscriptions:
         return None
 
 
+
+class FakeSubscription (Subscription):
+    def __init__(self, s, r ):
+        Subscription.__init__(self, s, r, None, None)
+
+    def fetch_episodes(self):
+        # override fetch_episodes
+        return self._fake_episode_list
 
 
 if __name__ == '__main__':
