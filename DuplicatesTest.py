@@ -12,7 +12,7 @@ class DuplicatesTest(unittest.TestCase):
         subscriptions = Subscriptions(self.standardpath)
         self.sub = subscriptions.find("Agenda")
         self.episodes = self.sub.get_all_episodes()
-        self.gather_dupe_indices()
+        self.dupes = self.gather_dupe_indices(self.episodes)
 
     def xassertEqual(self, a, b):
         self.assertEqual(os.path.join(self.sub._podcasts_subdir(), a), b)
@@ -28,25 +28,27 @@ class DuplicatesTest(unittest.TestCase):
         self.xassertEqual("The Agendas Week in Review-3.mp4",
                           third_duplicate_episdode.locallink())
 
-    def gather_dupe_indices(self):
+    def gather_dupe_indices(self, episodes):
         '''
         Scan the list of all episodes which have recurring titles.
         Store their indices in the array self.dupes.
         '''
         unique_titles = []
         duplicates_titles = []
-        self.dupes = []
+        dupes = []
 
-        for i in range(len(self.episodes)):
-            title = self.episodes[i].title
+        for i in range(len(episodes)):
+            title = episodes[i].title
             if title not in unique_titles:
                 unique_titles.append(title)
             else:
                 duplicates_titles.append(title)
 
-        for i in range(len(self.episodes)):
-            if self.episodes[i].title in duplicates_titles:
-                self.dupes.append(i)
+        for i in range(len(episodes)):
+            if episodes[i].title in duplicates_titles:
+                dupes.append(i)
+
+        return dupes
 
     def test_first_occurrence_of_dupe_is_as_normal(self):
         first_dupe = self.episodes[self.dupes[0]]
