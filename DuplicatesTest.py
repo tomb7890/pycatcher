@@ -115,11 +115,9 @@ Whiskey X Yankee Zulu""".split()
         for i in range(maxeps):
             e = episode_objects.pop(0)
             episode_stream.append(e)
-
         dupes = self.gather_dupe_indices(episode_stream)
 
         self.assertEqual(episode_stream[-1].title, "India")
-
         # call "get_all_episodes" to engage the processing
         fs._fake_episode_list = episode_stream
         processed = fs.get_all_episodes()
@@ -130,10 +128,19 @@ Whiskey X Yankee Zulu""".split()
             d = b
             self.assertEqual(c, d)
 
-        yassertEqual('Alpha.mp3', processed[0].locallink() )
-        yassertEqual('Delta.mp3', processed[dupes[0]].locallink() )
-        yassertEqual('Delta-2.mp3', processed[dupes[1]].locallink() )
 
         # TODO push some new episodes onto the stream and reprocess
         # such that the oldest of maxeps scrolls away
         # assert the oldest dupe scrolls away ( & freeing up one of the dupe name mods )
+
+
+        # tweak the second title dupe as we expect
+        modified_expected_link_base_titles = \
+        """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India""".split()
+
+        for i in range (len(modified_expected_link_base_titles)):
+            title = modified_expected_link_base_titles[i] + ".mp3"
+            yassertEqual(title, processed[i].locallink())
+
+
+        # now fetch another ten episodes from the stream
