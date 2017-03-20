@@ -72,15 +72,7 @@ class DuplicatesTest(unittest.TestCase):
                           second_dupe.locallink())
 
 
-
-    def test_the_gamut(self):
-        # set up some episodes with duplicate titles
-
-
-
-        episode_titles = """Alfa Bravo Charlie Delta Echo Foxtrot Golf Hotel India Delta Juliett Kilo
-Lima Mike November Oscar Papa Quebec Delta  Romeo Sierra Tango Uniform Victor
-Whiskey X Yankee Zulu""".split()
+    def prepare_materials_for_test(self, episode_titles):
 
         self.assertEqual( episode_titles[3], "Delta")
 
@@ -90,6 +82,7 @@ Whiskey X Yankee Zulu""".split()
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
         fs = FakeSubscription(subscriptions, "foobar")
+        fs.maxeps = 10
 
         for e in episode_titles:
             episode_object = Episode(fs)
@@ -98,25 +91,49 @@ Whiskey X Yankee Zulu""".split()
             episode_object.url = 'http://www.example.com/foo/bar/baz.mp3'
             count = count + 1
             episode_objects.append( episode_object )
+        return fs, episode_objects
 
+
+    def test_the_gamut(self):
+        # set up some episodes with duplicate titles
+
+        # All known episodes
+        episode_titles = """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta Hotel India Juliett Kilo
+Lima Delta Mike November Oscar Delta Papa Quebec Romeo Delta Sierra Tango Uniform Victor
+Whiskey X Yankee Zulu""".split()
+
+        fs, episode_objects = self.prepare_materials_for_test(episode_titles)
+
+        # sanity checking, ok
         self.assertEqual( episode_objects[-1].title, "Zulu")
         self.assertEqual( episode_objects[-1].guid, len(episode_objects)-1)
 
-        fs._fake_episode_list = episode_objects
-        processed = fs.get_all_episodes()
+        episode_stream = []
+
+        maxeps = 10
+
+        for i in range(maxeps):
+            e = episode_objects.pop(0)
+            episode_stream.append(e)
+
+        dupes = self.gather_dupe_indices(episode_stream)
+
+        self.assertEqual(episode_stream[-1].title, "India")
 
         # call "get_all_episodes" to engage the processing
-        # assert that dupes have modifed episode names
+        fs._fake_episode_list = episode_stream
+        processed = fs.get_all_episodes()
 
+        # assert that dupes indeeed have modifed episode names
         def yassertEqual(a, b):
             c = os.path.join(os.path.expanduser("~/podcasts/foobar"), a)
             d = b
             self.assertEqual(c, d)
 
-        yassertEqual('Alfa.mp3', processed[0].locallink() )
-        yassertEqual('Delta.mp3', processed[3].locallink() )
-        yassertEqual('Delta-2.mp3', processed[9].locallink() )
+        yassertEqual('Alpha.mp3', processed[0].locallink() )
+        yassertEqual('Delta.mp3', processed[dupes[0]].locallink() )
+        yassertEqual('Delta-2.mp3', processed[dupes[1]].locallink() )
 
-        # push some new episodes onto the stream
+        # TODO push some new episodes onto the stream and reprocess
         # such that the oldest of maxeps scrolls away
-        # note the oldest dupe scrolls away ( & freeing up one of the dupe name mods )
+        # assert the oldest dupe scrolls away ( & freeing up one of the dupe name mods )
