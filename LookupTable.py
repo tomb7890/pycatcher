@@ -28,5 +28,18 @@ class LookupTable:
             f.write(s)
             f.close
 
+
+class FakeLookupTable(LookupTable):
+    def __init__(self):
+        LookupTable.__init__(self, None)
+
+    def load(self):
+        pass
+    def save(self):
+        pass
+
+
+
+
 if __name__ == '__main__':
     pass
