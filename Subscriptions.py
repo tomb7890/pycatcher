@@ -7,7 +7,6 @@ import LookupTable
 import xml.etree.ElementTree as ET
 from ConfigParser import ConfigParser
 from Episode import Episode, sort_rev_chron
-import Library
 import Command
 
 

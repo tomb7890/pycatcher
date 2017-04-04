@@ -7,7 +7,6 @@ from Application import get_list_of_subscriptions, doreport, init_config, dodown
 from Application import get_list_of_subscriptions_production, localrss_conditions
 from Episode import sort_rev_chron
 from Subscriptions import Subscriptions
-from Library import create_links
 from wget import MockWget, Wget
 import Command
 from Report import make_report_text
