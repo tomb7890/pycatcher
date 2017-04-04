@@ -63,8 +63,8 @@ def dodownload(basedir, downloader):
             episodes = get_sorted_list_of_episodes(sub)
             new = episodes[:sub.maxeps]
             old = episodes[sub.maxeps:]
-            get_new_episodes(sub, new, basedir, downloader)
-            release_old_episodes(old)
+            sub.release_old_and_download_new(old, new, basedir, downloader)
+
         except xml.etree.ElementTree.ParseError, error:
             logging.info("minidom parsing error:"+repr(error) +
                            'with subscription ' + repr(sub.get_rss_path()))
@@ -83,9 +83,6 @@ def get_list_of_subscriptions(basedir, match=None):
     return subs.items
 
 
-def release_old_episodes(expired):
-    prunefiles(expired)
-
 
 def get_sorted_list_of_episodes(sub):
     episodes = sub.get_all_episodes()
@@ -99,53 +96,12 @@ def get_latest_episodes(sub):
     return new
 
 
-def get_new_episodes(sub, saved, basedir, downloader):
-    download_new_files(downloader, sub, saved)
-    Library.create_links(saved, sub)
-
-
-def prepare_queue(episodes):
-    queue = []
-    for episode in episodes:
-        lf = episode.localfile()
-        if os.path.exists(lf):
-            logging.info("file already exists: " + lf)
-        else:
-            logging.info("queuing: " + lf)
-            queue.append(episode.url)
-    return queue
-
-
-def download_new_files(downloader, subscription, episodes):
-    logging.info("downloader ")
-    queue = prepare_queue(episodes)
-    if len(queue) > 0 :
-        inputfile = 'urls.dat'
-
-        downloader.addoption('--input-file', inputfile)
-        downloader.addoption('--directory-prefix', subscription._data_subdir())
-        if Command.Args().parser.limitrate:
-            downloader.addoption('--limit-rate', Command.Args().parser.limitrate)
-
-        downloader.url = subscription.url
-        f = open(inputfile, 'w')
-        f.write('%s\n' % ('\n'.join(queue)))
-        f.close()
-        downloader.execute()
-        logging.info(downloader.getCmd)
-        if os.path.exists(inputfile):
-            os.unlink(inputfile)
 
 def appdir():
     path = init_config()
     return path
 
 
-
-def prunefiles(doomedeps):
-    for ep in doomedeps:
-        ep.prune_file()
-        ep.prune_link()
 
 
 if __name__ == '__main__':

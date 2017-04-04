@@ -32,6 +32,48 @@ class Subscription:
     def _lookup_table_path(self):
         return os.path.join( self.get_rss_dir(), LookupTable.file_extension() )
 
+    def prepare_queue(self, episodes):
+        queue = []
+        for episode in episodes:
+            lf = episode.localfile()
+            if os.path.exists(lf):
+                logging.info("file already exists: " + lf)
+            else:
+                logging.info("queuing: " + lf)
+                queue.append(episode.url)
+        return queue
+
+    def release_old_and_download_new(self, old, new, basedir, downloader):
+        self.release_old_episodes(old)
+        episodes = self.get_new_episodes(new, basedir, downloader)
+        return episodes
+
+    def download_new_files(self, downloader, episodes):
+        logging.info("downloader ")
+        queue = self.prepare_queue(episodes)
+        if len(queue) > 0 :
+            inputfile = 'urls.dat'
+
+            downloader.addoption('--input-file', inputfile)
+            downloader.addoption('--directory-prefix', self._data_subdir())
+            if Command.Args().parser.limitrate:
+                downloader.addoption('--limit-rate', Command.Args().parser.limitrate)
+
+            downloader.url = self.url
+            f = open(inputfile, 'w')
+            f.write('%s\n' % ('\n'.join(queue)))
+            f.close()
+            downloader.execute()
+            logging.info(downloader.getCmd)
+            if os.path.exists(inputfile):
+                os.unlink(inputfile)
+
+
+
+    def get_new_episodes(self, saved, basedir, downloader):
+        self.download_new_files(downloader, saved)
+        self.create_links(saved)
+
     def link_creation_test(self, src, dst):
         if os.path.exists(src) and not os.path.exists(dst):
             return True
@@ -72,6 +114,14 @@ class Subscription:
                 logging.info("[%s], [%s] " % (actual, filename))
                 if not os.path.exists(filename):
                     os.rename(actual, filename)
+
+    def release_old_episodes(self, expired):
+        self.prunefiles(expired)
+
+    def prunefiles(self, doomedeps):
+        for ep in doomedeps:
+            ep.prune_file()
+            ep.prune_link()
 
 
     def _podcasts_subdir(self): # podcasts/ffrf/
