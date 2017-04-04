@@ -1,5 +1,6 @@
 import os
 import re
+import glob
 import time
 import logging
 import LookupTable
@@ -30,6 +31,47 @@ class Subscription:
 
     def _lookup_table_path(self):
         return os.path.join( self.get_rss_dir(), LookupTable.file_extension() )
+
+    def link_creation_test(self, src, dst):
+        if os.path.exists(src) and not os.path.exists(dst):
+            return True
+        return False
+
+    def create_links(self, episodes):
+        for e in episodes:
+            src = e.localfile()
+            self.trim_querystring_from_filename(src)
+            dest = e.locallink()
+            if os.path.exists(src):
+                disksize = os.path.getsize(src)
+                if int(disksize) != int(e.enclosure_length ) and False:
+                    logging.warning("episdode %s's length is %d, expected to be %d " %
+                                    (src, disksize, int(e.enclosure_length)))
+
+            logging.info("making link from %s to  %s " % (src, dest))
+            if True == self.link_creation_test(src, dest):
+                os.link(src, dest)
+
+    def trim_querystring_from_filename(self, filename):
+        '''
+        Rename file on disk from the actual file name (sometimes with a
+        query string appended by the file downloader) to the expected
+        name taken from the url of the RSS enclosure.
+        '''
+
+        QUERY_STRING_MARKER = '?'
+        WILDCARD = '*'
+
+        fileptrn = filename + QUERY_STRING_MARKER + WILDCARD
+        g = glob.glob(fileptrn)
+        x = "trim_querystring_from_filename: %s using fileptrn %s" % (filename,
+                                                                      fileptrn)
+        if len(g) > 0:
+            actual = g[0]
+            if actual:
+                logging.info("[%s], [%s] " % (actual, filename))
+                if not os.path.exists(filename):
+                    os.rename(actual, filename)
 
 
     def _podcasts_subdir(self): # podcasts/ffrf/
