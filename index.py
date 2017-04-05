@@ -1,4 +1,4 @@
-"""Lookup Table
+"""Index
 
 For a given RSS Subscription, tell us what absolute file path where
 the hard link will be found. Methods are included for serializing to
@@ -6,12 +6,15 @@ and from storage.
 
 """
 
-import json, os
+import json
+import os
+
 
 def file_extension():
     return "idx"
 
-class LookupTable:
+
+class Index:
     def __init__(self, filepath):
         self.fp = filepath
         self.table = {}
@@ -32,16 +35,18 @@ class LookupTable:
             f.write(s)
             f.close
 
-class FakeLookupTable(LookupTable):
+
+class FakeIndex(Index):
     def __init__(self):
-        LookupTable.__init__(self, None)
+        Index.__init__(self, None)
 
     def load(self):
+        # override
         pass
+
     def save(self):
+        # override
         pass
-
-
 
 
 if __name__ == '__main__':

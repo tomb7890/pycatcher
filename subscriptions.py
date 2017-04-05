@@ -4,7 +4,7 @@ import re
 import glob
 import time
 import logging
-import lookuptable
+import index
 import xml.etree.ElementTree as ET
 from ConfigParser import ConfigParser
 from episode import Episode, sort_rev_chron
@@ -27,10 +27,10 @@ class Subscription:
         self.url = u
         self.maxeps = m
         self._make_directories()
-        self.lut = lookuptable.LookupTable(self.get_idx_path())
+        self.lut = index.Index(self.get_idx_path())
 
     def _lookup_table_path(self):
-        return os.path.join( self.get_rss_dir(), lookuptable.file_extension() )
+        return os.path.join( self.get_rss_dir(), index.file_extension() )
 
     def prepare_queue(self, episodes):
         queue = []
@@ -188,7 +188,7 @@ class Subscription:
     def get_idx_path(self):
         ''' Returns the full path of an IDX file.  '''
 
-        idxfile = self.rssfile.replace("xml", lookuptable.file_extension())
+        idxfile = self.rssfile.replace("xml", index.file_extension())
         filename = os.path.join(self.subscriptions.get_rss_dir(),
                                 idxfile )
         return filename
