@@ -3,7 +3,7 @@ task :tags do
 end
 
 task :test => :tags do
-  sh "python -m unittest discover -p '*Test*.py'"
+  sh "python -m unittest discover -p '*test*.py'"
 end
 
 task :report => :test do
