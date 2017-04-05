@@ -11,67 +11,6 @@ class DuplicatesTest(unittest.TestCase):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
         self.sub = subscriptions.find("Agenda")
-        self.episodes = self.sub.get_all_episodes()
-        self.dupes = self.gather_dupe_indices(self.episodes)
-
-    def xassertEqual(self, a, b):
-        self.assertEqual(os.path.join(self.sub._podcasts_subdir(), a), b)
-
-    def test_number_not_append(self):
-        index_of_folower_of_first_dupe = self.dupes[1]+1
-        first_follower = self.episodes[index_of_folower_of_first_dupe]
-        self.xassertEqual("Ontarios Pothole Pains.mp4",
-                          first_follower.locallink())
-
-    def test_number_appended(self):
-        third_duplicate_episdode = self.episodes[self.dupes[2]]
-        self.xassertEqual("The Agendas Week in Review-3.mp4",
-                          third_duplicate_episdode.locallink())
-
-    def gather_dupe_indices(self, episodes):
-        '''
-        Scan the list of all episodes which have recurring titles.
-        Store their indices in the array self.dupes.
-        '''
-        unique_titles = []
-        duplicates_titles = []
-        dupes = []
-
-        for i in range(len(episodes)):
-            title = episodes[i].title
-            if title not in unique_titles:
-                unique_titles.append(title)
-            else:
-                duplicates_titles.append(title)
-
-        for i in range(len(episodes)):
-            if episodes[i].title in duplicates_titles:
-                dupes.append(i)
-
-        return dupes
-
-    def test_first_occurrence_of_dupe_is_as_normal(self):
-        first_dupe = self.episodes[self.dupes[0]]
-        self.assertEqual("The Agendas Week in Review.mp4", first_dupe.basename())
-
-    def test_follower_of_dupe(self):
-        index_of_folower_of_first_dupe = self.dupes[1]+1
-        first_follower = self.episodes[index_of_folower_of_first_dupe]
-        self.assertEqual("Ontarios Pothole Pains.mp4", first_follower.basename())
-
-    def test_of_locallink(self):
-        # make sure I don't break anything while extracting basename from locallink
-        first_dupe = self.episodes[self.dupes[0]]
-        expected = 'The Agendas Week in Review.mp4'
-        actual = first_dupe.locallink()
-        self.xassertEqual(os.path.expanduser(expected), actual)
-
-    def test_second_dupe_has_disambiguator(self):
-        second_dupe = self.episodes[self.dupes[1]]
-        self.xassertEqual("The Agendas Week in Review-2.mp4",
-                          second_dupe.locallink())
-
-
     def prepare_materials_for_test(self, episode_titles):
         self.assertEqual( episode_titles[3], "Delta")
         episode_objects = []
