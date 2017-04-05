@@ -2,6 +2,7 @@ import unittest
 import os
 from Application import init_config
 from Subscriptions import Subscriptions, FakeSubscription
+from LookupTable import FakeLookupTable
 from Episode import Episode
 from wget import  MockWget
 
@@ -17,6 +18,7 @@ class DuplicatesTest(unittest.TestCase):
         subscriptions = Subscriptions(self.standardpath)
         dummy_rss = "blah"
         fs = FakeSubscription(subscriptions, dummy_rss)
+        fs.lut = FakeLookupTable()
         fs.maxeps = 10
         return fs
 
