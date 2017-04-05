@@ -3,7 +3,7 @@ import os
 from Application import init_config
 from Subscriptions import Subscriptions, FakeSubscription
 from Episode import Episode
-
+from wget import  MockWget
 
 class DuplicatesTest(unittest.TestCase):
 
@@ -11,78 +11,89 @@ class DuplicatesTest(unittest.TestCase):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
         self.sub = subscriptions.find("Agenda")
-    def prepare_materials_for_test(self, episode_titles):
-        self.assertEqual( episode_titles[3], "Delta")
-        episode_objects = []
-        count = 0
+
+    def construct_fake_subscription_object(self, episode_titles):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
-        fs = FakeSubscription(subscriptions, "foobar")
+        dummy_rss = "blah"
+        fs = FakeSubscription(subscriptions, dummy_rss)
         fs.maxeps = 10
+        return fs
+
+    def prepare_synthetic_episodes(self, sub, episode_titles):
+        episodes = []
+        count = 0
         for e in episode_titles:
-            episode_object = Episode(fs)
+            episode_object = Episode(sub)
             episode_object.guid = count
             episode_object.title = e
             episode_object.url = 'http://www.example.com/foo/bar/baz.mp3'
             count = count + 1
-            episode_objects.append( episode_object )
-        return fs, episode_objects
+            episodes.append( episode_object )
+        return episodes
 
+    def test_modifying_link_names_when_duplicated_(self):
 
-    def test_the_gamut(self):
-        # set up some episodes with duplicate titles
+        def assert_correct(fs, expected_linknames, episodes):
+            expected = expected_linknames.split()
+            for i in range (fs.maxeps):
+                title = expected[i] + ".mp3"
+                c = os.path.join(fs._podcasts_subdir(), title)
+                d = episodes[i].locallink()
+                self.assertEqual(c, d)
 
-        def z():
-            """ Advance the stream of podcast episodes and run the application code """
-            episode_stream = []
-            for i in range(stream_pointer, stream_pointer + maxeps):
-                episode_stream.append(episode_objects[i])
-            fs._fake_episode_list = episode_stream
-            processed = fs.get_all_episodes()
-            return processed
-
-        def yassertEqual(a, b):
-            c = os.path.join(os.path.expanduser("~/podcasts/foobar"), a)
-            d = b
-            self.assertEqual(c, d)
-
+        def simulate_download(stream_pointer, fs, episodes ):
+            fakedownloader = MockWget()
+            new = []
+            for i in range(stream_pointer, stream_pointer + fs.maxeps):
+                new.append(episodes[i])
+            old = []
+            for i in range(0, stream_pointer):
+                old.append(episodes[i])
+            eps = fs.release_old_and_download_new(old,
+                                            new,
+                                            self.standardpath,
+                                            fakedownloader)
+            return eps
 
         # All known episodes
-        episode_titles = """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta Hotel India Juliett Kilo
-Lima Delta Mike November Oscar Delta Papa Quebec Romeo Delta Sierra Tango Uniform Victor
-Whiskey X Yankee Zulu""".split()
+        episode_titles = """
+        Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta Hotel India
+        Juliett Kilo Lima Delta Mike November Oscar Delta Papa Quebec
+        Romeo Delta Sierra Tango Delta Uniform Victor Delta Whiskey XRay
+        Yankee Zulu""".split()
 
-        fs, episode_objects = self.prepare_materials_for_test(episode_titles)
+        fs = self.construct_fake_subscription_object(episode_titles)
+        episodes = self.prepare_synthetic_episodes(fs,episode_titles)
 
-        # sanity checking, ok
-        self.assertEqual( episode_objects[-1].title, "Zulu")
-        self.assertEqual( episode_objects[-1].guid, len(episode_objects)-1)
+        # sanity checking
+        self.assertEqual( episodes[-1].title, "Zulu")
+        self.assertEqual( episodes[-1].guid, len(episodes)-1)
 
-        maxeps = 10
         stream_pointer = 0
-        processed = z()
+        processed = simulate_download(stream_pointer, fs, episodes)
+        expected_linknames = \
+        """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India"""
+        assert_correct(fs, expected_linknames, processed)
 
-        # TODO push some new episodes onto the stream and reprocess
-        # such that the oldest of maxeps scrolls away
-        # assert the oldest dupe scrolls away ( & freeing up one of the dupe name mods )
-
-        # tweak the second title dupe as expected
-        modified_expected_link_base_titles = \
-        """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India""".split()
-
-        for i in range (maxeps):
-            title = modified_expected_link_base_titles[i] + ".mp3"
-            yassertEqual(title, processed[i].locallink())
-
-        # advance the stream pointer in way that results in some overlapping
         stream_pointer = stream_pointer + 5
-        episode_stream = z()
-        fs._fake_episode_list = episode_stream
-        processed = fs.get_all_episodes()
+        processed = simulate_download(stream_pointer, fs, episodes)
+        expected_linknames = \
+        "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike"
+        assert_correct(fs, expected_linknames, processed)
 
-        modified_expected_link_base_titles = \
-        "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike".split()
+        stream_pointer = stream_pointer + 7
+        processed = simulate_download(stream_pointer, fs, episodes)
+        expected_linknames = \
+        "Lima Delta Mike November Oscar Delta-2 Papa Quebec Romeo Delta-3"
+        assert_correct(fs, expected_linknames, processed)
 
-        for i in range (maxeps):
-            title = modified_expected_link_base_titles[i] + ".mp3"
-            yassertEqual(title, processed[i].locallink())
+        stream_pointer = stream_pointer + 8
+        processed = simulate_download(stream_pointer, fs, episodes)
+        expected_linknames = \
+        "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
+        assert_correct(fs, expected_linknames, processed)
+
+
+if __name__ == '__main__':
+    unittest.main()
