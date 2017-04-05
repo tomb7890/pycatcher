@@ -1,5 +1,5 @@
 import os
-import Command
+import command
 import logging
 
 class Wget:
@@ -12,7 +12,7 @@ class Wget:
         self.options = {}
 
     def verbose(self):
-        if Command.Args().parser.verbose:
+        if command.Args().parser.verbose:
             return True
         return False
 
@@ -31,7 +31,7 @@ class Wget:
             self.cmd = self.cmd + " %s='%s'" % (o, self.options[o])
 
         fullcmd = "%s  '%s' " % (self.cmd, self.url)
-        if Command.Args().parser.verbose:
+        if command.Args().parser.verbose:
             print fullcmd
 
         return fullcmd

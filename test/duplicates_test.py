@@ -1,9 +1,9 @@
 import unittest
 import os
-from Application import init_config
-from Subscriptions import Subscriptions, FakeSubscription
-from LookupTable import FakeLookupTable
-from Episode import Episode
+from application import init_config
+from subscriptions import Subscriptions, FakeSubscription
+from lookuptable import FakeLookupTable
+from episode import Episode
 from wget import  MockWget
 
 class DuplicatesTest(unittest.TestCase):

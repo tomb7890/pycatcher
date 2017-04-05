@@ -1,8 +1,7 @@
-import unittest, os
-from Episode import Episode
-from Subscriptions import Subscriptions
-
-from Application import init_config
+import unittest
+from episode import Episode
+from subscriptions import Subscriptions
+from application import init_config
 
 class EpisodeTest (unittest.TestCase):
     def setUp(self):

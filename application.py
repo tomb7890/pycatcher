@@ -1,8 +1,8 @@
 import os
-import Subscriptions
-from Report import doreport
+import subscriptions
+from report import doreport
 import wget
-import Command
+import command
 import sys
 
 
@@ -14,11 +14,11 @@ def main():
 
     basedir = init_config()
 
-    Command.Args().parse(sys.argv[1:])
+    command.Args().parse(sys.argv[1:])
     downloader = wget.Wget()
-    if Command.Args().parser.report:
+    if command.Args().parser.report:
         doreport(basedir)
-    elif Command.Args().parser.refresh:
+    elif command.Args().parser.refresh:
         dorefresh(basedir)
     else:
         dodownload(basedir, downloader)
@@ -52,25 +52,25 @@ def dodownload(basedir, downloader):
     for sub in get_list_of_subscriptions_production(basedir):
         downloader.reset()
         if localrss_conditions(os.path.exists(sub.get_rss_path()),
-                               Command.Args().parser.localrss):
+                               command.Args().parser.localrss):
             sub.refresh(downloader)
         downloader.reset()
         sub.dodownload(basedir, downloader)
 
 def get_list_of_subscriptions_production(basedir):
     match = None
-    if Command.Args().parser.program:
-        match = Command.Args().parser.program
+    if command.Args().parser.program:
+        match = command.Args().parser.program
     return get_list_of_subscriptions(basedir, match)
 
 
 def get_list_of_subscriptions(basedir, match=None):
     subs = []
-    subs = Subscriptions.Subscriptions(basedir, match)
+    subs = subscriptions.Subscriptions(basedir, match)
     return subs.items
 
 def get_latest_episodes(sub):
-    episodes = get_sorted_list_of_episodes(sub, True)
+    episodes = subscriptions.get_sorted_list_of_episodes(sub, True)
     new = episodes[:sub.maxeps]
     return new
 

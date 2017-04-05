@@ -3,32 +3,32 @@ import unittest
 import xml
 import mock
 
-from Application import get_list_of_subscriptions, doreport, init_config, dodownload
-from Application import get_list_of_subscriptions_production, localrss_conditions
-from Episode import sort_rev_chron
-from Subscriptions import Subscriptions
-from wget import MockWget, Wget
-import Command
-from Report import make_report_text
+from application import get_list_of_subscriptions, init_config, dodownload
+from application import get_list_of_subscriptions_production, localrss_conditions
+from episode import sort_rev_chron
+from subscriptions import Subscriptions
+from wget import MockWget
+import command
+from report import make_report_text
 
 
 class ApplicationTest(unittest.TestCase):
 
     def setUp(self):
-        self.parser = Command.Args().parse('--program  wbur'.split())
+        self.parser = command.Args().parse('--program  wbur'.split())
         self.standardpath = init_config()
 
     def test_localrss_option_suspends_download_of_rss_file(self):
         self.fake = MockWget()
-        self.parser = Command.Args().parse('--localrss --program wbur   '.split())
-        self.assertTrue(Command.Args().parser.localrss)
+        self.parser = command.Args().parse('--localrss --program wbur   '.split())
+        self.assertTrue(command.Args().parser.localrss)
         dodownload(self.standardpath, self.fake)
         self.assertFalse(self._wbur_rss_file_was_downloaded())
 
     def test_unmatched_program_halts_app_execution_with_exception(self):
         with self.assertRaises(ValueError):
             self.fake = MockWget()
-            self.parser = Command.Args().parse(' --program asodmxcwew  '.split())
+            self.parser = command.Args().parse(' --program asodmxcwew  '.split())
             dodownload(self.standardpath, self.fake)
 
 

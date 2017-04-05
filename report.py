@@ -1,8 +1,8 @@
 import xml
 import os
 import StringIO
-import Subscriptions
-import Episode
+import subscriptions
+import episode
 
 
 def doreport(basedir):
@@ -17,7 +17,7 @@ def make_report_text(basedir):
     in reverse chronological order,  make an html report.
     '''
     alleps = []
-    subs = Subscriptions.Subscriptions(basedir)
+    subs = subscriptions.Subscriptions(basedir)
     for sub in subs.items:
         try:
             episodes = sub.get_all_episodes()
@@ -26,11 +26,11 @@ def make_report_text(basedir):
                     if os.path.exists(ep.localfile()):
                         alleps.append(ep)
         except xml.etree.ElementTree.ParseError, e:
-            if Command.Args().parser.verbose:
+            if command.Args().parser.verbose:
                 print ("minidom parsing error:"+repr(e) +
                        'with subscription ' + repr(sub.get_rss_path()))
 
-    Episode.sort_rev_chron(alleps)
+    episode.sort_rev_chron(alleps)
     return make_report_from_eps(alleps)
 
 

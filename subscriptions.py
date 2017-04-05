@@ -4,11 +4,11 @@ import re
 import glob
 import time
 import logging
-import LookupTable
+import lookuptable
 import xml.etree.ElementTree as ET
 from ConfigParser import ConfigParser
-from Episode import Episode, sort_rev_chron
-import Command
+from episode import Episode, sort_rev_chron
+import command
 
 
 class Subscription:
@@ -27,10 +27,10 @@ class Subscription:
         self.url = u
         self.maxeps = m
         self._make_directories()
-        self.lut = LookupTable.LookupTable(self.get_idx_path())
+        self.lut = lookuptable.LookupTable(self.get_idx_path())
 
     def _lookup_table_path(self):
-        return os.path.join( self.get_rss_dir(), LookupTable.file_extension() )
+        return os.path.join( self.get_rss_dir(), lookuptable.file_extension() )
 
     def prepare_queue(self, episodes):
         queue = []
@@ -58,8 +58,8 @@ class Subscription:
 
             downloader.addoption('--input-file', inputfile)
             downloader.addoption('--directory-prefix', self._data_subdir())
-            if Command.Args().parser.limitrate:
-                downloader.addoption('--limit-rate', Command.Args().parser.limitrate)
+            if command.Args().parser.limitrate:
+                downloader.addoption('--limit-rate', command.Args().parser.limitrate)
 
             downloader.url = self.url
             f = open(inputfile, 'w')
@@ -188,7 +188,7 @@ class Subscription:
     def get_idx_path(self):
         ''' Returns the full path of an IDX file.  '''
 
-        idxfile = self.rssfile.replace("xml", LookupTable.file_extension())
+        idxfile = self.rssfile.replace("xml", lookuptable.file_extension())
         filename = os.path.join(self.subscriptions.get_rss_dir(),
                                 idxfile )
         return filename
@@ -285,7 +285,7 @@ class Subscription:
             episode.mktime = time.mktime(pd)  # seconds since the epoch
             episode.pubDate = timestamp
         except ValueError, e:
-            if Command.Args().parser.verbose and Command.Args().parser.debug:
+            if command.Args().parser.verbose and command.Args().parser.debug:
                 print "pubdate parsing failed: \
                 %s using data %s from %s" % \
                     (e, timestamp, filename)
@@ -314,7 +314,7 @@ class Subscription:
         self.title = (root.findall("./channel/title")[0].text)
 
     def _fetch_root(self, filename):
-        if Command.Args().parser.tolerant:
+        if command.Args().parser.tolerant:
             self._remove_blank_from_head_of_rss_file(filename)
         tree = ET.parse(filename)
         root = tree.getroot()

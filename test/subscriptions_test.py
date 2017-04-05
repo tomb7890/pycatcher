@@ -1,9 +1,9 @@
 import unittest
-from Application import init_config, get_list_of_subscriptions
+from application import init_config, get_list_of_subscriptions
 import tempfile
 import xml
-import Subscriptions
-import Command
+import subscriptions
+import command
 
 
 class SubscriptionsTest (unittest.TestCase):
@@ -19,7 +19,7 @@ class SubscriptionsTest (unittest.TestCase):
         with self.assertRaises(ValueError):
             basedir = self.standardpath
             match = 'nklfewcjdisoafsdklewjidso'
-            s = Subscriptions.Subscriptions(basedir, match)
+            s = subscriptions.Subscriptions(basedir, match)
 
     def test_junk_in_header(self):
         '''test processing an RSS file with junk at the top of the header'''
@@ -45,7 +45,7 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_tolerate_blanks_in_header(self):
         '''test tolerating an RSS file with a blank line at the top'''
-        Command.Args().parse(' --tolerant '.split())
+        command.Args().parse(' --tolerant '.split())
         s = self.set_up_minidom_test()
         f, filename = self.get_temp_file()
         f.write('\n')
@@ -56,7 +56,7 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_empty_rss_file(self):
         '''test processing an empty RSS file'''
-        Command.Args().parse('')
+        command.Args().parse('')
         with self.assertRaises(xml.etree.ElementTree.ParseError):
             s = self.set_up_minidom_test()
             f, filename = self.get_temp_file()
