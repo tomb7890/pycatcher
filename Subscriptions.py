@@ -1,3 +1,4 @@
+import xml
 import os
 import re
 import glob
@@ -67,8 +68,6 @@ class Subscription:
             if os.path.exists(inputfile):
                 os.unlink(inputfile)
 
-
-
     def get_new_episodes(self, saved, basedir, downloader):
         self.download_new_files(downloader, saved)
         self.create_links(saved)
@@ -122,6 +121,21 @@ class Subscription:
             ep.prune_file()
             ep.prune_link()
 
+    def get_sorted_list_of_episodes(self):
+        episodes = self.get_all_episodes()
+        sort_rev_chron(episodes)
+        return episodes
+
+    def dodownload(self, basedir, downloader):
+        try:
+            episodes = self.get_sorted_list_of_episodes()
+            new = episodes[:self.maxeps]
+            old = episodes[self.maxeps:]
+            self.release_old_and_download_new(old, new, basedir, downloader)
+
+        except xml.etree.ElementTree.ParseError, error:
+            logging.info("minidom parsing error:"+repr(error) +
+                         'with subscription ' + repr(sub.get_rss_path()))
 
     def _podcasts_subdir(self): # podcasts/ffrf/
         return os.path.join(self.subscriptions._podcasts_basedir(), self._sub_dir())

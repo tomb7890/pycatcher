@@ -1,7 +1,5 @@
-import xml
 import os
 import Subscriptions
-import Episode
 from Report import doreport
 import wget
 import Command
@@ -59,16 +57,7 @@ def dodownload(basedir, downloader):
                                Command.Args().parser.localrss):
             sub.refresh(downloader)
         downloader.reset()
-        try:
-            episodes = get_sorted_list_of_episodes(sub)
-            new = episodes[:sub.maxeps]
-            old = episodes[sub.maxeps:]
-            sub.release_old_and_download_new(old, new, basedir, downloader)
-
-        except xml.etree.ElementTree.ParseError, error:
-            logging.info("minidom parsing error:"+repr(error) +
-                           'with subscription ' + repr(sub.get_rss_path()))
-
+        sub.dodownload(basedir, downloader)
 
 def get_list_of_subscriptions_production(basedir):
     match = None
@@ -82,27 +71,14 @@ def get_list_of_subscriptions(basedir, match=None):
     subs = Subscriptions.Subscriptions(basedir, match)
     return subs.items
 
-
-
-def get_sorted_list_of_episodes(sub):
-    episodes = sub.get_all_episodes()
-    Episode.sort_rev_chron(episodes)
-    return episodes
-
-
 def get_latest_episodes(sub):
     episodes = get_sorted_list_of_episodes(sub, True)
     new = episodes[:sub.maxeps]
     return new
 
-
-
 def appdir():
     path = init_config()
     return path
-
-
-
 
 if __name__ == '__main__':
     main()
