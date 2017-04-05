@@ -350,13 +350,10 @@ class Subscriptions:
         to keep at a time.
 
         """
-
-
         self.items = []
         self.basedir = b
         self._initialize_directories()
         self._initialize_subscriptions(match)
-        # self._initialize_subscription_titles()
 
     def _initialize_directories(self):
         self._data_basedir()
@@ -456,14 +453,26 @@ class Subscriptions:
         return None
 
 
-
 class FakeSubscription (Subscription):
     def __init__(self, s, r ):
         Subscription.__init__(self, s, r, None, None)
 
     def fetch_episodes(self):
-        # override fetch_episodes
-        return self._fake_episode_list
+        eps = self._fake_episode_list
+        return eps
+
+    def release_old_episodes(self, old):
+        self.release_expired_episodes(old)
+
+    def get_new_episodes(self, new, basedir, downloader):
+        self._fake_episode_list = new
+        episodes = self.get_all_episodes()
+        return episodes
+
+    def release_expired_episodes(self, episodes):
+        for e in episodes:
+            guid = e.guid
+            self.lut.remove_entry(guid)
 
 
 if __name__ == '__main__':
