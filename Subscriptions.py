@@ -120,6 +120,9 @@ class Subscription:
         for ep in doomedeps:
             ep.prune_file()
             ep.prune_link()
+        for ep in doomedeps:
+            key = ep.guid
+            self.lut.remove_entry(key)
 
     def get_sorted_list_of_episodes(self):
         episodes = self.get_all_episodes()
