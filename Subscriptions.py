@@ -44,8 +44,10 @@ class Subscription:
         return queue
 
     def release_old_and_download_new(self, old, new, basedir, downloader):
+        self.lut.load()
         self.release_old_episodes(old)
         episodes = self.get_new_episodes(new, basedir, downloader)
+        self.lut.save()
         return episodes
 
     def download_new_files(self, downloader, episodes):
