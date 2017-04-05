@@ -4,7 +4,6 @@ from Report import doreport
 import wget
 import Command
 import sys
-import logging
 
 
 def main():
