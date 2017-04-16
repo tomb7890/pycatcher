@@ -27,10 +27,10 @@ class Subscription:
         self.url = u
         self.maxeps = m
         self._make_directories()
-        self.lut = index.Index(self.get_idx_path())
+        self.index = index.Index(self.get_idx_path())
 
     def _lookup_table_path(self):
-        return os.path.join( self.get_rss_dir(), index.file_extension() )
+        return os.path.join(self.get_rss_dir(), index.file_extension())
 
     def prepare_queue(self, episodes):
         queue = []
@@ -44,22 +44,23 @@ class Subscription:
         return queue
 
     def release_old_and_download_new(self, old, new, basedir, downloader):
-        self.lut.load()
+        self.index.load()
         self.release_old_episodes(old)
         episodes = self.get_new_episodes(new, basedir, downloader)
-        self.lut.save()
+        self.index.save()
         return episodes
 
     def download_new_files(self, downloader, episodes):
         logging.info("downloader ")
         queue = self.prepare_queue(episodes)
-        if len(queue) > 0 :
+        if len(queue) > 0:
             inputfile = 'urls.dat'
 
             downloader.addoption('--input-file', inputfile)
             downloader.addoption('--directory-prefix', self._data_subdir())
             if command.Args().parser.limitrate:
-                downloader.addoption('--limit-rate', command.Args().parser.limitrate)
+                downloader.addoption('--limit-rate',
+                                     command.Args().parser.limitrate)
 
             downloader.url = self.url
             f = open(inputfile, 'w')
@@ -86,12 +87,13 @@ class Subscription:
             dest = e.locallink()
             if os.path.exists(src):
                 disksize = os.path.getsize(src)
-                if int(disksize) != int(e.enclosure_length ) and False:
-                    logging.warning("episdode %s's length is %d, expected to be %d " %
-                                    (src, disksize, int(e.enclosure_length)))
+                if int(disksize) != int(e.enclosure_length) and False:
+                    logging.warning(
+                        "episdode %s's length is %d, expected to be %d " %
+                        (src, disksize, int(e.enclosure_length)))
 
             logging.info("making link from %s to  %s " % (src, dest))
-            if True == self.link_creation_test(src, dest):
+            if self.link_creation_test(src, dest) is True:
                 os.link(src, dest)
 
     def trim_querystring_from_filename(self, filename):
@@ -124,7 +126,7 @@ class Subscription:
             ep.prune_link()
         for ep in doomedeps:
             key = ep.guid
-            self.lut.remove_entry(key)
+            self.index.remove_entry(key)
 
     def get_sorted_list_of_episodes(self):
         episodes = self.get_all_episodes()
@@ -142,11 +144,13 @@ class Subscription:
             logging.info("minidom parsing error:"+repr(error) +
                          'with subscription ' + repr(sub.get_rss_path()))
 
-    def _podcasts_subdir(self): # podcasts/ffrf/
-        return os.path.join(self.subscriptions._podcasts_basedir(), self._sub_dir())
+    def _podcasts_subdir(self):  # podcasts/ffrf/
+        return os.path.join(self.subscriptions._podcasts_basedir(),
+                            self._sub_dir())
 
-    def _data_subdir(self): # eg ~/.podcast-data/ffrf/
-        return os.path.join(self.subscriptions._data_basedir(), self._sub_dir())
+    def _data_subdir(self):  # eg ~/.podcast-data/ffrf/
+        return os.path.join(self.subscriptions._data_basedir(),
+                            self._sub_dir())
 
     def _make_directories(self):
         if not os.path.exists(self._podcasts_subdir()):
@@ -172,7 +176,7 @@ class Subscription:
         return queue
 
     def refresh(self, downloader):
-        logging.info( 'refresh')
+        logging.info('refresh')
         '''Download and store the most recent RSS file '''
         self.download_rss_file(downloader)
 
@@ -190,7 +194,7 @@ class Subscription:
 
         idxfile = self.rssfile.replace("xml", index.file_extension())
         filename = os.path.join(self.subscriptions.get_rss_dir(),
-                                idxfile )
+                                idxfile)
         return filename
 
     def download_rss_file(self, downloader):
@@ -203,13 +207,13 @@ class Subscription:
 
     def get_all_episodes(self):
         episodes = self.fetch_episodes()
-        self._max_episode_count =  len(episodes)
+        self._max_episode_count = len(episodes)
         self.set_linknames(episodes)
         return episodes
 
     def fetch_episodes(self):
-        rssfile= self.get_rss_path()
-        logging.info( 'calling get_all_episodes with rss file' + repr(rssfile))
+        rssfile = self.get_rss_path()
+        logging.info('calling get_all_episodes with rss file' + repr(rssfile))
         episodes = self.parse_rss_file(rssfile)
         return episodes
 
@@ -217,9 +221,9 @@ class Subscription:
         return self._max_episode_count
 
     def set_linkname(self, episode):
-        if not self.lut.table.has_key(episode.guid):
+        if episode.guid not in self.index.table:
             link_name = self.generate_link_name(episode)
-            self.lut.table[episode.guid] = link_name
+            self.index.table[episode.guid] = link_name
             full_link_path = os.path.join(self._podcasts_subdir(), link_name)
             episode._link_name = full_link_path
 
@@ -237,7 +241,7 @@ class Subscription:
         must be generated to avoid a collision, using a numerical suffix
 
         '''
-        table = self.lut.table
+        table = self.index.table
 
         count = 1
         # while link name is unavailable...
@@ -305,7 +309,8 @@ class Subscription:
             if e and len(e) > 0:
                 episode.url = e[0].get('url')
                 episode.enclosure_length = e[0].get('length')
-            if episode.pubDate and episode.url and episode.title and episode.guid:
+            if episode.pubDate and episode.url and episode.title \
+               and episode.guid:
                 episodes.append(episode)
         return episodes
 
@@ -319,7 +324,6 @@ class Subscription:
         tree = ET.parse(filename)
         root = tree.getroot()
         return root
-
 
 
 def trim_tzinfo(t):
@@ -363,11 +367,11 @@ class Subscriptions:
     def _initialize_directories(self):
         self._data_basedir()
         self._podcasts_basedir()
-        if not os.path.exists( self._datadir):
+        if not os.path.exists(self._datadir):
             os.mkdir(self._datadir)
-        if not os.path.exists( self._podcastdir):
+        if not os.path.exists(self._podcastdir):
             os.mkdir(self._podcastdir)
-        if not os.path.exists( self.get_rss_dir()):
+        if not os.path.exists(self.get_rss_dir()):
             os.mkdir(self.get_rss_dir())
 
     def find(self, substr):
@@ -409,20 +413,20 @@ class Subscriptions:
         if not hasattr(self, '_podcastdir'):
             cf = ConfigParser()
             cf.read(self._get_ini_file_name())
-            self._podcastdir = os.path.expanduser(cf.get('general', 'podcasts-directory', 0))
+            self._podcastdir = os.path.expanduser(
+                cf.get('general', 'podcasts-directory', 0))
         return self._podcastdir
 
     def _get_ini_file_name(self):
         basename = 'pycatcher.conf'
         alternative1 = os.path.join(
             os.path.expanduser("~/podcasts/"),
-            basename )
+            basename)
 
         if os.path.exists(basename):
             return basename
-        elif  os.path.exists(alternative1):
+        elif os.path.exists(alternative1):
             return alternative1
-
 
     def _get_subs_file_name(self):
         return self._get_ini_file_name()
@@ -444,13 +448,13 @@ class Subscriptions:
 
                 if match:
                     if match.lower() in repr(s).lower():
-                         self.items.append(sub)
+                        self.items.append(sub)
                 else:
                     self.items.append(sub)
 
         if match is not None and len(match) > 0:
             if len(self.items) == 0:
-                raise ValueError("could not find subscription " + match )
+                raise ValueError("could not find subscription " + match)
 
     def _initialize_subscription_titles(self):
         for s in self.items:
@@ -459,7 +463,7 @@ class Subscriptions:
 
 
 class FakeSubscription (Subscription):
-    def __init__(self, s, r ):
+    def __init__(self, s, r):
         Subscription.__init__(self, s, r, None, None)
 
     def fetch_episodes(self):
@@ -477,7 +481,7 @@ class FakeSubscription (Subscription):
     def release_expired_episodes(self, episodes):
         for e in episodes:
             guid = e.guid
-            self.lut.remove_entry(guid)
+            self.index.remove_entry(guid)
 
 
 if __name__ == '__main__':
