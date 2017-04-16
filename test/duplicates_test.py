@@ -19,7 +19,7 @@ class DuplicatesTest(unittest.TestCase):
         subscriptions = Subscriptions(self.standardpath)
         dummy_rss = "blah"
         fs = FakeSubscription(subscriptions, dummy_rss)
-        fs.lut = FakeIndex()
+        fs.index = FakeIndex()
         fs.maxeps = 10
         return fs
 
