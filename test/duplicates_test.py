@@ -9,11 +9,6 @@ from downloader import FakeDownloader
 
 class DuplicatesTest(unittest.TestCase):
 
-    def setUp(self):
-        self.standardpath = init_config()
-        subscriptions = Subscriptions(self.standardpath)
-        self.sub = subscriptions.find("Agenda")
-
     def construct_fake_subscription_object(self, episode_titles):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
