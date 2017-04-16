@@ -2,7 +2,7 @@ import os
 import command
 import logging
 
-class Wget:
+class Downloader:
     def __init__(self):
         self.reset()
 
@@ -23,7 +23,7 @@ class Wget:
 
         if self.verbose():
             self.cmd = self.cmd + " --verbose"
-            print "Wget.execute()"
+            print "Downloader.execute()"
         else:
             self.cmd = self.cmd + " --quiet"
 
@@ -40,14 +40,14 @@ class Wget:
         fullcmd = self.getCmd()
         os.system(fullcmd)
 
-class MockWget (Wget):
+class FakeDownloader (Downloader):
     def __init__(self):
-        Wget.__init__(self)
+        Downloader.__init__(self)
         self.url = ''
         self.history = []
 
     def execute(self):
-        logging.info( 'MockWget.execute: %s' % self.getCmd())
+        logging.info( 'FakeDownloader.execute: %s' % self.getCmd())
         self.history.append(self.url)
 
 

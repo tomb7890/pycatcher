@@ -7,7 +7,7 @@ from application import get_list_of_subscriptions, init_config, dodownload
 from application import get_list_of_subscriptions_production, localrss_conditions
 from episode import sort_rev_chron
 from subscriptions import Subscriptions
-from wget import MockWget
+from downloader import FakeDownloader
 import command
 from report import make_report_text
 
@@ -19,7 +19,7 @@ class ApplicationTest(unittest.TestCase):
         self.standardpath = init_config()
 
     def test_localrss_option_suspends_download_of_rss_file(self):
-        self.fake = MockWget()
+        self.fake = FakeDownloader()
         self.parser = command.Args().parse('--localrss --program wbur   '.split())
         self.assertTrue(command.Args().parser.localrss)
         dodownload(self.standardpath, self.fake)
@@ -27,7 +27,7 @@ class ApplicationTest(unittest.TestCase):
 
     def test_unmatched_program_halts_app_execution_with_exception(self):
         with self.assertRaises(ValueError):
-            self.fake = MockWget()
+            self.fake = FakeDownloader()
             self.parser = command.Args().parse(' --program asodmxcwew  '.split())
             dodownload(self.standardpath, self.fake)
 
@@ -74,8 +74,8 @@ class ApplicationTest(unittest.TestCase):
         self.assertTrue('<HTML>' in report)
 
     def test_dodownload(self):
-        wget = MockWget()
-        dodownload(self.standardpath, wget)
+        downloader = FakeDownloader()
+        dodownload(self.standardpath, downloader)
 
     def test_minidom_parse_success(self):
         matchpattern = 'wbur'
@@ -111,7 +111,7 @@ class ApplicationTest(unittest.TestCase):
     def _get_list_of_eps(self):
         subs = get_list_of_subscriptions(self.standardpath, "agenda")
         asub = subs[0]
-        mock = MockWget()
+        mock = FakeDownloader()
         eps = asub.get_all_episodes()
         sort_rev_chron(eps)
         new = eps[:asub.maxeps]

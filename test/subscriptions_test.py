@@ -69,6 +69,5 @@ class SubscriptionsTest (unittest.TestCase):
         s = get_list_of_subscriptions(basedir)[0]
         return s
 
-
 if __name__ == '__main__':
     unittest.main()

@@ -4,7 +4,7 @@ from application import init_config
 from subscriptions import Subscriptions, FakeSubscription
 from index import FakeIndex
 from episode import Episode
-from wget import MockWget
+from downloader import FakeDownloader
 
 
 class DuplicatesTest(unittest.TestCase):
@@ -46,7 +46,7 @@ class DuplicatesTest(unittest.TestCase):
                 self.assertEqual(c, d)
 
         def simulate_download(stream_pointer, fs, episodes ):
-            fakedownloader = MockWget()
+            fakedownloader = FakeDownloader()
             new = []
             for i in range(stream_pointer, stream_pointer + fs.maxeps):
                 new.append(episodes[i])

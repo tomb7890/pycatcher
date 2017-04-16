@@ -1,7 +1,7 @@
 import os
 import subscriptions
 from report import doreport
-import wget
+import downloader
 import command
 import sys
 
@@ -15,13 +15,13 @@ def main():
     basedir = init_config()
 
     command.Args().parse(sys.argv[1:])
-    downloader = wget.Wget()
+    dlr = downloader.Downloader()
     if command.Args().parser.report:
         doreport(basedir)
     elif command.Args().parser.refresh:
         dorefresh(basedir)
     else:
-        dodownload(basedir, downloader)
+        dodownload(basedir, dlr)
 
 
 def init_config():
@@ -32,10 +32,10 @@ def init_config():
 
 
 def dorefresh(basedir):
-    downloader = wget.Wget()
+    dlr = downloader.Downloader()
     for sub in get_list_of_subscriptions_production(basedir):
-        downloader.reset()
-        sub.refresh(downloader)
+        dlr.reset()
+        sub.refresh(dlr)
 
 
 def localrss_conditions(local_rssfile_exists, localrss_flag_is_set):
