@@ -27,17 +27,17 @@ class DuplicatesTest(unittest.TestCase):
             episode_object.title = e
             episode_object.url = 'http://www.example.com/foo/bar/baz.mp3'
             count = count + 1
-            self.episodes.append( episode_object )
+            self.episodes.append(episode_object)
 
     def assert_correct(self, fs, expected_linknames, processed):
         expected = expected_linknames.split()
-        for i in range (fs.maxeps):
+        for i in range(fs.maxeps):
             title = expected[i] + ".mp3"
             c = os.path.join(fs._podcasts_subdir(), title)
             d = processed[i].locallink()
             self.assertEqual(c, d)
 
-    def simulate_download(self, stream_pointer ):
+    def simulate_download(self, stream_pointer):
         fakedownloader = FakeDownloader()
 
         # create a batch of episodes
@@ -48,9 +48,9 @@ class DuplicatesTest(unittest.TestCase):
         for i in range(0, stream_pointer):
             old.append(self.episodes[i])
         eps = self.fs.release_old_and_download_new(old,
-                                        new,
-                                        self.standardpath,
-                                        fakedownloader)
+                                                   new,
+                                                   self.standardpath,
+                                                   fakedownloader)
 
         return eps
 
@@ -94,10 +94,10 @@ class DuplicatesTest(unittest.TestCase):
         "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
         self.assert_correct(self.fs, expected_linknames, processed)
 
-    def _advance_download_history_by(self,n):
+    def _advance_download_history_by(self, n):
         stream_pointer = 0
         processed = None
-        for i in range(0,n+1):
+        for i in range(0, n+1):
             processed = self.simulate_download(stream_pointer)
             stream_pointer = stream_pointer + 1
         return processed
