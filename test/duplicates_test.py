@@ -7,8 +7,6 @@ from episode import Episode
 from downloader import FakeDownloader
 
 
-
-
 class DuplicatesTest(unittest.TestCase):
 
     def construct_fake_subscription_object(self):
@@ -30,7 +28,6 @@ class DuplicatesTest(unittest.TestCase):
             episode_object.url = 'http://www.example.com/foo/bar/baz.mp3'
             count = count + 1
             self.episodes.append( episode_object )
-        
 
     def assert_correct(self, fs, expected_linknames, processed):
         expected = expected_linknames.split()
@@ -40,11 +37,10 @@ class DuplicatesTest(unittest.TestCase):
             d = processed[i].locallink()
             self.assertEqual(c, d)
 
-            
     def simulate_download(self, stream_pointer ):
         fakedownloader = FakeDownloader()
 
-        # create a batch of episodes 
+        # create a batch of episodes
         new = []
         for i in range(stream_pointer, stream_pointer + self.fs.maxeps):
             new.append(self.episodes[i])
@@ -101,7 +97,7 @@ class DuplicatesTest(unittest.TestCase):
         self.assert_correct(self.fs, expected_linknames, processed)
 
     def _advance_download_history_by(self,n):
-        stream_pointer = 0 
+        stream_pointer = 0
         processed = None
         for i in range(0,n+1):
             processed = self.simulate_download(stream_pointer)
@@ -110,6 +106,6 @@ class DuplicatesTest(unittest.TestCase):
 
 
 
-    
+
 if __name__ == '__main__':
     unittest.main()
