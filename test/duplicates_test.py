@@ -54,8 +54,6 @@ class DuplicatesTest(unittest.TestCase):
 
         return eps
 
-
-
     def setUp(self):
         # All known episodes
         # The following is a list of all episode titles for a hypothetical podcast subscription
@@ -103,8 +101,6 @@ class DuplicatesTest(unittest.TestCase):
             processed = self.simulate_download(stream_pointer)
             stream_pointer = stream_pointer + 1
         return processed
-
-
 
 
 if __name__ == '__main__':
