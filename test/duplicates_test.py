@@ -7,91 +7,109 @@ from episode import Episode
 from downloader import FakeDownloader
 
 
+
+
 class DuplicatesTest(unittest.TestCase):
 
-    def construct_fake_subscription_object(self, episode_titles):
+    def construct_fake_subscription_object(self):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
         dummy_rss = "blah"
         fs = FakeSubscription(subscriptions, dummy_rss)
         fs.index = FakeIndex()
         fs.maxeps = 10
-        return fs
+        self.fs = fs
 
-    def prepare_synthetic_episodes(self, sub, episode_titles):
-        episodes = []
+    def prepare_synthetic_episodes(self):
+        self.episodes = []
         count = 0
-        for e in episode_titles:
-            episode_object = Episode(sub)
+        for e in self.episode_titles:
+            episode_object = Episode(self.fs)
             episode_object.guid = count
             episode_object.title = e
             episode_object.url = 'http://www.example.com/foo/bar/baz.mp3'
             count = count + 1
-            episodes.append( episode_object )
-        return episodes
+            self.episodes.append( episode_object )
+        
 
-    def test_modifying_link_names_when_duplicated_(self):
+    def assert_correct(self, fs, expected_linknames, processed):
+        expected = expected_linknames.split()
+        for i in range (fs.maxeps):
+            title = expected[i] + ".mp3"
+            c = os.path.join(fs._podcasts_subdir(), title)
+            d = processed[i].locallink()
+            self.assertEqual(c, d)
 
-        def assert_correct(fs, expected_linknames, episodes):
-            expected = expected_linknames.split()
-            for i in range (fs.maxeps):
-                title = expected[i] + ".mp3"
-                c = os.path.join(fs._podcasts_subdir(), title)
-                d = episodes[i].locallink()
-                self.assertEqual(c, d)
+            
+    def simulate_download(self, stream_pointer ):
+        fakedownloader = FakeDownloader()
 
-        def simulate_download(stream_pointer, fs, episodes ):
-            fakedownloader = FakeDownloader()
-            new = []
-            for i in range(stream_pointer, stream_pointer + fs.maxeps):
-                new.append(episodes[i])
-            old = []
-            for i in range(0, stream_pointer):
-                old.append(episodes[i])
-            eps = fs.release_old_and_download_new(old,
-                                            new,
-                                            self.standardpath,
-                                            fakedownloader)
-            return eps
+        # create a batch of episodes 
+        new = []
+        for i in range(stream_pointer, stream_pointer + self.fs.maxeps):
+            new.append(self.episodes[i])
+        old = []
+        for i in range(0, stream_pointer):
+            old.append(self.episodes[i])
+        eps = self.fs.release_old_and_download_new(old,
+                                        new,
+                                        self.standardpath,
+                                        fakedownloader)
 
+        return eps
+
+
+
+    def setUp(self):
         # All known episodes
-        episode_titles = """
+        # The following is a list of all episode titles for a hypothetical podcast subscription
+        self.episode_titles = """
         Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta Hotel India
         Juliett Kilo Lima Delta Mike November Oscar Delta Papa Quebec
         Romeo Delta Sierra Tango Delta Uniform Victor Delta Whiskey XRay
         Yankee Zulu""".split()
 
-        fs = self.construct_fake_subscription_object(episode_titles)
-        episodes = self.prepare_synthetic_episodes(fs,episode_titles)
+        self.construct_fake_subscription_object()
+        self.prepare_synthetic_episodes()
 
-        # sanity checking
-        self.assertEqual( episodes[-1].title, "Zulu")
-        self.assertEqual( episodes[-1].guid, len(episodes)-1)
+    def test_establish_nominal_operation(self):
+        self.assertEqual( self.episodes[-1].title, "Zulu")
+        self.assertEqual( self.episodes[-1].guid, len(self.episodes)-1)
 
-        stream_pointer = 0
-        processed = simulate_download(stream_pointer, fs, episodes)
+    def test_zero(self):
+        processed = self._advance_download_history_by(0)
         expected_linknames = \
         """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India"""
-        assert_correct(fs, expected_linknames, processed)
+        self.assert_correct(self.fs, expected_linknames, processed)
 
-        stream_pointer = stream_pointer + 5
-        processed = simulate_download(stream_pointer, fs, episodes)
+    def test_five(self):
+        processed = self._advance_download_history_by(5)
         expected_linknames = \
         "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike"
-        assert_correct(fs, expected_linknames, processed)
+        self.assert_correct(self.fs, expected_linknames, processed)
 
-        stream_pointer = stream_pointer + 7
-        processed = simulate_download(stream_pointer, fs, episodes)
+    def test_twelve(self):
+        processed = self._advance_download_history_by(12)
         expected_linknames = \
         "Lima Delta Mike November Oscar Delta-2 Papa Quebec Romeo Delta-3"
-        assert_correct(fs, expected_linknames, processed)
+        self.assert_correct(self.fs, expected_linknames, processed)
 
-        stream_pointer = stream_pointer + 8
-        processed = simulate_download(stream_pointer, fs, episodes)
+    def test_twenty(self):
+        processed = self._advance_download_history_by(20)
         expected_linknames = \
         "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
-        assert_correct(fs, expected_linknames, processed)
+        self.assert_correct(self.fs, expected_linknames, processed)
+
+    def _advance_download_history_by(self,n):
+        stream_pointer = 0 
+        processed = None
+        for i in range(0,n+1):
+            processed = self.simulate_download(stream_pointer)
+            stream_pointer = stream_pointer + 1
+        return processed
 
 
+
+    
 if __name__ == '__main__':
     unittest.main()
