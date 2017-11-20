@@ -9,7 +9,7 @@ from downloader import FakeDownloader
 
 class DuplicatesTest(unittest.TestCase):
 
-    def construct_fake_subscription_object(self):
+    def _construct_fake_subscription_object(self):
         self.standardpath = init_config()
         subscriptions = Subscriptions(self.standardpath)
         dummy_rss = "blah"
@@ -18,7 +18,7 @@ class DuplicatesTest(unittest.TestCase):
         fs.maxeps = 10
         self.sub = fs
 
-    def prepare_synthetic_episodes(self):
+    def _prepare_synthetic_episodes(self):
         self.episodes = []
         count = 0
         for t in self.episode_titles:
@@ -29,7 +29,7 @@ class DuplicatesTest(unittest.TestCase):
             count = count + 1
             self.episodes.append(e)
 
-    def assert_correct(self, expected, actual):
+    def _assert_correct(self, expected, actual):
         expected = expected.split()
         for i in range(self.sub.maxeps):
             title = expected[i] + ".mp3"
@@ -37,7 +37,7 @@ class DuplicatesTest(unittest.TestCase):
             actual_basename = actual[i].locallink()
             self.assertEqual(expected_basename, actual_basename)
 
-    def simulate_download(self, stream_pointer):
+    def _simulate_download(self, stream_pointer):
         fakedownloader = FakeDownloader()
 
         # create a batch of episodes
@@ -63,8 +63,8 @@ class DuplicatesTest(unittest.TestCase):
         Romeo Delta Sierra Tango Delta Uniform Victor Delta Whiskey XRay
         Yankee Zulu""".split()
 
-        self.construct_fake_subscription_object()
-        self.prepare_synthetic_episodes()
+        self._construct_fake_subscription_object()
+        self._prepare_synthetic_episodes()
 
     def test_establish_nominal_operation(self):
         self.assertEqual( self.episodes[-1].title, "Zulu")
@@ -74,31 +74,35 @@ class DuplicatesTest(unittest.TestCase):
         processed = self._advance_download_history_by(0)
         expected_linknames = \
         """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India"""
-        self.assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, processed)
 
     def test_five(self):
         processed = self._advance_download_history_by(5)
         expected_linknames = \
         "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike"
-        self.assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, processed)
 
     def test_twelve(self):
         processed = self._advance_download_history_by(12)
         expected_linknames = \
         "Lima Delta Mike November Oscar Delta-2 Papa Quebec Romeo Delta-3"
-        self.assert_correct(expected_linknames, processed)
+
+        # expected_linknames = ' '.join(self.episode_titles[12:22] )
+        self._assert_correct(expected_linknames, processed)
+
+        
 
     def test_twenty(self):
         processed = self._advance_download_history_by(20)
         expected_linknames = \
         "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
-        self.assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, processed)
 
     def _advance_download_history_by(self, n):
         stream_pointer = 0
         processed = None
         for i in range(0, n+1):
-            processed = self.simulate_download(stream_pointer)
+            processed = self._simulate_download(stream_pointer)
             stream_pointer = stream_pointer + 1
         return processed
 
