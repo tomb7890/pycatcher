@@ -21,13 +21,13 @@ class DuplicatesTest(unittest.TestCase):
     def prepare_synthetic_episodes(self):
         self.episodes = []
         count = 0
-        for e in self.episode_titles:
-            episode_object = Episode(self.sub)
-            episode_object.guid = count
-            episode_object.title = e
-            episode_object.url = 'http://www.example.com/foo/bar/baz.mp3'
+        for t in self.episode_titles:
+            e = Episode(self.sub)
+            e.guid = count
+            e.title = t
+            e.url = 'http://www.example.com/foo/bar/baz.mp3'
             count = count + 1
-            self.episodes.append(episode_object)
+            self.episodes.append(e)
 
     def assert_correct(self, expected, actual):
         expected = expected.split()
