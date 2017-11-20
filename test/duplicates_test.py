@@ -29,11 +29,11 @@ class DuplicatesTest(unittest.TestCase):
             count = count + 1
             self.episodes.append(episode_object)
 
-    def assert_correct(self, fs, expected, actual):
+    def assert_correct(self, expected, actual):
         expected = expected.split()
-        for i in range(fs.maxeps):
+        for i in range(self.sub.maxeps):
             title = expected[i] + ".mp3"
-            expected_basename = os.path.join(fs._podcasts_subdir(), title)
+            expected_basename = os.path.join(self.sub._podcasts_subdir(), title)
             actual_basename = actual[i].locallink()
             self.assertEqual(expected_basename, actual_basename)
 
@@ -74,25 +74,25 @@ class DuplicatesTest(unittest.TestCase):
         processed = self._advance_download_history_by(0)
         expected_linknames = \
         """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India"""
-        self.assert_correct(self.sub, expected_linknames, processed)
+        self.assert_correct(expected_linknames, processed)
 
     def test_five(self):
         processed = self._advance_download_history_by(5)
         expected_linknames = \
         "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike"
-        self.assert_correct(self.sub, expected_linknames, processed)
+        self.assert_correct(expected_linknames, processed)
 
     def test_twelve(self):
         processed = self._advance_download_history_by(12)
         expected_linknames = \
         "Lima Delta Mike November Oscar Delta-2 Papa Quebec Romeo Delta-3"
-        self.assert_correct(self.sub, expected_linknames, processed)
+        self.assert_correct(expected_linknames, processed)
 
     def test_twenty(self):
         processed = self._advance_download_history_by(20)
         expected_linknames = \
         "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
-        self.assert_correct(self.sub, expected_linknames, processed)
+        self.assert_correct(expected_linknames, processed)
 
     def _advance_download_history_by(self, n):
         stream_pointer = 0
