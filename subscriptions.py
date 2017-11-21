@@ -21,11 +21,11 @@ class Subscription:
     maxeps: number of episodes to store on local disk
     rssfile:'''
 
-    def __init__(self, s, r, u, m):
-        self.subscriptions = s
-        self.rssfile = r
-        self.url = u
-        self.maxeps = m
+    def __init__(self, subscriptions, rssfile, url, maxeps):
+        self.subscriptions = subscriptions
+        self.rssfile = rssfile
+        self.url = url
+        self.maxeps = maxeps
         self._make_directories()
         self.index = index.Index(self.get_idx_path())
 
