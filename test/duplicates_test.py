@@ -26,40 +26,54 @@ class DuplicatesTest(unittest.TestCase):
         self.assertEqual( self.episodes[-1].guid, len(self.episodes)-1)
 
     def test_zero(self):
-        processed = self._advance_download_history_by(0)
+        actual = self._advance_download_history_by(0)
         expected_linknames = \
         """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India"""
-        self._assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, actual)
 
     def test_five(self):
-        processed = self._advance_download_history_by(5)
+        actual = self._advance_download_history_by(5)
         expected_linknames = \
         "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike"
-        self._assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, actual)
 
     def test_twelve(self):
-        processed = self._advance_download_history_by(12)
+        actual = self._advance_download_history_by(12)
         expected_linknames = \
         "Lima Delta Mike November Oscar Delta-2 Papa Quebec Romeo Delta-3"
 
         # expected_linknames = ' '.join(self.episode_titles[12:22] )
-        self._assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, actual)
 
         
 
     def test_twenty(self):
-        processed = self._advance_download_history_by(20)
+        actual = self._advance_download_history_by(20)
         expected_linknames = \
         "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
-        self._assert_correct(expected_linknames, processed)
+        self._assert_correct(expected_linknames, actual)
+
+    def test_full_gamut(self):
+        self.sub.maxeps = len(self.episode_titles) 
+        actual = self._advance_download_history_by(0)
+        expected_linknames = \
+        """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India
+                Juliett Kilo Lima Delta-3 Mike November Oscar Delta-4 Papa Quebec
+                Romeo Delta-5 Sierra Tango Delta-6 Uniform Victor Delta-7 Whiskey XRay
+                Yankee Zulu Delta-8"""
+
+        self.assertEqual(len(self.episode_titles), len(actual))
+        self._assert_correct(expected_linknames, actual)
+
+
 
     def _advance_download_history_by(self, n):
         stream_pointer = 0
-        processed = None
+        episodes = None
         for i in range(0, n+1):
-            processed = self._simulate_download(stream_pointer)
+            episodes = self._simulate_download(stream_pointer)
             stream_pointer = stream_pointer + 1
-        return processed
+        return episodes
 
     def _construct_fake_subscription_object(self):
         self.standardpath = init_config()
@@ -99,12 +113,12 @@ class DuplicatesTest(unittest.TestCase):
         old = []
         for i in range(0, stream_pointer):
             old.append(self.episodes[i])
-        eps = self.sub.release_old_and_download_new(old,
+        episodes = self.sub.release_old_and_download_new(old,
                                                    new,
                                                    self.standardpath,
                                                    fakedownloader)
 
-        return eps
+        return episodes
 
 if __name__ == '__main__':
     unittest.main()
