@@ -9,51 +9,6 @@ from downloader import FakeDownloader
 
 class DuplicatesTest(unittest.TestCase):
 
-    def _construct_fake_subscription_object(self):
-        self.standardpath = init_config()
-        subscriptions = Subscriptions(self.standardpath)
-        dummy_rss = "blah"
-        fs = FakeSubscription(subscriptions, dummy_rss)
-        fs.index = FakeIndex()
-        fs.maxeps = 10
-        self.sub = fs
-
-    def _prepare_synthetic_episodes(self):
-        self.episodes = []
-        count = 0
-        for t in self.episode_titles:
-            e = Episode(self.sub)
-            e.guid = count
-            e.title = t
-            e.url = 'http://www.example.com/foo/bar/baz.mp3'
-            count = count + 1
-            self.episodes.append(e)
-
-    def _assert_correct(self, expected, actual):
-        expected = expected.split()
-        for i in range(self.sub.maxeps):
-            title = expected[i] + ".mp3"
-            expected_basename = os.path.join(self.sub._podcasts_subdir(), title)
-            actual_basename = actual[i].locallink()
-            self.assertEqual(expected_basename, actual_basename)
-
-    def _simulate_download(self, stream_pointer):
-        fakedownloader = FakeDownloader()
-
-        # create a batch of episodes
-        new = []
-        for i in range(stream_pointer, stream_pointer + self.sub.maxeps):
-            new.append(self.episodes[i])
-        old = []
-        for i in range(0, stream_pointer):
-            old.append(self.episodes[i])
-        eps = self.sub.release_old_and_download_new(old,
-                                                   new,
-                                                   self.standardpath,
-                                                   fakedownloader)
-
-        return eps
-
     def setUp(self):
         # All known episodes
         # The following is a list of all episode titles for a hypothetical podcast subscription
@@ -106,6 +61,50 @@ class DuplicatesTest(unittest.TestCase):
             stream_pointer = stream_pointer + 1
         return processed
 
+    def _construct_fake_subscription_object(self):
+        self.standardpath = init_config()
+        subscriptions = Subscriptions(self.standardpath)
+        dummy_rss = "blah"
+        fs = FakeSubscription(subscriptions, dummy_rss)
+        fs.index = FakeIndex()
+        fs.maxeps = 10
+        self.sub = fs
+
+    def _prepare_synthetic_episodes(self):
+        self.episodes = []
+        count = 0
+        for t in self.episode_titles:
+            e = Episode(self.sub)
+            e.guid = count
+            e.title = t
+            e.url = 'http://www.example.com/foo/bar/baz.mp3'
+            count = count + 1
+            self.episodes.append(e)
+
+    def _assert_correct(self, expected, actual):
+        expected = expected.split()
+        for i in range(self.sub.maxeps):
+            title = expected[i] + ".mp3"
+            expected_basename = os.path.join(self.sub._podcasts_subdir(), title)
+            actual_basename = actual[i].locallink()
+            self.assertEqual(expected_basename, actual_basename)
+
+    def _simulate_download(self, stream_pointer):
+        fakedownloader = FakeDownloader()
+
+        # create a batch of episodes
+        new = []
+        for i in range(stream_pointer, stream_pointer + self.sub.maxeps):
+            new.append(self.episodes[i])
+        old = []
+        for i in range(0, stream_pointer):
+            old.append(self.episodes[i])
+        eps = self.sub.release_old_and_download_new(old,
+                                                   new,
+                                                   self.standardpath,
+                                                   fakedownloader)
+
+        return eps
 
 if __name__ == '__main__':
     unittest.main()
