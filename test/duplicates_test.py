@@ -27,43 +27,39 @@ class DuplicatesTest(unittest.TestCase):
 
     def test_zero(self):
         actual = self._advance_download_history_by(0)
-        expected_linknames = \
+        expected = \
         """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India"""
-        self._assert_correct(expected_linknames, actual)
+        self._assert_correct(expected, actual)
 
     def test_five(self):
         actual = self._advance_download_history_by(5)
-        expected_linknames = \
+        expected = \
         "Foxtrot Golf Delta-2 Hotel India Juliett Kilo Lima Delta Mike"
-        self._assert_correct(expected_linknames, actual)
+        self._assert_correct(expected, actual)
 
     def test_twelve(self):
         actual = self._advance_download_history_by(12)
-        expected_linknames = \
+        expected = \
         "Lima Delta Mike November Oscar Delta-2 Papa Quebec Romeo Delta-3"
-
-        # expected_linknames = ' '.join(self.episode_titles[12:22] )
-        self._assert_correct(expected_linknames, actual)
-
-        
+        self._assert_correct(expected, actual)
 
     def test_twenty(self):
         actual = self._advance_download_history_by(20)
-        expected_linknames = \
+        expected = \
         "Romeo Delta-3 Sierra Tango Delta Uniform Victor Delta-2 Whiskey XRay"
-        self._assert_correct(expected_linknames, actual)
+        self._assert_correct(expected, actual)
 
     def test_full_gamut(self):
         self.sub.maxeps = len(self.episode_titles) 
         actual = self._advance_download_history_by(0)
-        expected_linknames = \
+        expected = \
         """Alpha Bravo Charlie Delta Echo Foxtrot Golf Delta-2 Hotel India
                 Juliett Kilo Lima Delta-3 Mike November Oscar Delta-4 Papa Quebec
                 Romeo Delta-5 Sierra Tango Delta-6 Uniform Victor Delta-7 Whiskey XRay
                 Yankee Zulu Delta-8"""
 
         self.assertEqual(len(self.episode_titles), len(actual))
-        self._assert_correct(expected_linknames, actual)
+        self._assert_correct(expected, actual)
 
 
 
