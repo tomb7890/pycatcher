@@ -19,4 +19,4 @@ By default, downloaded media will be stored in the "~/podcasts" directory. Set t
 Rename the provided `pycatcher.conf.example` and modify accordingly.
 
 ### Execution
-run `python application.py` to download.
+`$ python application.py`
