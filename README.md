@@ -11,7 +11,7 @@ An additional section is used to describe each feed, or subscription of interest
 
 Optionally,  a `data-directory` option may be used override the location of primary media storage.  Add URLs for as many feeds as you like and, for each feed, an optional integer in `maxeps`  if you would like other than the default of three of the latest episodes.
 
-By default, downloaded media will be stored in the "~/podcasts" directory. Set the `PODCASTROOT` environment variable to overrride this preference.
+By default, downloaded media will be stored in `~/podcasts` directory. Set the `PODCASTROOT` environment variable to overrride this preference.
 
 
 
