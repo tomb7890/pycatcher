@@ -14,7 +14,7 @@ Additional sections are used to describe each feed, or subscription of interest.
 
 
 ### Installation
-Rename the provided `pycatcher.conf.example` to 'pycatcher.conf` and modify accordingly.
+Rename the provided `pycatcher.conf.example` to `pycatcher.conf` and modify accordingly.
 
 
 
