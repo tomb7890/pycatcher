@@ -3,6 +3,7 @@ import os
 import StringIO
 import subscriptions
 import episode
+from downloader import FakeDownloader
 
 
 def doreport(basedir):
@@ -17,7 +18,9 @@ def make_report_text(basedir):
     in reverse chronological order,  make an html report.
     '''
     alleps = []
-    subs = subscriptions.Subscriptions(basedir)
+    downloader = FakeDownloader()
+    
+    subs = subscriptions.Subscriptions(downloader, basedir)
     for sub in subs.items:
         try:
             episodes = sub.get_all_episodes()

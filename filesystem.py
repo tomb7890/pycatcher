@@ -1,9 +1,20 @@
 import os
 
+import logging
+
 
 class FileSystem:
+
     def __init__(self):
         pass
+
+    def link_creation_test(self, src, dst):
+        logging.info("link_creation_test: %s and %s " % (src, dst))
+        if self.path_exists(src) and not self.path_exists(dst):
+            return True
+        else:
+            return False
+    
 
     def path_exists(self, path):
         return os.path.exists(path)
@@ -19,11 +30,12 @@ class FileSystem:
     def link(self, src, dest):
         os.link(src, dest)
 
-    def exists(self, filename):
-        return os.exists(filename)
+    def rename(self, old, new):
+        os.rename(old, new)
 
 
 class FakeFileSystem (FileSystem):
+
     def _directory_portion_of_full_path(self, fullpath):
         segments = fullpath.split("/")
         path = "/".join(segments[0:len(segments)-1])
@@ -39,12 +51,16 @@ class FakeFileSystem (FileSystem):
         self._ffs = {}
 
     def link(self, src, dest):
-        basename = self._filename_portion_of_full_path(src)
+
+        basename = self._filename_portion_of_full_path(dest)
         directory = self._directory_portion_of_full_path(dest)
         dir = self._ffs[directory]
+        if basename in dir:
+            raise ValueError
         dir.append(basename)
 
     def mkdir(self, path):
+
         if path not in self._ffs:
             self._ffs[path] = []
         else:
@@ -61,13 +77,14 @@ class FakeFileSystem (FileSystem):
             self._ffs[directory] = files 
 
     def path_exists(self, path):
+        x = False 
         dirq = self._directory_portion_of_full_path(path)
         filename = self._filename_portion_of_full_path(path)
         if dirq in self._ffs:
             dir = self._ffs[dirq]
             if filename in dir:
-                return True
-        return False
+                x= True
+        return x 
 
     def listdir(self, path):
         dir = self._ffs[path]
@@ -86,7 +103,7 @@ class FakeFileSystem (FileSystem):
                 dir.remove(filename)
 
     def exists(self, filename):
-        return filename in self._ffs
+        return self.path_exists(filename)
 
 
 if __name__ == '__main__':

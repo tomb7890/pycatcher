@@ -10,6 +10,11 @@ from ConfigParser import ConfigParser
 from episode import Episode, sort_rev_chron
 import command
 
+from downloader import FakeDownloader
+
+logger = logging.getLogger()
+# logger.setLevel(logging.INFO)
+
 
 class Subscription:
     '''A Subscription class encapsulates an RSS Feed.
@@ -21,10 +26,11 @@ class Subscription:
     maxeps: number of episodes to store on local disk
     rssfile:'''
 
-    def __init__(self, subscriptions, rssfile, url, maxeps):
+    def __init__(self, subscriptions, rssfile, url, maxeps, downloader):
         self.subscriptions = subscriptions
         self.rssfile = rssfile
         self.url = url
+        self.downloader = downloader
         self.maxeps = maxeps
         self._make_directories()
         self.index = index.Index(self.get_idx_path())
@@ -36,11 +42,11 @@ class Subscription:
         queue = []
         for episode in episodes:
             lf = episode.localfile()
-            if os.path.exists(lf):
+            if self.downloader.fs.path_exists(lf):
                 logging.info("file already exists: " + lf)
             else:
-                logging.info("queuing: " + lf)
-                queue.append(episode.url)
+                logging.info("queuing: " + lf.title())
+                queue.append(episode)
         return queue
 
     def release_old_and_download_new(self, old, new, basedir, downloader):
@@ -51,52 +57,41 @@ class Subscription:
         return episodes
 
     def download_new_files(self, downloader, episodes):
-        logging.info("downloader ")
+        logging.info("Subscriptions.download_new_files")
         queue = self.prepare_queue(episodes)
         if len(queue) > 0:
-            inputfile = 'urls.dat'
-
-            downloader.addoption('--input-file', inputfile)
             downloader.addoption('--directory-prefix', self._data_subdir())
             if command.Args().parser.limitrate:
                 downloader.addoption('--limit-rate',
                                      command.Args().parser.limitrate)
 
             downloader.url = self.url
-            f = open(inputfile, 'w')
-            f.write('%s\n' % ('\n'.join(queue)))
-            f.close()
-            downloader.execute()
+            downloader.execute(queue)
             logging.info(downloader.getCmd)
-            if os.path.exists(inputfile):
-                os.unlink(inputfile)
 
     def get_new_episodes(self, saved, basedir, downloader):
         self.download_new_files(downloader, saved)
         self.create_links(saved)
-
-    def link_creation_test(self, src, dst):
-        if os.path.exists(src) and not os.path.exists(dst):
-            return True
-        return False
 
     def create_links(self, episodes):
         for e in episodes:
             src = e.localfile()
             self.trim_querystring_from_filename(src)
             dest = e.locallink()
+
             if os.path.exists(src):
                 disksize = os.path.getsize(src)
                 if int(disksize) != int(e.enclosure_length) and False:
-                    logging.warning(
-                        "episdode %s's length is %d, expected to be %d " %
-                        (src, disksize, int(e.enclosure_length)))
-
-            logging.info("making link from %s to  %s " % (src, dest))
-            if self.link_creation_test(src, dest) is True:
-                os.link(src, dest)
+                    logging.warning("episdode %s's length is %d, expected to be %d " %
+                                    (src, disksize, int(e.enclosure_length)))
+                    
+                logging.info("making link from %s to  %s " % (src, dest))
+                if self.downloader.fs.link_creation_test(src, dest) is True:
+                    self.downloader.fs.link(src, dest)
 
     def trim_querystring_from_filename(self, filename):
+        fs = self.downloader.fs
+        
         '''
         Rename file on disk from the actual file name (sometimes with a
         query string appended by the file downloader) to the expected
@@ -114,8 +109,8 @@ class Subscription:
             actual = g[0]
             if actual:
                 logging.info("[%s], [%s] " % (actual, filename))
-                if not os.path.exists(filename):
-                    os.rename(actual, filename)
+                if not fs.path_exists(filename):
+                    fs.rename(actual, filename)
 
     def release_old_episodes(self, expired):
         self.prunefiles(expired)
@@ -133,12 +128,13 @@ class Subscription:
         sort_rev_chron(episodes)
         return episodes
 
-    def dodownload(self, basedir, downloader):
+    def dodownload(self, basedir):
         try:
             episodes = self.get_sorted_list_of_episodes()
             new = episodes[:self.maxeps]
             old = episodes[self.maxeps:]
-            self.release_old_and_download_new(old, new, basedir, downloader)
+            self.release_old_and_download_new(old, new, basedir,
+                                              self.downloader)
 
         except xml.etree.ElementTree.ParseError, error:
             logging.info("minidom parsing error:"+repr(error) +
@@ -153,11 +149,11 @@ class Subscription:
                             self._sub_dir())
 
     def _make_directories(self):
-        if not os.path.exists(self._podcasts_subdir()):
-            os.mkdir(self._podcasts_subdir())
+        if not self.downloader.fs.path_exists(self._podcasts_subdir()):
+            self.downloader.fs.mkdir(self._podcasts_subdir())
 
-        if not os.path.exists(self._data_subdir()):
-            os.mkdir(self._data_subdir())
+        if not self.downloader.fs.path_exists(self._data_subdir()):
+            self.downloader.fs.mkdir(self._data_subdir())
 
     def queue(self):
         '''The queue method returns pending episodes.
@@ -171,7 +167,7 @@ class Subscription:
         sort_rev_chron(allepisodes)
         queue = []
         for ep in allepisodes[:self.maxeps]:
-            if not os.path.exists(ep.localfile()):
+            if not self.downloader.fs.path.exists(ep.localfile()):
                 queue.append(ep.localfile())
         return queue
 
@@ -203,7 +199,7 @@ class Subscription:
 
         downloader.addoption('--output-document', filename)
         downloader.url = self.url
-        downloader.execute()
+        downloader.execute_main()
 
     def get_all_episodes(self):
         episodes = self.fetch_episodes()
@@ -224,8 +220,11 @@ class Subscription:
         if episode.guid not in self.index.table:
             link_name = self.generate_link_name(episode)
             self.index.table[episode.guid] = link_name
-            full_link_path = os.path.join(self._podcasts_subdir(), link_name)
-            episode._link_name = full_link_path
+        else:
+            link_name = self.index.table[episode.guid]
+
+        full_link_path = os.path.join(self._podcasts_subdir(), link_name)
+        episode._link_name = full_link_path
 
     def set_linknames(self, episodes):
         for e in episodes:
@@ -346,7 +345,7 @@ def trim_tzinfo(t):
 
 class Subscriptions:
 
-    def __init__(self, b=None, match=None):
+    def __init__(self, downloader=FakeDownloader(), basedir=None, match=None):
         """A subscriptions file (podcasts.ini) is a user defined file,
         it allows the specification of the podcast programs to be downloaded.
 
@@ -360,19 +359,20 @@ class Subscriptions:
 
         """
         self.items = []
-        self.basedir = b
+        self.basedir = basedir
+        self.downloader = downloader
         self._initialize_directories()
         self._initialize_subscriptions(match)
 
     def _initialize_directories(self):
         self._data_basedir()
         self._podcasts_basedir()
-        if not os.path.exists(self._datadir):
-            os.mkdir(self._datadir)
-        if not os.path.exists(self._podcastdir):
-            os.mkdir(self._podcastdir)
-        if not os.path.exists(self.get_rss_dir()):
-            os.mkdir(self.get_rss_dir())
+        if not self.downloader.fs.path_exists(self._datadir):
+            self.downloader.fs.mkdir(self._datadir)
+        if not self.downloader.fs.path_exists(self._podcastdir):
+            self.downloader.fs.mkdir(self._podcastdir)
+        if not self.downloader.fs.path_exists(self.get_rss_dir()):
+            self.downloader.fs.mkdir(self.get_rss_dir())
 
     def find(self, substr):
         ''' find a matching subscription'''
@@ -444,7 +444,7 @@ class Subscriptions:
             if config.has_option(s, 'url'):
                 url = config.get(s, 'url')
             if maxeps and rssfile and url:
-                sub = Subscription(self, rssfile, url, int(maxeps))
+                sub = Subscription(self, rssfile, url, int(maxeps), self.downloader)
 
                 if match:
                     if match.lower() in repr(s).lower():
@@ -462,9 +462,21 @@ class Subscriptions:
         return None
 
 
-class FakeSubscription (Subscription):
-    def __init__(self, s, r):
-        Subscription.__init__(self, s, r, None, None)
+class FakeSubscription(Subscription):
+    def __init__(self,
+                 subscriptions,
+                 rssfile,
+                 url,
+                 maxeps,
+                 downloader):
+        
+        Subscription.__init__(self,
+                              subscriptions,
+                              rssfile,
+                              url, 
+                              maxeps,
+                              downloader)
+        
 
     def fetch_episodes(self):
         eps = self._fake_episode_list

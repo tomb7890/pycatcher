@@ -1,5 +1,5 @@
-import os, re, string
-
+import re, string, filesystem
+import os
 
 def sort_rev_chron(episodes):
 
@@ -52,13 +52,11 @@ class Episode:
 
     def prune_file(self):
         filename = self.localfile()
-        if os.path.exists( filename ):
-            os.unlink( filename )
+        self.subscription.downloader.fs.prune_file(filename)
 
     def prune_link(self):
         link = self.locallink()
-        if os.path.exists( link ):
-            os.unlink( link )
+        self.subscription.downloader.fs.prune_link(link)
 
     def _file_extension(self):
         src = self.localfile( )
