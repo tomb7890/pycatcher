@@ -23,11 +23,7 @@ class Downloader:
 
     def prepare_command(self):
         cmd = "wget "
-        
-        # for a in self.args.keys():
-        #     cmd = cmd + ' %s="%s" ' % (a, self.args[a])
 
-        
         for k in self._dict.keys():
             cmd = cmd + ' %s="%s" ' % (k, self._dict[k])
 
