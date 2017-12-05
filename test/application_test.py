@@ -18,39 +18,10 @@ class ApplicationTest(unittest.TestCase):
         self.parser = command.Args().parse('--program  wbur'.split())
         self.standardpath = init_config()
 
-    def test_localrss_option_suspends_download_of_rss_file(self):
-        self.fake = FakeDownloader()
-        self.parser = command.Args().parse('--localrss --program wbur   '.split())
-        self.assertTrue(command.Args().parser.localrss)
-        dodownload(self.standardpath, self.fake)
-        self.assertFalse(self._wbur_rss_file_was_downloaded())
-        
     def test_unmatched_program_halts_app_execution_with_exception(self):
         with self.assertRaises(ValueError):
             self.fake = FakeDownloader()
-            self.parser = command.Args().parse(' --program asodmxcwew  '.split())
-            dodownload(self.standardpath, self.fake)
-
-    def test_localrss_conditions(self):
-        localrss_flag_is_set = False
-        local_rssfile_exists = False
-        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
-        self.assertTrue(actual)
-
-        localrss_flag_is_set = True
-        local_rssfile_exists = False
-        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
-        self.assertTrue(actual)
-
-        localrss_flag_is_set = False
-        local_rssfile_exists = True
-        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
-        self.assertTrue(actual)
-
-        localrss_flag_is_set = True
-        local_rssfile_exists = True
-        actual = localrss_conditions(local_rssfile_exists, localrss_flag_is_set)
-        self.assertFalse(actual)
+            dodownload(self.standardpath, self.fake, program='asodmxcwew')
 
     def _wbur_rss_file_was_downloaded(self):
         x = True

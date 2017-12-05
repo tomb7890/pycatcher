@@ -40,23 +40,12 @@ def dorefresh(basedir):
         sub.refresh(dlr)
 
 
-def localrss_conditions(local_rssfile_exists, localrss_flag_is_set):
-    if localrss_flag_is_set:
-        if local_rssfile_exists:
-            return False
-    return True
-
-
-def dodownload(basedir, downloader):
+def dodownload(basedir, downloader, **args):
     '''
     Download files
     '''
-    for sub in get_list_of_subscriptions_production(downloader, basedir):
-        downloader.reset()
-        if localrss_conditions(os.path.exists(sub.get_rss_path()),
-                               command.Args().parser.localrss):
-            sub.refresh(downloader)
-        downloader.reset()
+    for sub in get_list_of_subscriptions_production(downloader, basedir, **args):
+        sub.refresh(downloader)
         sub.dodownload(basedir)
 
 def get_list_of_subscriptions_production(downloader, basedir):
