@@ -2,10 +2,10 @@ import os
 import subscriptions
 from report import doreport
 import downloader
-import command
 import sys
-from filesystem import FileSystem 
-
+from filesystem import FileSystem
+import argparse
+import logging 
 
 def main():
     '''
@@ -14,16 +14,34 @@ def main():
     '''
 
     basedir = init_config()
+    p = argparse.ArgumentParser()
+    p.add_argument('-v', '--verbose', action='store_true')
+    p.add_argument('-p', '--program', dest='program',
+                        action='store',help='program x')
+    p.add_argument('-lr', '--limit-rate', dest='limitrate',
+                        action='store', help='limitrate')
+    p.add_argument('-d', '--debug',  action='store_true')
+    p.add_argument('-r', '--report', action='store_true')
+    p.add_argument('-f', '--refresh', action='store_true')
+    p.add_argument('-sp', '--strict-parsing',
+                        action='store_true',  default=True,
+                        help = """
+                        Allow blank lines to appear in header of RSS file
+                        """)
 
-    command.Args().parse(sys.argv[1:])
-    dlr = downloader.Downloader()
+    args = p.parse_args(sys.argv[1:])
+    dlr = downloader.Downloader(**vars(args))
     dlr.fs = FileSystem()
-    if command.Args().parser.report:
+    if args.report:
         doreport(basedir)
-    elif command.Args().parser.refresh:
+    elif args.refresh:
         dorefresh(basedir)
     else:
-        dodownload(basedir, dlr)
+        dodownload(basedir, dlr, **vars(args))
+
+    if 'verbose' in args:
+        logger = logging.getLogger()
+        logger.setLevel(logging.INFO)
 
 
 def init_config():
@@ -48,16 +66,12 @@ def dodownload(basedir, downloader, **args):
         sub.refresh(downloader)
         sub.dodownload(basedir)
 
-def get_list_of_subscriptions_production(downloader, basedir):
-    match = None
-    if command.Args().parser.program:
-        match = command.Args().parser.program
-    return get_list_of_subscriptions(basedir, downloader, match)
+def get_list_of_subscriptions_production(downloader, basedir, **args):
+    return get_list_of_subscriptions(basedir, downloader, **args)
 
-
-def get_list_of_subscriptions(basedir, downloader, match=None):
+def get_list_of_subscriptions(basedir, downloader, **args):
     subs = []
-    subs = subscriptions.Subscriptions(downloader, basedir, match )
+    subs = subscriptions.Subscriptions(downloader, basedir, **args )
     return subs.items
 
 def get_latest_episodes(sub):

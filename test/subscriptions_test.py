@@ -3,15 +3,14 @@ from application import init_config, get_list_of_subscriptions
 import tempfile
 import xml
 import subscriptions
-import command
+
 from index import FakeIndex
 from downloader import FakeDownloader
 
 class SubscriptionsTest (unittest.TestCase):
     def setUp(self):
         self.standardpath = init_config()
-        self.setup_additional()
-
+        
     def get_temp_file(self):
         filename = tempfile.mktemp()
         f = open(filename, 'w')
@@ -22,7 +21,23 @@ class SubscriptionsTest (unittest.TestCase):
             basedir = self.standardpath
             match = 'nklfewcjdisoafsdklewjidso'
             dl  = FakeDownloader()
-            s = subscriptions.Subscriptions(dl, basedir, match)
+            s = subscriptions.Subscriptions(dl, basedir, program=match)
+
+    def test_download_rss_file(self):
+        dl = FakeDownloader(verbose=True)
+        basedir = self.standardpath
+        s = subscriptions.Subscriptions(dl, basedir, program='wbur')
+        wbur=s.items[0]
+        self.assertNotEqual(None, wbur)
+        wbur.refresh(dl)
+        cmd = 'wget  --output-document="/home/tomb/.podcasts-data/rss/on_point_wbur.xml"  "http://www.npr.org/rss/podcast.php?id=510053" '
+        self.assertEqual(cmd, dl.getCmd())
+
+        wbur.dodownload(dl)
+        expected = 'wget  --input-file="urls.dat"  --directory-prefix="/home/tomb/.podcasts-data/on_point_wbur" '
+        
+        self.assertEqual(expected, dl.getCmd())
+
 
     def test_junk_in_header(self):
         '''test processing an RSS file with junk at the top of the header'''
@@ -48,8 +63,8 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_tolerate_blanks_in_header(self):
         '''test tolerating an RSS file with a blank line at the top'''
-        command.Args().parse(' --tolerant '.split())
         s = self.set_up_minidom_test()
+        s.set_strict_parsing(False)
         f, filename = self.get_temp_file()
         f.write('\n')
         partial = open(s.get_rss_path(), 'r').read()
@@ -59,7 +74,6 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_empty_rss_file(self):
         '''test processing an empty RSS file'''
-        command.Args().parse('')
         with self.assertRaises(xml.etree.ElementTree.ParseError):
             s = self.set_up_minidom_test()
             f, filename = self.get_temp_file()
@@ -75,7 +89,6 @@ class SubscriptionsTest (unittest.TestCase):
 
     def setup_additional(self):
         self.program_string = 'freakon'
-        self.parser = command.Args().parse(('--program %s' % self.program_string).split())
         self.standardpath = init_config()
         self._prepare_subscription_object()
         self.sub.index = FakeIndex()
@@ -83,10 +96,12 @@ class SubscriptionsTest (unittest.TestCase):
     def _prepare_subscription_object(self):
         fd = FakeDownloader()
         subs = get_list_of_subscriptions(self.standardpath, fd,
-                                         self.program_string)
+                                         program=self.program_string)
         self.sub = subs[0]
+        self.assertEqual(1, len(subs))
 
     def test_main(self):
+        self.setup_additional()
         self.assertEqual(0,
                          len(self.sub.downloader.fs.listdir(
                              self.sub._podcasts_subdir()

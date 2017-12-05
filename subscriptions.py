@@ -8,12 +8,11 @@ import index
 import xml.etree.ElementTree as ET
 from ConfigParser import ConfigParser
 from episode import Episode, sort_rev_chron
-import command
+
 
 from downloader import FakeDownloader
 
 logger = logging.getLogger()
-# logger.setLevel(logging.INFO)
 
 
 class Subscription:
@@ -26,9 +25,12 @@ class Subscription:
     maxeps: number of episodes to store on local disk
     rssfile:'''
 
-    def __init__(self, subscriptions, rssfile, url, maxeps, downloader):
+    def __init__(self, subscriptions, rssfile, url, maxeps, downloader,
+                 strict=True, limitrate=None):
         self.subscriptions = subscriptions
         self.rssfile = rssfile
+        self.strict = strict
+        self.limitrate = limitrate
         self.url = url
         self.downloader = downloader
         self.maxeps = maxeps
@@ -37,6 +39,9 @@ class Subscription:
 
     def _lookup_table_path(self):
         return os.path.join(self.get_rss_dir(), index.file_extension())
+
+    def set_strict_parsing(self, x):
+        self.strict = x
 
     def prepare_queue(self, episodes):
         queue = []
@@ -81,14 +86,12 @@ class Subscription:
                 if int(disksize) != int(e.enclosure_length) and False:
                     logging.warning("episdode %s's length is %d, expected to be %d " %
                                     (src, disksize, int(e.enclosure_length)))
-                    
                 logging.info("making link from %s to  %s " % (src, dest))
                 if self.downloader.fs.link_creation_test(src, dest) is True:
                     self.downloader.fs.link(src, dest)
 
     def trim_querystring_from_filename(self, filename):
         fs = self.downloader.fs
-        
         '''
         Rename file on disk from the actual file name (sometimes with a
         query string appended by the file downloader) to the expected
@@ -135,7 +138,7 @@ class Subscription:
 
         except xml.etree.ElementTree.ParseError, error:
             logging.info("minidom parsing error:"+repr(error) +
-                         'with subscription ' + repr(sub.get_rss_path()))
+                         'with subscription ' + repr(self.get_rss_path()))
 
     def _podcasts_subdir(self):  # podcasts/ffrf/
         return os.path.join(self.subscriptions._podcasts_basedir(),
@@ -312,7 +315,7 @@ class Subscription:
         self.title = (root.findall("./channel/title")[0].text)
 
     def _fetch_root(self, filename):
-        if command.Args().parser.tolerant:
+        if self.strict is False:
             self._remove_blank_from_head_of_rss_file(filename)
         tree = ET.parse(filename)
         root = tree.getroot()
@@ -339,7 +342,7 @@ def trim_tzinfo(t):
 
 class Subscriptions:
 
-    def __init__(self, downloader=FakeDownloader(), basedir=None, match=None):
+    def __init__(self, downloader=FakeDownloader(), basedir=None, **args):
         """A subscriptions file (podcasts.ini) is a user defined file,
         it allows the specification of the podcast programs to be downloaded.
 
@@ -356,7 +359,7 @@ class Subscriptions:
         self.basedir = basedir
         self.downloader = downloader
         self._initialize_directories()
-        self._initialize_subscriptions(match)
+        self._initialize_subscriptions(**args)
 
     def _initialize_directories(self):
         self._data_basedir()
@@ -425,9 +428,13 @@ class Subscriptions:
     def _get_subs_file_name(self):
         return self._get_ini_file_name()
 
-    def _initialize_subscriptions(self, match):
+    def _initialize_subscriptions(self, **args):
         config = ConfigParser()
         config.read(self._get_subs_file_name())
+
+        program_value = None
+        if 'program' in args:
+            program_value = args['program']
 
         for s in config.sections():
             maxeps = rssfile = url = None
@@ -440,15 +447,15 @@ class Subscriptions:
             if maxeps and rssfile and url:
                 sub = Subscription(self, rssfile, url, int(maxeps), self.downloader)
 
-                if match:
-                    if match.lower() in repr(s).lower():
+                if program_value:
+                    if program_value.lower() in repr(s).lower():
                         self.items.append(sub)
                 else:
                     self.items.append(sub)
 
-        if match is not None and len(match) > 0:
+        if program_value is not None and len(program_value) > 0:
             if len(self.items) == 0:
-                raise ValueError("could not find subscription " + match)
+                raise ValueError("could not find subscription " + program_value)
 
     def _initialize_subscription_titles(self):
         for s in self.items:

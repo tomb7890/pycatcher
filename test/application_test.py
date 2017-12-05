@@ -3,19 +3,18 @@ import unittest
 import xml
 
 from application import get_list_of_subscriptions, init_config, dodownload
-from application import get_list_of_subscriptions_production, localrss_conditions
+from application import get_list_of_subscriptions_production
 from episode import sort_rev_chron
 from subscriptions import Subscriptions
 from downloader import Downloader, FakeDownloader
 from filesystem import FileSystem
-import command
+# import command
 from report import make_report_text
 
 
 class ApplicationTest(unittest.TestCase):
 
     def setUp(self):
-        self.parser = command.Args().parse('--program  wbur'.split())
         self.standardpath = init_config()
 
     def test_unmatched_program_halts_app_execution_with_exception(self):
@@ -48,20 +47,19 @@ class ApplicationTest(unittest.TestCase):
     def test_match_failure(self):
         downloader = FakeDownloader()
         with self.assertRaises(ValueError):
-            subs = Subscriptions(downloader, self.standardpath, "foobar")
+            subs = Subscriptions(downloader, self.standardpath, program="foobar")
 
     def test_match_success(self):
         downloader = FakeDownloader()
-        subs = Subscriptions(downloader, self.standardpath, "genes")
+        subs = Subscriptions(downloader, self.standardpath, program="genes")
         self.assertEqual(1, len(subs.items))
 
     def test_get_list_of_subscriptions_with_match_failure(self):
         with self.assertRaises(ValueError):
-            get_list_of_subscriptions(self.standardpath, FakeDownloader(), "quux")
-
+            get_list_of_subscriptions(self.standardpath, FakeDownloader(), program="quux")
 
     def test_get_list_of_subscriptions_with_match_success(self):
-        items = get_list_of_subscriptions(self.standardpath, FakeDownloader(), "genes")
+        items = get_list_of_subscriptions(self.standardpath, FakeDownloader(), program="genes")
         self.assertEqual(1, len(items))
     
     def test_doreport(self):
@@ -72,12 +70,12 @@ class ApplicationTest(unittest.TestCase):
     def test_dodownload(self):
         downloader = FakeDownloader()
         dodownload(self.standardpath, downloader)
-
+        
     def test_minidom_parse_success(self):
         matchpattern = 'wbur'
         basedir = self.standardpath
         downloader = FakeDownloader()
-        subs = get_list_of_subscriptions(basedir, downloader, matchpattern)
+        subs = get_list_of_subscriptions(basedir, downloader, program=matchpattern)
         for s in subs:
             try:
                 s.parse_rss_file(s.get_rss_path())
