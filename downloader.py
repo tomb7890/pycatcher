@@ -1,80 +1,107 @@
 import os
-import command
 import logging
+import shutil
 from filesystem import FakeFileSystem
+logger = logging.getLogger()
 
 
 class Downloader:
-    def __init__(self):
-        self.reset()
+    def __init__(self, **args):
+        self._dict = {}
+        self.cmd = ""
+        self.args = args
 
-    def reset(self):
-        self.url = None
-        self.cmd = 'wget'
-        self.options = {}
+    def add_option(self, name, value):
+        self._dict[name] = value
 
-    def verbose(self):
-        if command.Args().parser.verbose:
-            logger=logging.getLogger()
-            logger.setLevel(logging.INFO)
-            return True
-        return False
-
-    def addoption(self, opt, val):
-        self.options[opt] = val
+    def remove_option(self, name):
+        if name in self._dict:
+            del self._dict[name]
 
     def getCmd(self):
+        return self.cmd
 
-        if self.verbose():
-            self.cmd = self.cmd + " --verbose"
-            print "Downloader.execute()"
-        else:
-            self.cmd = self.cmd + " --quiet"
-
-        for o in self.options:
-            self.cmd = self.cmd + " %s='%s'" % (o, self.options[o])
-
-        fullcmd = "%s  '%s' " % (self.cmd, self.url)
-        if command.Args().parser.verbose:
-            print fullcmd
-
-        return fullcmd
-
-    def execute(self, queue):
-        logging.info('Downloader.execute: %s' % self.getCmd())
-        inputfile = 'urls.dat'
-        self.addoption('--input-file', inputfile)
+    def prepare_command(self):
+        cmd = "wget "
         
-        f = open(inputfile, 'w')
+        # for a in self.args.keys():
+        #     cmd = cmd + ' %s="%s" ' % (a, self.args[a])
 
-        f.write('%s\n' % ('\n'.join([x.url for  x in queue])))
+        
+        for k in self._dict.keys():
+            cmd = cmd + ' %s="%s" ' % (k, self._dict[k])
+
+        verbosity = "--quiet"
+        if 'verbose' in self.args:
+            if self.args['verbose']:
+                verbosity = None
+
+        if verbosity:
+            cmd = cmd + " %s" % verbosity
+
+        if self.url is not None:
+            cmd = cmd + ' "%s" ' % self.url
+
+        self.cmd = cmd
+
+    def download_file(self, url, path):
+        ''' Downloads an single url. '''
+        self.add_option('--output-document', path)
+        self.url = url
+        self.prepare_command()
+        self._download_file(url, path)
+
+    def download_queue(self, queue):
+        self._set_up_for_using_input_file(queue)
+        self.prepare_command()
+        logging.info('Downloader.download_queue(): %s' % self.getCmd())
+        self._download_queue(queue)
+        self._clean_up_input_file()
+
+    def _set_up_for_using_input_file(self, queue):
+        self.remove_option('--output-document')
+        self.inputfile = 'urls.dat'
+        self.add_option('--input-file', self.inputfile)
+        self.url = None
+        f = open(self.inputfile, 'w')
+        f.write('%s\n' % ('\n'.join([x.url for x in queue])))
         f.close()
 
-        self.execute_main()
+    def _clean_up_input_file(self):
+        if os.path.exists(self.inputfile):
+            os.unlink(self.inputfile)
 
-        if os.path.exists(inputfile):
-            os.unlink(inputfile)
+    def _download_queue(self, queue):
+        self.invoke_download_command()
 
-    def execute_main(self):
-        logging.info( 'Downloader.execute_main: %s' % self.getCmd())
-        fullcmd = self.getCmd()
-        os.system(fullcmd)
+    def invoke_download_command(self):
+        os.system(self.getCmd())
+
+    def _download_file(self, filename, url):
+        self.invoke_download_command()
 
 
 class FakeDownloader(Downloader):
-    def __init__(self):
-        Downloader.__init__(self)
+    def __init__(self, **args):
+        Downloader.__init__(self, **args)
         self.url = ''
-        self.history = []
         self.fs = FakeFileSystem()
 
-    def execute(self, queue):
-        logging.info( 'FakeDownloader.execute: %s' % self.getCmd())
-        self.history.append(self.url)
+    def _download_file(self, filename, url):
+        dest = os.path.expanduser('~/.podcasts-data/rss/on_point_wbur.xml')
+        if os.path.exists(dest):
+            os.unlink(dest)
+        src = os.path.join(os.getcwd(), 'test/data/foo')
+        shutil.copyfile(src, dest)
 
-        for episode in queue:
-            datadir = self.options['--directory-prefix']
-            self.fs.touch(datadir, episode._filename_from_url())
- 
-if __name__ == '__main__':
-    pass
+    def _download_queue(self, queue):
+        logging.info("FakeDownloader:download_queue(): %s" % self.getCmd())
+
+        if queue:
+            for episode in queue:
+                logging.info("@" * 30 + " download_file" )
+                datadir = self._dict['--directory-prefix']
+                self.fs.touch(datadir, episode._filename_from_url())
+
+    def invoke_download_command(self):
+        pass

@@ -60,14 +60,11 @@ class Subscription:
         logging.info("Subscriptions.download_new_files")
         queue = self.prepare_queue(episodes)
         if len(queue) > 0:
-            downloader.addoption('--directory-prefix', self._data_subdir())
-            if command.Args().parser.limitrate:
-                downloader.addoption('--limit-rate',
-                                     command.Args().parser.limitrate)
-
-            downloader.url = self.url
-            downloader.execute(queue)
-            logging.info(downloader.getCmd)
+            downloader.add_option('--directory-prefix', self._data_subdir())
+            if self.limitrate:
+                downloader.add_option('--limit-rate',
+                                      self.limitrate)
+            downloader.download_queue(queue)
 
     def get_new_episodes(self, saved, basedir, downloader):
         self.download_new_files(downloader, saved)
@@ -195,11 +192,8 @@ class Subscription:
 
     def download_rss_file(self, downloader):
         ''' Downloads an RSS file. '''
-        filename = self.get_rss_path()
-
-        downloader.addoption('--output-document', filename)
-        downloader.url = self.url
-        downloader.execute_main()
+        downloader.add_option('--output-document', self.get_rss_path())
+        downloader.download_file(self.url, self.get_rss_path())
 
     def get_all_episodes(self):
         episodes = self.fetch_episodes()
