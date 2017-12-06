@@ -53,8 +53,8 @@ def init_config():
 
 def dorefresh(basedir):
     dlr = downloader.Downloader()
-    for sub in get_list_of_subscriptions_production(basedir):
-        dlr.reset()
+    dlr.fs = FileSystem()
+    for sub in get_list_of_subscriptions(basedir, dlr):
         sub.refresh(dlr)
 
 
