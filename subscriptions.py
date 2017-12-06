@@ -274,11 +274,9 @@ class Subscription:
         lines = d.split('\n')
         return lines
 
-    def pubdate_to_timestamp(self, x, episode):
+    def pubdate_to_timestamp(self, timestamp, episode):
         try:
             fmtstring = r'%a, %d %b %Y %H:%M:%S'
-            # timestamp = n.firstChild.nodeValue
-            timestamp = x
             trimmed = trim_tzinfo(timestamp)
             pd = time.strptime(trimmed, fmtstring)
             episode.mktime = time.mktime(pd)  # seconds since the epoch
