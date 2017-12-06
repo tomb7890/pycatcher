@@ -57,17 +57,13 @@ def dorefresh(basedir):
     for sub in get_list_of_subscriptions(basedir, dlr):
         sub.refresh(dlr)
 
-
 def dodownload(basedir, downloader, **args):
     '''
     Download files
     '''
-    for sub in get_list_of_subscriptions_production(downloader, basedir, **args):
+    for sub in get_list_of_subscriptions(basedir, downloader, **args):
         sub.refresh(downloader)
         sub.dodownload(basedir)
-
-def get_list_of_subscriptions_production(downloader, basedir, **args):
-    return get_list_of_subscriptions(basedir, downloader, **args)
 
 def get_list_of_subscriptions(basedir, downloader, **args):
     subs = []
