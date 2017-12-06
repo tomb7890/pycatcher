@@ -1,15 +1,14 @@
-import xml
+import glob
+import logging
 import os
 import re
-import glob
 import time
-import logging
+import xml
+from ConfigParser import ConfigParser
+
 import index
 import xml.etree.ElementTree as ET
-from ConfigParser import ConfigParser
 from episode import Episode, sort_rev_chron
-
-
 from downloader import FakeDownloader
 
 logger = logging.getLogger()

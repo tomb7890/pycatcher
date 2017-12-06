@@ -1,11 +1,13 @@
+import argparse
+import logging
 import os
+import sys
+
 import subscriptions
 from report import doreport
 import downloader
-import sys
 from filesystem import FileSystem
-import argparse
-import logging 
+
 
 def main():
     '''
