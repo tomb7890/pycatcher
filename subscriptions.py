@@ -36,9 +36,6 @@ class Subscription:
         self._make_directories()
         self.index = index.Index(self.get_idx_path())
 
-    def _lookup_table_path(self):
-        return os.path.join(self.get_rss_dir(), index.file_extension())
-
     def set_strict_parsing(self, x):
         self.strict = x
 
