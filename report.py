@@ -1,5 +1,6 @@
 import xml
 import os
+import logging
 import StringIO
 import subscriptions
 import episode
@@ -29,8 +30,7 @@ def make_report_text(basedir):
                     if os.path.exists(ep.localfile()):
                         alleps.append(ep)
         except xml.etree.ElementTree.ParseError, e:
-            if command.Args().parser.verbose:
-                print ("minidom parsing error:"+repr(e) +
+            logging.warning("minidom parsing error:"+repr(e) +
                        'with subscription ' + repr(sub.get_rss_path()))
 
     episode.sort_rev_chron(alleps)

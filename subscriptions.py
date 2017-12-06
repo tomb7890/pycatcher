@@ -279,10 +279,9 @@ class Subscription:
             episode.mktime = time.mktime(pd)  # seconds since the epoch
             episode.pubDate = timestamp
         except ValueError, e:
-            if command.Args().parser.verbose and command.Args().parser.debug:
-                print "pubdate parsing failed: \
+            logging.warning("pubdate parsing failed: \
                 %s using data %s from %s" % \
-                    (e, timestamp, filename)
+                    (e, timestamp, episode.title ))
 
     def parse_rss_file(self, filename):
         episodes = []
