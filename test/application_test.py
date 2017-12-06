@@ -8,7 +8,6 @@ from episode import sort_rev_chron
 from subscriptions import Subscriptions
 from downloader import Downloader, FakeDownloader
 from filesystem import FileSystem
-# import command
 from report import make_report_text
 
 
