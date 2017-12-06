@@ -107,7 +107,7 @@ class ApplicationTest(unittest.TestCase):
 
     def _get_list_of_eps(self):
         subs = get_list_of_subscriptions(self.standardpath,
-                                         FakeDownloader(), "genes")
+                                         FakeDownloader(), program="genes")
         asub = subs[0]
         eps = asub.get_all_episodes()
         sort_rev_chron(eps)
