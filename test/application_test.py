@@ -3,7 +3,6 @@ import unittest
 import xml
 
 from application import get_list_of_subscriptions, init_config, dodownload
-from application import get_list_of_subscriptions_production
 from episode import sort_rev_chron
 from subscriptions import Subscriptions
 from downloader import Downloader, FakeDownloader
@@ -20,17 +19,6 @@ class ApplicationTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.fake = FakeDownloader()
             dodownload(self.standardpath, self.fake, program='asodmxcwew')
-
-    def _wbur_rss_file_was_downloaded(self):
-        x = True
-        url = None
-        downloader = FakeDownloader()
-        for sub in get_list_of_subscriptions_production(downloader, self.standardpath):
-            url = sub.url
-        for el in self.fake.history:
-            if url in el:
-                x = False
-        return x
 
     def test_dirs_exist(self):
         subs = Subscriptions(FakeDownloader(), self.standardpath )
