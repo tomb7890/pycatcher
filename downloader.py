@@ -69,9 +69,9 @@ class Downloader:
             o.add_option('--input-file', af.inputfile)
             self.prepare_command(o)
             logging.info('Downloader.download_queue(): %s' % self.getCmd())
-            self._download_queue(queue, o )
+            self._download_queue(queue, o)
 
-    def _download_queue(self, queue):
+    def _download_queue(self, queue, o):
         self.invoke_download_command()
 
     def invoke_download_command(self):
