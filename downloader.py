@@ -1,31 +1,46 @@
 import os
 import logging
 import shutil
+
 from filesystem import FakeFileSystem
 logger = logging.getLogger()
+
+from options import Options  
+
+class AutoFile:
+    def __init__(self, queue):
+        self._set_up_for_using_input_file(queue)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._clean_up_input_file()
+
+    def _set_up_for_using_input_file(self, queue):
+        self.inputfile = 'urls.dat'
+        f = open(self.inputfile, 'w')
+        f.write('%s\n' % ('\n'.join([x.url for x in queue])))
+        f.close()
+
+    def _clean_up_input_file(self):
+        if os.path.exists(self.inputfile):
+             os.unlink(self.inputfile)
 
 
 class Downloader:
     def __init__(self, **args):
-        self._dict = {}
         self.cmd = ""
         self.args = args
-
-    def add_option(self, name, value):
-        self._dict[name] = value
-
-    def remove_option(self, name):
-        if name in self._dict:
-            del self._dict[name]
 
     def getCmd(self):
         return self.cmd
 
-    def prepare_command(self):
+    def prepare_command(self, o):
         cmd = "wget "
 
-        for k in self._dict.keys():
-            cmd = cmd + ' %s="%s" ' % (k, self._dict[k])
+        for k in o._dict.keys():
+            cmd = cmd + ' %s="%s" ' % (k, o._dict[k])
 
         verbosity = "--quiet"
         if 'verbose' in self.args:
@@ -42,30 +57,19 @@ class Downloader:
 
     def download_file(self, url, path):
         ''' Downloads an single url. '''
-        self.add_option('--output-document', path)
+        o = Options()
+        o.add_option('--output-document', path)
         self.url = url
-        self.prepare_command()
+        self.prepare_command(o)
         self._download_file(url, path)
 
-    def download_queue(self, queue):
-        self._set_up_for_using_input_file(queue)
-        self.prepare_command()
-        logging.info('Downloader.download_queue(): %s' % self.getCmd())
-        self._download_queue(queue)
-        self._clean_up_input_file()
-
-    def _set_up_for_using_input_file(self, queue):
-        self.remove_option('--output-document')
-        self.inputfile = 'urls.dat'
-        self.add_option('--input-file', self.inputfile)
+    def download_queue(self, queue, o):
         self.url = None
-        f = open(self.inputfile, 'w')
-        f.write('%s\n' % ('\n'.join([x.url for x in queue])))
-        f.close()
-
-    def _clean_up_input_file(self):
-        if os.path.exists(self.inputfile):
-            os.unlink(self.inputfile)
+        with AutoFile(queue) as af:
+            o.add_option('--input-file', af.inputfile)
+            self.prepare_command(o)
+            logging.info('Downloader.download_queue(): %s' % self.getCmd())
+            self._download_queue(queue, o )
 
     def _download_queue(self, queue):
         self.invoke_download_command()
@@ -90,13 +94,13 @@ class FakeDownloader(Downloader):
         src = os.path.join(os.getcwd(), 'test/data/foo')
         shutil.copyfile(src, dest)
 
-    def _download_queue(self, queue):
+    def _download_queue(self, queue, o):
         logging.info("FakeDownloader:download_queue(): %s" % self.getCmd())
 
         if queue:
             for episode in queue:
                 logging.info("@" * 30 + " download_file" )
-                datadir = self._dict['--directory-prefix']
+                datadir = o._dict['--directory-prefix']
                 self.fs.touch(datadir, episode._filename_from_url())
 
     def invoke_download_command(self):

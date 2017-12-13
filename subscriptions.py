@@ -10,6 +10,7 @@ import index
 import xml.etree.ElementTree as ET
 from episode import Episode, sort_rev_chron
 from downloader import FakeDownloader
+from options import Options 
 
 logger = logging.getLogger()
 
@@ -61,11 +62,12 @@ class Subscription:
         logging.info("Subscriptions.download_new_files")
         queue = self.prepare_queue(episodes)
         if len(queue) > 0:
-            downloader.add_option('--directory-prefix', self._data_subdir())
+            o = Options()
+            o.add_option('--directory-prefix', self._data_subdir())
             if self.limitrate:
-                downloader.add_option('--limit-rate',
+                o.add_option('--limit-rate',
                                       self.limitrate)
-            downloader.download_queue(queue)
+            downloader.download_queue(queue, o)
 
     def get_new_episodes(self, saved, basedir, downloader):
         self.download_new_files(downloader, saved)
@@ -191,7 +193,6 @@ class Subscription:
 
     def download_rss_file(self, downloader):
         ''' Downloads an RSS file. '''
-        downloader.add_option('--output-document', self.get_rss_path())
         downloader.download_file(self.url, self.get_rss_path())
 
     def get_all_episodes(self):
