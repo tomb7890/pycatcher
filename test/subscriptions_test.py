@@ -27,16 +27,20 @@ class SubscriptionsTest (unittest.TestCase):
         dl = FakeDownloader(verbose=True)
         basedir = self.standardpath
         s = subscriptions.Subscriptions(dl, basedir, program='wbur')
-        wbur=s.items[0]
+        wbur = s.items[0]
         self.assertNotEqual(None, wbur)
+
         wbur.refresh(dl)
-        cmd = 'wget  --output-document="/home/tomb/.podcasts-data/rss/on_point_wbur.xml"  "http://www.npr.org/rss/podcast.php?id=510053" '
-        self.assertEqual(cmd, dl.getCmd())
+
+        self.assertTrue("--output-document" in dl.getCmd())
+        self.assertFalse("--input-file" in dl.getCmd())
+        self.assertFalse("--directory-prefix"  in dl.getCmd())
 
         wbur.dodownload(dl)
-        expected = 'wget  --input-file="urls.dat"  --directory-prefix="/home/tomb/.podcasts-data/on_point_wbur" '
-        
-        self.assertEqual(expected, dl.getCmd())
+
+        self.assertFalse("--output-document" in dl.getCmd())
+        self.assertTrue("--input-file" in dl.getCmd())
+        self.assertTrue("--directory-prefix" in dl.getCmd())
 
 
     def test_junk_in_header(self):
