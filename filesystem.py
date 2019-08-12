@@ -33,6 +33,8 @@ class FileSystem:
     def rename(self, old, new):
         os.rename(old, new)
 
+    def mkdir(self, path):
+        os.mkdir(path)
 
 class FakeFileSystem (FileSystem):
 
