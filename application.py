@@ -9,7 +9,7 @@ import downloader
 from filesystem import FileSystem
 
 import argparser 
-
+import urllib
 
 try:
     from urllib.request import urlopen
@@ -51,7 +51,7 @@ def init_config():
         return os.path.expanduser('~/podcasts')
 
 def podcastquery(searchterm):
-    url = 'https://itunes.apple.com/search?term=%s&limit=25&entity=podcast' % searchterm
+    url = 'https://itunes.apple.com/search?term=%s&limit=25&entity=podcast' % urllib.quote_plus(searchterm)
     response = urlopen(url)
     data = response.read().decode("utf-8")
     return json.loads(data)
