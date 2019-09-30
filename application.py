@@ -35,7 +35,7 @@ def main():
     elif args.search:
         dosearch(basedir, args.search)
     elif args.subscribe:
-        dosubscribe(basedir, dlr, **vars(args)) 
+        dosubscribe(basedir, dlr, args) 
     else:
         dodownload(basedir, dlr, args) 
 
@@ -64,13 +64,13 @@ def dosearch(basedir, searchterm):
         print "%d. [%s] %s " % ( i, p[r'artistName'], p[r'collectionName'])
         i=i+1
 
-def dosubscribe(basedir, dlr, **args):
-    searchterm = args['subscribe'].split(',')[0]
+def dosubscribe(basedir, dlr, args):
+    searchterm = args.subscribe.split(',')[0]
     results = podcastquery(searchterm)
-    index = int(args['subscribe'].split(',')[-1]) - 1 
+    index = int(args.subscribe.split(',')[-1]) - 1 
     feedurl = results[r'results'][index][r'feedUrl']
     
-    subs = subscriptions.Subscriptions(dlr, basedir, **args )
+    subs = subscriptions.Subscriptions(args, dlr, basedir)
     s = subscriptions.Subscription(subs, searchterm, feedurl, 3, dlr )
     subs.add(s, index, results)
 
