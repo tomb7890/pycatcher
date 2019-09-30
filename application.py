@@ -3,11 +3,16 @@ import logging
 import os
 import sys
 
+import json
 import subscriptions
 from report import doreport
 import downloader
 from filesystem import FileSystem
 
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen 
 
 def main():
     '''
@@ -30,6 +35,9 @@ def main():
                         help = """
                         Allow blank lines to appear in header of RSS file
                         """)
+    p.add_argument('-s', '--search', dest='search', action='store',help='Search iTunes for a podcast')
+    p.add_argument('-x', '--subscribe', dest='subscribe', action='store',help='Subscribe to a podcast')
+    p.add_argument('-c', '--config', dest='configfile', action='store',help='Set alternate config file ')
 
     args = p.parse_args(sys.argv[1:])
     dlr = downloader.Downloader(**vars(args))
@@ -38,6 +46,10 @@ def main():
         doreport(basedir)
     elif args.refresh:
         dorefresh(basedir)
+    elif args.search:
+        dosearch(basedir, args.search)
+    elif args.subscribe:
+        dosubscribe(basedir, dlr, **vars(args)) 
     else:
         dodownload(basedir, dlr, **vars(args))
 
@@ -52,6 +64,29 @@ def init_config():
     else:
         return os.path.expanduser('~/podcasts')
 
+def podcastquery(searchterm):
+    url = 'https://itunes.apple.com/search?term=%s&limit=25&entity=podcast' % searchterm
+    response = urlopen(url)
+    data = response.read().decode("utf-8")
+    return json.loads(data)
+
+def dosearch(basedir, searchterm):
+    results = podcastquery(searchterm)
+    print "\n\n"
+    i = 1
+    for p in results[r'results']:
+        print "%d. [%s] %s " % ( i, p[r'artistName'], p[r'collectionName'])
+        i=i+1
+
+def dosubscribe(basedir, dlr, **args):
+    searchterm = args['subscribe'].split(',')[0]
+    results = podcastquery(searchterm)
+    index = int(args['subscribe'].split(',')[-1]) - 1 
+    feedurl = results[r'results'][index][r'feedUrl']
+    
+    subs = subscriptions.Subscriptions(dlr, basedir, **args )
+    s = subscriptions.Subscription(subs, searchterm, feedurl, 3, dlr )
+    subs.add(s, index, results)
 
 def dorefresh(basedir):
     dlr = downloader.Downloader()
