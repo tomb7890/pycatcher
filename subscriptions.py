@@ -351,7 +351,9 @@ class Subscriptions:
         self.items = []
         self.basedir = basedir
         self.downloader = downloader
-        
+
+        self.args = args
+
         self._initialize_directories()
         self._initialize_subscriptions(args)
 
@@ -365,6 +367,20 @@ class Subscriptions:
         if not self.downloader.fs.path_exists(self.get_rss_dir()):
             self.downloader.fs.mkdir(self.get_rss_dir())
 
+
+    def add(self, s, index, object):
+        cp = ConfigParser()
+        cp.read(self._get_ini_file_name())
+        try:
+            sn = object[r'results'][index][r'collectionName']
+            cp.add_section(sn)
+            cp.set(sn, 'url', object[r'results'][index][r'feedUrl'])
+            cp.set(sn, 'rssfile', re.sub(r'\W', '', sn) + ".xml")
+            cp.set(sn, 'maxeps', 3 )
+            cp.write(open(self._get_ini_file_name(), 'w'))
+        except Exception, e:
+            print "Error adding %s: %s. " % (sn, e)
+            
     def find(self, substr):
         ''' find a matching subscription'''
         for i in self.items:
@@ -394,7 +410,15 @@ class Subscriptions:
         ''' return the directory used for storing the media data '''
         if not hasattr(self, '_datadir'):
             cf = ConfigParser()
-            cf.read(self._get_ini_file_name())
+
+            if os.path.exists(self._get_ini_file_name()):
+                cf.read(self._get_ini_file_name())
+            else:
+                cf.add_section('general')
+                cf.set('general', 'data-directory', '~/.podcasts-data')
+                cf.set('general', 'podcasts-directory', '~/podcasts')
+                cf.write(open(self._get_ini_file_name(), 'w')) 
+
             dir = cf.get('general', 'data-directory', 0)
             self._datadir = os.path.expanduser(dir)
         return self._datadir
@@ -409,6 +433,9 @@ class Subscriptions:
         return self._podcastdir
 
     def _get_ini_file_name(self):
+        if self.args and  self.args.configfile:
+            return self.args.configfile
+        
         basename = 'pycatcher.conf'
         alternative1 = os.path.join(
             os.path.expanduser("~/podcasts/"),

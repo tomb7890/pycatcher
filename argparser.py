@@ -1,7 +1,7 @@
 import argparse
 
 def argparser(x=None):
-    
+
     p = argparse.ArgumentParser()
     p.add_argument('-v', '--verbose', action='store_true')
     p.add_argument('-p', '--program', dest='program',
@@ -16,6 +16,11 @@ def argparser(x=None):
                         help = """
                         Allow blank lines to appear in header of RSS file
                         """)
+
+    p.add_argument('-s', '--search', dest='search', action='store',help='Search iTunes for a podcast')
+    p.add_argument('-x', '--subscribe', dest='subscribe', action='store',help='Subscribe to a podcast')
+    p.add_argument('-c', '--config', dest='configfile', action='store',help='Set alternate config file ')
+
     if x:
         return p.parse_args(x.split())
     else:
@@ -23,4 +28,3 @@ def argparser(x=None):
 
 if __name__ == '__main__':
     main()
-
