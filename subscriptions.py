@@ -9,7 +9,6 @@ from ConfigParser import ConfigParser
 import index
 import xml.etree.ElementTree as ET
 from episode import Episode, sort_rev_chron
-from downloader import FakeDownloader
 from options import Options 
 
 logger = logging.getLogger()
@@ -336,7 +335,7 @@ def trim_tzinfo(t):
 
 class Subscriptions:
 
-    def __init__(self, downloader=FakeDownloader(), basedir=None, **args):
+    def __init__(self, args, downloader=None, basedir=None):
         """A subscriptions file (podcasts.ini) is a user defined file,
         it allows the specification of the podcast programs to be downloaded.
 
@@ -352,8 +351,9 @@ class Subscriptions:
         self.items = []
         self.basedir = basedir
         self.downloader = downloader
+        
         self._initialize_directories()
-        self._initialize_subscriptions(**args)
+        self._initialize_subscriptions(args)
 
     def _initialize_directories(self):
         self._data_basedir()
@@ -422,13 +422,13 @@ class Subscriptions:
     def _get_subs_file_name(self):
         return self._get_ini_file_name()
 
-    def _initialize_subscriptions(self, **args):
+    def _initialize_subscriptions(self, args):
         config = ConfigParser()
         config.read(self._get_subs_file_name())
 
         program_value = None
-        if 'program' in args:
-            program_value = args['program']
+        if args and args.program:
+            program_value = args.program
 
         for s in config.sections():
             maxeps = rssfile = url = None

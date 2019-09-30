@@ -1,7 +1,7 @@
 import os
 import unittest
 import xml
-
+import argparser
 from application import get_list_of_subscriptions, init_config, dodownload
 from episode import sort_rev_chron
 from subscriptions import Subscriptions
@@ -18,10 +18,10 @@ class ApplicationTest(unittest.TestCase):
     def test_unmatched_program_halts_app_execution_with_exception(self):
         with self.assertRaises(ValueError):
             self.fake = FakeDownloader()
-            dodownload(self.standardpath, self.fake, program='asodmxcwew')
+            dodownload(self.standardpath, self.fake, argparser.argparser(' --program asodmxcwew '))
 
     def test_dirs_exist(self):
-        subs = Subscriptions(FakeDownloader(), self.standardpath )
+        subs = Subscriptions(None, FakeDownloader(), self.standardpath )
         asub = subs.find("genes")
         self.assertTrue(os.path.exists(asub.subscriptions._podcasts_basedir()))
 
@@ -34,19 +34,19 @@ class ApplicationTest(unittest.TestCase):
     def test_match_failure(self):
         downloader = FakeDownloader()
         with self.assertRaises(ValueError):
-            subs = Subscriptions(downloader, self.standardpath, program="foobar")
+            subs = Subscriptions(argparser.argparser(' --program foobar'), downloader, self.standardpath)
 
     def test_match_success(self):
         downloader = FakeDownloader()
-        subs = Subscriptions(downloader, self.standardpath, program="genes")
+        subs = Subscriptions(argparser.argparser(' --program genes'), downloader, self.standardpath)
         self.assertEqual(1, len(subs.items))
 
     def test_get_list_of_subscriptions_with_match_failure(self):
         with self.assertRaises(ValueError):
-            get_list_of_subscriptions(self.standardpath, FakeDownloader(), program="quux")
+            get_list_of_subscriptions(self.standardpath, FakeDownloader(), argparser.argparser(' --program quux') )
 
     def test_get_list_of_subscriptions_with_match_success(self):
-        items = get_list_of_subscriptions(self.standardpath, FakeDownloader(), program="genes")
+        items = get_list_of_subscriptions(self.standardpath, FakeDownloader(), argparser.argparser(' --program genes'))
         self.assertEqual(1, len(items))
     
     def test_doreport(self):
@@ -62,7 +62,7 @@ class ApplicationTest(unittest.TestCase):
         matchpattern = 'wbur'
         basedir = self.standardpath
         downloader = FakeDownloader()
-        subs = get_list_of_subscriptions(basedir, downloader, program=matchpattern)
+        subs = get_list_of_subscriptions(basedir, downloader, argparser.argparser(' --program %s' % matchpattern))
         for s in subs:
             try:
                 s.parse_rss_file(s.get_rss_path())
@@ -73,10 +73,9 @@ class ApplicationTest(unittest.TestCase):
         basedir = self.standardpath
         downloader = Downloader()
         downloader.fs = FileSystem()
-        subs = Subscriptions(downloader, self.standardpath)
+        subs = Subscriptions(None, downloader, self.standardpath)
         asub = subs.find("wbur")
         self.assertNotEqual(None,asub)
-
     
     def gtest_create_links(self, mock_link):
         # get a set of episodes

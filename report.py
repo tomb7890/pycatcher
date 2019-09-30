@@ -21,7 +21,7 @@ def make_report_text(basedir):
     alleps = []
     downloader = FakeDownloader()
     
-    subs = subscriptions.Subscriptions(downloader, basedir)
+    subs = subscriptions.Subscriptions(None, downloader, basedir)
     for sub in subs.items:
         try:
             episodes = sub.get_all_episodes()

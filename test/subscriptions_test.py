@@ -3,14 +3,14 @@ from application import init_config, get_list_of_subscriptions
 import tempfile
 import xml
 import subscriptions
-
+import argparser 
 from index import FakeIndex
 from downloader import FakeDownloader
 
 class SubscriptionsTest (unittest.TestCase):
     def setUp(self):
         self.standardpath = init_config()
-        
+
     def get_temp_file(self):
         filename = tempfile.mktemp()
         f = open(filename, 'w')
@@ -19,24 +19,27 @@ class SubscriptionsTest (unittest.TestCase):
     def test_assertion_raised_when_match_attempt_fails(self):
         with self.assertRaises(ValueError):
             basedir = self.standardpath
-            match = 'nklfewcjdisoafsdklewjidso'
-            dl  = FakeDownloader()
-            s = subscriptions.Subscriptions(dl, basedir, program=match)
+            match = ''
+            args = argparser.argparser("--verbose --program nklfewcjdisoafsdklewjidso")
+            dl  = FakeDownloader(args)
+            s = subscriptions.Subscriptions(args, dl, basedir)
 
     def test_download_rss_file(self):
-        dl = FakeDownloader(verbose=True)
+        args = argparser.argparser('--verbose')
+        
+        dl = FakeDownloader(args)
         basedir = self.standardpath
-        s = subscriptions.Subscriptions(dl, basedir, program='wbur')
-        wbur = s.items[0]
-        self.assertNotEqual(None, wbur)
+        s = subscriptions.Subscriptions(args, dl, basedir)
+        first = s.items[0]
+        self.assertNotEqual(None, first)
 
-        wbur.refresh(dl)
+        first.refresh(dl)
 
         self.assertTrue("--output-document" in dl.getCmd())
         self.assertFalse("--input-file" in dl.getCmd())
         self.assertFalse("--directory-prefix"  in dl.getCmd())
 
-        wbur.dodownload(dl)
+        first.dodownload(dl)
 
         self.assertFalse("--output-document" in dl.getCmd())
         self.assertTrue("--input-file" in dl.getCmd())
@@ -88,7 +91,7 @@ class SubscriptionsTest (unittest.TestCase):
     def set_up_minidom_test(self):
         basedir = self.standardpath
         dl = FakeDownloader()
-        s = get_list_of_subscriptions(basedir, dl)[0]
+        s = get_list_of_subscriptions(basedir, dl, None)[0]
         return s
 
     def setup_additional(self):
@@ -100,7 +103,7 @@ class SubscriptionsTest (unittest.TestCase):
     def _prepare_subscription_object(self):
         fd = FakeDownloader()
         subs = get_list_of_subscriptions(self.standardpath, fd,
-                                         program=self.program_string)
+                                         argparser.argparser('--verbose --program %s' % self.program_string )) 
         self.sub = subs[0]
         self.assertEqual(1, len(subs))
 

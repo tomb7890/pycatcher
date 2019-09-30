@@ -78,7 +78,7 @@ class DuplicatesTest(unittest.TestCase):
         self.standardpath = init_config()
         
         downloader = FakeDownloader()
-        subscriptions = Subscriptions(downloader, self.standardpath )
+        subscriptions = Subscriptions(None, downloader, self.standardpath )
         rssfile = 'dummy' 
         dummy_rss = "blah"
         url = "http://foo.bar.com"

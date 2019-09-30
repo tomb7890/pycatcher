@@ -29,7 +29,7 @@ class AutoFile:
 
 
 class Downloader:
-    def __init__(self, **args):
+    def __init__(self, args=None):
         self.cmd = ""
         self.args = args
 
@@ -43,9 +43,8 @@ class Downloader:
             cmd = cmd + ' %s="%s" ' % (k, o._dict[k])
 
         verbosity = "--quiet"
-        if 'verbose' in self.args:
-            if self.args['verbose']:
-                verbosity = None
+        if self.args and self.args.verbose:
+            verbosity = None
 
         if verbosity:
             cmd = cmd + " %s" % verbosity
@@ -82,8 +81,8 @@ class Downloader:
 
 
 class FakeDownloader(Downloader):
-    def __init__(self, **args):
-        Downloader.__init__(self, **args)
+    def __init__(self, args=None):
+        Downloader.__init__(self, args)
         self.url = ''
         self.fs = FakeFileSystem()
 
