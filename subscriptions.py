@@ -146,11 +146,10 @@ class Subscription:
                             self._sub_dir())
 
     def _make_directories(self):
-        if not self.downloader.fs.path_exists(self._podcasts_subdir()):
-            self.downloader.fs.mkdir(self._podcasts_subdir())
-
-        if not self.downloader.fs.path_exists(self._data_subdir()):
-            self.downloader.fs.mkdir(self._data_subdir())
+        dirs = [self._podcasts_subdir(), self._data_subdir() ]
+        for d in dirs:
+            if not self.downloader.fs.path_exists(d):
+                self.downloader.fs.mkdir(d)
 
     def queue(self):
         '''The queue method returns pending episodes.
@@ -360,13 +359,11 @@ class Subscriptions:
     def _initialize_directories(self):
         self._data_basedir()
         self._podcasts_basedir()
-        if not self.downloader.fs.path_exists(self._datadir):
-            self.downloader.fs.mkdir(self._datadir)
-        if not self.downloader.fs.path_exists(self._podcastdir):
-            self.downloader.fs.mkdir(self._podcastdir)
-        if not self.downloader.fs.path_exists(self.get_rss_dir()):
-            self.downloader.fs.mkdir(self.get_rss_dir())
 
+        dirs = [self._datadir, self._podcastdir, self.get_rss_dir()]
+        for d in dirs:
+            if not self.downloader.fs.path_exists(d):
+                self.downloader.fs.mkdir(d)
 
     def add(self, s, index, object):
         cp = ConfigParser()
