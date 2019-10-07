@@ -434,14 +434,14 @@ class Subscriptions:
             return self.args.configfile
         
         basename = 'pycatcher.conf'
-        alternative1 = os.path.join(
+        default = os.path.join(
             os.path.expanduser("~/podcasts/"),
             basename)
 
         if os.path.exists(basename):
             return basename
-        elif os.path.exists(alternative1):
-            return alternative1
+        else: 
+            return default
 
     def _get_subs_file_name(self):
         return self._get_ini_file_name()
