@@ -412,9 +412,15 @@ class Subscriptions:
                 cf.read(self._get_ini_file_name())
             else:
                 cf.add_section('general')
+
+                podcasts_directory = os.path.expanduser('~/podcasts' )
+                if not os.path.exists(podcasts_directory):
+                    self.downloader.fs.mkdir(podcasts_directory)
+
                 cf.set('general', 'data-directory', '~/.podcasts-data')
-                cf.set('general', 'podcasts-directory', '~/podcasts')
-                cf.write(open(self._get_ini_file_name(), 'w')) 
+                cf.set('general', 'podcasts-directory', podcasts_directory ) 
+                cf.write(open(self._get_ini_file_name(), 'w'))
+
 
             dir = cf.get('general', 'data-directory', 0)
             self._datadir = os.path.expanduser(dir)
