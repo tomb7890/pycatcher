@@ -33,7 +33,7 @@ class Subscription:
         self.url = url
         self.downloader = downloader
         self.maxeps = maxeps
-        self._make_directories()
+        
         self.index = index.Index(self.get_idx_path())
 
     def set_strict_parsing(self, x):
@@ -69,6 +69,7 @@ class Subscription:
             downloader.download_queue(queue, o)
 
     def get_new_episodes(self, saved, basedir, downloader):
+        self._make_directories()
         self.download_new_files(downloader, saved)
         self.create_links(saved)
 
