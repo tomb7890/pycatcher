@@ -69,9 +69,10 @@ def dosubscribe(basedir, dlr, args):
     results = podcastquery(searchterm)
     index = int(args.subscribe.split(',')[-1]) - 1 
     feedurl = results[r'results'][index][r'feedUrl']
-    
+
     subs = subscriptions.Subscriptions(args, dlr, basedir)
-    s = subscriptions.Subscription(subs, searchterm, feedurl, 3, dlr )
+    sn = results[r'results'][index][r'collectionName']
+    s = subscriptions.Subscription(subs, sn, feedurl, 3, dlr )
     subs.add(s, index, results)
 
 def dorefresh(basedir):
