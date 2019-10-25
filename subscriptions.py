@@ -81,9 +81,15 @@ class Subscription:
 
             if os.path.exists(src):
                 disksize = os.path.getsize(src)
-                if int(disksize) != int(e.enclosure_length) and False:
-                    logging.warning("episdode %s's length is %d, expected to be %d " %
+                try:
+                    if int(disksize) != int(e.enclosure_length) and False:
+                        logging.warning("episdode %s's length is %d, expected to be %d " %
                                     (src, disksize, int(e.enclosure_length)))
+                except ValueError, exception:
+                    logging.warning("Parsing error with %s: %s" % (
+                        e.title, str(exception) 
+                    ))
+                            
                 logging.info("making link from %s to  %s " % (src, dest))
                 if self.downloader.fs.link_creation_test(src, dest) is True:
                     self.downloader.fs.link(src, dest)
