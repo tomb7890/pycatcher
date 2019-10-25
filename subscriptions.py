@@ -180,7 +180,6 @@ class Subscription:
         self.download_rss_file(downloader)
 
     def _sub_dir(self):
-        # return re.sub(r'\W', '_', self.title).lower()
         return self.rssfile.replace('.xml', '')
 
     def get_rss_path(self):
