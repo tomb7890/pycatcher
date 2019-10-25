@@ -59,10 +59,9 @@ class ApplicationTest(unittest.TestCase):
         dodownload(self.standardpath, downloader)
         
     def test_minidom_parse_success(self):
-        matchpattern = 'wbur'
         basedir = self.standardpath
         downloader = FakeDownloader()
-        subs = get_list_of_subscriptions(basedir, downloader, argparser.argparser(' --program %s' % matchpattern))
+        subs = get_list_of_subscriptions(basedir, downloader)
         for s in subs:
             try:
                 s.parse_rss_file(s.get_rss_path())
