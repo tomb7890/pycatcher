@@ -89,7 +89,7 @@ def dodownload(basedir, downloader, args=None):
         sub.refresh(downloader)
         sub.dodownload(basedir)
 
-def get_list_of_subscriptions(basedir, downloader, args):
+def get_list_of_subscriptions(basedir, downloader, args=None):
     subs = []
     subs = subscriptions.Subscriptions(args, downloader, basedir)
     return subs.items
