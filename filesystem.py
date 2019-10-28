@@ -82,7 +82,6 @@ class FakeFileSystem (FileSystem):
         if path in self._ffs.keys():
             return True
 
-        x = False 
         dirq = self._directory_portion_of_full_path(path)
         filename = self._filename_portion_of_full_path(path)
         if dirq in self._ffs:
