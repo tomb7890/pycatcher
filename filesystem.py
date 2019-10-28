@@ -82,13 +82,17 @@ class FakeFileSystem (FileSystem):
         if path in self._ffs.keys():
             return True
 
-        dirq = self._directory_portion_of_full_path(path)
+        dir = self._directory_portion_of_full_path(path)
         filename = self._filename_portion_of_full_path(path)
-        if dirq in self._ffs:
-            dir = self._ffs[dirq]
-            if filename in dir:
-                x= True
-        return x 
+
+        if dir in self._ffs:
+            filelist = self._ffs[dir]
+            if filename in filelist:
+                return True
+            else:
+                return False 
+
+        return False
 
     def listdir(self, path):
         dir = self._ffs[path]
