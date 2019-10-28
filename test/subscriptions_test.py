@@ -96,7 +96,6 @@ class SubscriptionsTest (unittest.TestCase):
 
     def setup_additional(self):
         self.program_string = 'freakon'
-        self.standardpath = init_config()
         self._prepare_subscription_object()
         self.sub.index = FakeIndex()
 
