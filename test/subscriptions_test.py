@@ -95,16 +95,13 @@ class SubscriptionsTest (unittest.TestCase):
         return s
 
     def setup_additional(self):
-        self.program_string = 'freakon'
         self._prepare_subscription_object()
         self.sub.index = FakeIndex()
 
     def _prepare_subscription_object(self):
         fd = FakeDownloader()
-        subs = get_list_of_subscriptions(self.standardpath, fd,
-                                         argparser.argparser('--verbose --program %s' % self.program_string )) 
-        self.sub = subs[0]
-        self.assertEqual(1, len(subs))
+        subs = get_list_of_subscriptions(self.standardpath, fd)
+        self.sub = random.choice(subs)
 
     def test_main(self):
         self.setup_additional()
