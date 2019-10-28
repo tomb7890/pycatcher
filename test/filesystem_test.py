@@ -83,6 +83,11 @@ class FileSystemTest(unittest.TestCase):
         self.assertTrue(self.ffs.path_exists(dst))
         self.assertFalse(self.ffs.link_creation_test(src, dst)) 
         
+    def test_pathexists_for_nested_empty_directory(self):
+        dir = '/foo/bar'
+        self.ffs.mkdir(dir)
+        self.assertTrue(self.ffs.path_exists(dir))
+        
 
     def g_test_file_rename(self):
         newname = "~/foo-bar/whizbang.mp3"
