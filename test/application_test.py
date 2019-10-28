@@ -67,14 +67,6 @@ class ApplicationTest(unittest.TestCase):
                 s.parse_rss_file(s.get_rss_path())
             except xml.etree.ElementTree.ParseError, p:
                 self.assertFalse(True)
-
-    def test_fetch_latest_onpoints(self):
-        basedir = self.standardpath
-        downloader = Downloader()
-        downloader.fs = FileSystem()
-        subs = Subscriptions(None, downloader, self.standardpath)
-        asub = subs.find("wbur")
-        self.assertNotEqual(None,asub)
     
     def gtest_create_links(self, mock_link):
         # get a set of episodes
