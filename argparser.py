@@ -18,7 +18,7 @@ def argparser(x=None):
                         """)
 
     p.add_argument('-s', '--search', dest='search', action='store',help='Search iTunes for a podcast')
-    p.add_argument('-x', '--subscribe', dest='subscribe', action='store',help='Subscribe to a podcast')
+    p.add_argument('-x', '--subscribe', nargs=2, dest='subscribe', action='store',help='Subscribe to a podcast')
     p.add_argument('-c', '--config', dest='configfile', action='store',help='Set alternate config file ')
 
     if x:

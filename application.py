@@ -65,9 +65,9 @@ def dosearch(basedir, searchterm):
         i=i+1
 
 def dosubscribe(basedir, dlr, args):
-    searchterm = args.subscribe.split(',')[0]
+    searchterm = args.subscribe[0]
+    index = int(args.subscribe[1])-1
     results = podcastquery(searchterm)
-    index = int(args.subscribe.split(',')[-1]) - 1 
     feedurl = results[r'results'][index][r'feedUrl']
 
     subs = subscriptions.Subscriptions(args, dlr, basedir)
