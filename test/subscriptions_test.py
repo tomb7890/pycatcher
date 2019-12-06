@@ -6,6 +6,7 @@ import subscriptions
 import argparser 
 from index import FakeIndex
 from downloader import FakeDownloader
+import random
 
 class SubscriptionsTest (unittest.TestCase):
     def setUp(self):
@@ -105,10 +106,8 @@ class SubscriptionsTest (unittest.TestCase):
 
     def test_main(self):
         self.setup_additional()
-        self.assertEqual(0,
-                         len(self.sub.downloader.fs.listdir(
-                             self.sub._podcasts_subdir()
-                         )))
+
+        self.assertFalse(self.sub.downloader.fs.path_exists(self.sub._podcasts_subdir()))
 
         self.sub.dodownload(init_config())
 
