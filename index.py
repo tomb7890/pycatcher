@@ -10,30 +10,34 @@ import json
 import os
 
 
-def file_extension():
-    return "idx"
-
+FILE_EXTENSION = "idx"
 
 class Index:
+    
     def __init__(self, filepath):
         self.fp = filepath
         self.table = {}
+        
 
     def load(self):
         if os.path.exists(self.fp):
-            text = open(self.fp, 'r').read()
-            self.table = json.loads(text)
+            with open(self.fp,'r') as f:
+                text = f.read()
+                self.table = json.loads(text)
 
     def remove_entry(self, key):
         if key in self.table:
             del self.table[key]
 
     def save(self):
-        if len(self.table.keys()) > 1:
-            s = json.dumps(self.table)
-            f = open(self.fp, 'w')
+        s = json.dumps(self.table)
+        with open(self.fp,'w') as f:
             f.write(s)
             f.close
+
+    def dump(self):
+        for k in self.table.keys():
+            print("key: [%s], \t\t\t value: [%s]." % ( k, self.table[k]))
 
 
 class FakeIndex(Index):
