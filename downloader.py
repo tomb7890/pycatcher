@@ -1,106 +1,161 @@
-import os
-import logging
-import shutil
-
-from filesystem import FakeFileSystem
-logger = logging.getLogger()
-
-from options import Options  
-
-class AutoFile:
-    def __init__(self, queue):
-        self._set_up_for_using_input_file(queue)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._clean_up_input_file()
-
-    def _set_up_for_using_input_file(self, queue):
-        self.inputfile = 'urls.dat'
-        f = open(self.inputfile, 'w')
-        f.write('%s\n' % ('\n'.join([x.url for x in queue])))
-        f.close()
-
-    def _clean_up_input_file(self):
-        if os.path.exists(self.inputfile):
-             os.unlink(self.inputfile)
-
+from urllib.request import ProxyHandler, build_opener, install_opener, urlretrieve
+from tqdm import tqdm
 
 class Downloader:
-    def __init__(self, args=None):
-        self.cmd = ""
-        self.args = args
 
-    def getCmd(self):
-        return self.cmd
+    def __init__(self, f, s, a = None):
+        self.fs = f
+        self.sub = s
+        self.args = a 
 
-    def prepare_command(self, o):
-        cmd = "wget "
+    def dodownload(self, db):
 
-        for k in o._dict.keys():
-            cmd = cmd + ' %s="%s" ' % (k, o._dict[k])
+        # create directories 
+        dirs = [ self.sub.base_podcasts_dir(), self.sub.podcasts_subdir() ]
+        for d in dirs :
+            if not self.fs.path_exists(d):
+                self.fs.mkdir(d) 
 
-        verbosity = "--quiet"
-        if self.args and self.args.verbose:
-            verbosity = None
+        # load the database 
+        db.load()
 
-        if verbosity:
-            cmd = cmd + " %s" % verbosity
+        self.episodes = self.sub.parse_rss_file()
+        self.new = self.episodes[0:self.sub.maxeps]
+        self.old = self.episodes[self.sub.maxeps:]
 
-        if self.url is not None:
-            cmd = cmd + ' "%s" ' % self.url
+        for e in self.new:
+            guid = e.guid
+            if guid not in db.table:
+                filename = self.generate_file_name(e, db, len(self.episodes))
+                self.queue(e, filename)
+            else:
+                filename = db.table[e.guid]
+                if not self.fs.path_exists(filename):
+                    self.queue(e, filename)
 
-        self.cmd = cmd
+        self.download_queue(db)
 
-    def download_file(self, url, path):
-        ''' Downloads an single url. '''
-        o = Options()
-        o.add_option('--output-document', path)
-        self.url = url
-        self.prepare_command(o)
-        self._download_file(url, path)
+        # finish up 
+        self.remove_oldones(db)
+        db.save()
+        self.delete_queue()
+    
+    def remove_oldones(self, db):
+        for e in self.old:
+            if e.guid in db.table:
+                filename = db.table[e.guid]
+                if self.fs.path_exists(filename):
+                    self.fs.prune_file(filename)
+                db.remove_entry(e.guid)
+                    
+    def delete_queue(self):
+        if hasattr(self, '_queue'):
+            del self._queue
+        
+    def queue(self, episode, filename):
+        if not hasattr(self, '_queue'):
+            self._queue = [] 
+        
+        item = episode, filename 
+        self._queue.append(item)
 
-    def download_queue(self, queue, o):
-        self.url = None
-        with AutoFile(queue) as af:
-            o.add_option('--input-file', af.inputfile)
-            self.prepare_command(o)
-            logging.info('Downloader.download_queue(): %s' % self.getCmd())
-            self._download_queue(queue, o)
+    def generate_file_name(self, episode, db, max):
 
-    def _download_queue(self, queue, o):
-        self.invoke_download_command()
+        ''''Generate a new file name that is not yet in use
 
-    def invoke_download_command(self):
-        os.system(self.getCmd())
+        A file name is typically the text of an episode's TITLE
+        element.  However sometimes there are duplicate (repeating)
+        TITLEs, e.g. "Week in Review". In this case a modified version
+        must be generated to avoid the exception by the filesystem
+        when a second file with the same name is created.  A numerical
+        suffix is appended to the filename to avoid duplication.
+        '''
 
-    def _download_file(self, filename, url):
-        self.invoke_download_command()
+        count = 1
 
+        proposal = episode.basename()
+        while True:
+            if count > max:
+                raise RuntimeError
+            count = count + 1
+            if not self.in_use(db, proposal):
+                break
+            proposal = episode.filename_base() \
+                       + "-%d" % count + episode.filename_extension()
+        return proposal
+
+    def in_use(self, db, filename):
+        if filename in db.table.values():
+            return True
+        if hasattr(self, '_queue'):
+            found = False 
+            for q in self._queue:
+                e, f  = q 
+                if filename == f:
+                    found = True
+            return found
+        return False
+                
+    def download_queue(self, db):
+        if not hasattr(self, '_queue'):
+            return 
+
+        for tuple in self._queue:
+            episode, destination_filename = tuple
+            try:
+                self.download_episode(episode, destination_filename)
+            except Exception as e:
+                print(e) 
+
+            fullpath = self.fs.path_join(self.sub.podcasts_subdir(), destination_filename)
+            if self.fs.path_exists(fullpath):
+                db.table[episode.guid] = fullpath
+
+
+    def download_episode(self, episode, destination_filename):
+        target = self.fs.path_join(self.sub.podcasts_subdir(), destination_filename)
+        if self.fs.path_exists(target):
+            raise Exception("target file exists! " + target)
+
+        self.download_impl(episode, destination_filename)
+
+    def download_impl(self, episode, destination_filename  ):
+        fetch( episode.url, self.fs.path_join(self.sub.podcasts_subdir(), destination_filename),
+                      self.sub.title, self.args)
 
 class FakeDownloader(Downloader):
-    def __init__(self, args=None):
-        Downloader.__init__(self, args)
-        self.url = ''
-        self.fs = FakeFileSystem()
+    def __init__(self, fs, subscription ):
+        Downloader.__init__(self, fs, subscription)
 
-    def _download_file(self, filename, url):
-        dest = os.path.expanduser('~/.podcasts-data/rss/on_point_wbur.xml')
-        if os.path.exists(dest):
-            os.unlink(dest)
-        src = os.path.join(os.getcwd(), 'test/data/foo')
-        shutil.copyfile(src, dest)
+    def download_impl(self, episode, destination):
+        self.fs.touch(self.sub.podcasts_subdir(), destination  )
 
-    def _download_queue(self, queue, o):
-        logging.info("FakeDownloader:download_queue(): %s" % self.getCmd())
+class DownloadProgressBar(tqdm):
+    def update_to(self, b=1, bsize=1, tsize=None):
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)
 
-        if queue:
-            for episode in queue:
-                logging.info("@" * 30 + " download_file" )
-                datadir = o._dict['--directory-prefix']
-                self.fs.touch(datadir, episode._filename_from_url())
+def fetch(url, output_path, program, args):
 
-    def invoke_download_command(self):
-        pass
+    if not args.quiet:
+        with DownloadProgressBar(unit='B', unit_scale=True,
+                             miniters=1, desc=program + ' ' + url.split('/')[-1]) as t:
+
+            # Some very popular podcasts reject the Python user agent.
+            proxy = ProxyHandler({})
+            opener = build_opener(proxy)
+            opener.addheaders = [('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30')]
+            install_opener(opener)
+            urlretrieve(url, output_path, t.update_to)
+
+    else:
+        urlretrieve(url, output_path)
+
+        
+if __name__ == '__main__':
+    pass
+
+
+
+
