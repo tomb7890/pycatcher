@@ -1,7 +1,8 @@
 import os
 
 import logging
-
+logger = logging.getLogger()
+# logger.setLevel(logging.INFO)
 
 class FileSystem:
 
@@ -9,12 +10,10 @@ class FileSystem:
         pass
 
     def link_creation_test(self, src, dst):
-        logging.info("link_creation_test: %s and %s " % (src, dst))
         if self.path_exists(src) and not self.path_exists(dst):
             return True
         else:
             return False
-    
 
     def path_exists(self, path):
         return os.path.exists(path)
@@ -36,8 +35,10 @@ class FileSystem:
     def mkdir(self, path):
         os.mkdir(path)
 
-class FakeFileSystem (FileSystem):
+    def path_join(self, a, b):
+        return os.path.join(a,b)
 
+class FakeFileSystem (FileSystem):
     def _directory_portion_of_full_path(self, fullpath):
         segments = fullpath.split("/")
         path = "/".join(segments[0:len(segments)-1])
@@ -53,7 +54,6 @@ class FakeFileSystem (FileSystem):
         self._ffs = {}
 
     def link(self, src, dest):
-
         basename = self._filename_portion_of_full_path(dest)
         directory = self._directory_portion_of_full_path(dest)
         dir = self._ffs[directory]
@@ -62,14 +62,16 @@ class FakeFileSystem (FileSystem):
         dir.append(basename)
 
     def mkdir(self, path):
-
+        # if directory doesn't yet exist
         if path not in self._ffs:
+            # mkdir the dir
             self._ffs[path] = []
         else:
-            raise Exception
+            # if it already exists, I guess it is an error to call mkdir on a directory that already exists.
+            raise Exception(path)
 
     def touch(self, directory, filename):
-        dir = None
+
         if directory in self._ffs:
             files = self._ffs[directory]
             files.append(filename)
@@ -86,14 +88,31 @@ class FakeFileSystem (FileSystem):
         filename = self._filename_portion_of_full_path(path)
 
         if dir in self._ffs:
-            filelist = self._ffs[dir]
-            if filename in filelist:
+            files = self._ffs[dir]
+            if filename in files:
                 return True
             else:
                 return False 
-
         return False
 
+    def rename(self, old, new):
+        # First consider the case of renaming a file to the same directory 
+        olddir = self._directory_portion_of_full_path(old)
+        oldfilename = self._filename_portion_of_full_path(old)
+        if olddir not in self._ffs.keys():
+            raise Exception("Rename: no such directory: [%s]" % olddir ) 
+        # get file listing of directory
+        oldfiles = self._ffs[self._directory_portion_of_full_path(old)]
+        if oldfilename  not in oldfiles:
+            raise Exception("Rename: no such file: [%s]" % oldfilename) 
+        newfilelist = []
+        newfilename = self._filename_portion_of_full_path(new)
+        for o in oldfiles:
+            if o != oldfilename:
+                newfilelist.append(o)
+            newfilelist.append(newfilename)
+        self._ffs[self._directory_portion_of_full_path(old)] = newfilelist
+        
     def listdir(self, path):
         dir = self._ffs[path]
         return dir
@@ -102,13 +121,13 @@ class FakeFileSystem (FileSystem):
         self.prune_file(fullpath)
 
     def prune_file(self, fullpath):
-        dirq = self._directory_portion_of_full_path(fullpath)
+        path = self._directory_portion_of_full_path(fullpath)
         filename = self._filename_portion_of_full_path(fullpath)
 
-        if dirq in self._ffs:
-            dir = self._ffs[dirq]
-            if filename in dir:
-                dir.remove(filename)
+        if path in self._ffs:
+            filelist = self._ffs[path]
+            if filename in filelist:
+                filelist.remove(filename)
 
     def exists(self, filename):
         return self.path_exists(filename)

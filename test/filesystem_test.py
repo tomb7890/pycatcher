@@ -90,7 +90,7 @@ class FileSystemTest(unittest.TestCase):
         
 
     def g_test_file_rename(self):
-        newname = "~/foo-bar/whizbang.mp3"
+        
         self._set_up_()
         self.ffs.rename(self.hypothetical_path,
                         self.ffs.rename(self.hypothetical_path) )

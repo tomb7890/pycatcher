@@ -1,63 +1,91 @@
-import xml
-import os
-import logging
-import StringIO
-import subscriptions
-import episode
-from downloader import FakeDownloader
+from io import StringIO
+from lib import sort_rev_chron, configsections, set_sub_from_config, full_path_to_index_file
+import index
+from subscription import Subscription
 
+def doreport(args, fs, outputfilename ):
+    text = make_report_text(args, fs)
+    write_report_file(outputfilename, text)
 
-def doreport(basedir):
-    text = make_report_text(basedir)
-    filename = os.path.join(basedir, 'report.html')
-    write_report_file(filename, text)
-
-
-def make_report_text(basedir):
+def make_report_text(args, fs):
     '''
     Collect all episodes from all subscriptions and sort them
     in reverse chronological order,  make an html report.
     '''
     alleps = []
-    downloader = FakeDownloader()
+    cp, sections = configsections()
     
-    subs = subscriptions.Subscriptions(None, downloader, basedir)
-    for sub in subs.items:
-        try:
-            episodes = sub.get_all_episodes()
-            if episodes != None:
-                for ep in episodes:
-                    if os.path.exists(ep.localfile()):
-                        alleps.append(ep)
-        except xml.etree.ElementTree.ParseError, e:
-            logging.warning("minidom parsing error:"+repr(e) +
-                       'with subscription ' + repr(sub.get_rss_path()))
+    for section in sections:
+        s = Subscription()
+        set_sub_from_config(s, cp, section)
 
-    episode.sort_rev_chron(alleps)
-    return make_report_from_eps(alleps)
+        db = index.Index(full_path_to_index_file(s))
+        db.load()
 
+        if fs.path_exists(s.rssfile):
+            eps = s.parse_rss_file()
+
+            for e in eps:
+                if e.guid in db.table:
+                    filename = db.table[e.guid]
+                    if fs.path_exists(filename):
+                        e.subscription_title = section 
+                        alleps.append(e)
+
+    if len(alleps) > 0 :
+        sort_rev_chron(alleps)
+        return make_report_from_eps(alleps)
+    else:
+        return None
 
 def write_report_file(filename, text):
-    f = open(filename, 'w')
-    f.write(text)
-    f.close()
-
+    if text is not None:
+        with open(filename, 'w') as f:
+            f.write(text)
+            f.close()
 
 def make_report_from_eps(alleps):
-    template = "<HTML>\n_BODY\n</HTML>"
-    report = template
-    f = StringIO.StringIO()
+    report = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head> <body>    _BODY </body></html>'
+    f = StringIO()
     for e in alleps:
-        write_episode_to_report(f, e)
-    report = report.replace("_BODY", f.getvalue())
+        write_row_to_container(f, e)
+
+        
+    report = report.replace("_BODY", "<container>%s</container>" % f.getvalue())
     return report
 
+def write_row_to_container(f, ep):
+    # f.write("<H2>%s</H2>\n" % ep.subscription_title)
+    # f.write("<H4>%s</H4>\n" % ep.title)
+    # f.write("<DIV>%s</DIV>\n" % ep.pubDate)
 
-def write_episode_to_report(f, ep):
-    f.write("<H2>%s</H2>\n" % ep.subscription.title.encode('ascii', 'ignore'))
-    f.write("<H4>%s</H4>\n" % ep.title.encode('ascii', 'ignore'))
-    f.write("<DIV>%s</DIV>\n" % ep.pubDate)
-    if ep.description:
-        desc = ep.description
-        adesc = desc.encode('ascii', 'ignore')
-        f.write("<DIV>%s</DIV>\n" % adesc)
+    template = """
+    <div class="row">
+    <div class="col">
+      <img src="https://ssl-static.libsyn.com/p/assets/8/2/4/e/824ee7f0ca827522/TheRealityCheck_1400X1400.jpg" 
+width="100" height="100" 
+    class="img-thumbnail" 
+alt="" 
+ />
+    </div>
+
+    <div class="col">
+    %s
+    </div>
+
+    <div class="col">
+    %s
+    </div>
+
+    <div class="col">
+    %s
+    </div>
+
+    </div>
+
+""" % ( ep.subscription_title, ep.title, ep.pubDate )
+
+    f.write(template) 
+    # if ep.description:
+    #     desc = ep.description
+    #     f.write("<DIV>%s</DIV>\n" % desc)
