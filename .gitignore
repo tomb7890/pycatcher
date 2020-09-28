@@ -1,2 +1,4 @@
 *.pyc
 /TAGS
+/prefs.conf
+/report.html
