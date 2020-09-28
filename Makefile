@@ -1,5 +1,5 @@
-test:	lint
-	python3 -m unittest discover -p '*test*.py'
+test:	lint 
+	python3 -m pytest test/
 
 
 lint:	tags
