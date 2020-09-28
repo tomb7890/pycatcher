@@ -9,4 +9,4 @@ tags:
 	etags `find . -type f -iname  \\*py`
 
 clean:
-	rm *pyc
+	find . -name "*.pyc"       -delete
