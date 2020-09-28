@@ -15,7 +15,7 @@ from filesystem import FileSystem
 from downloader import Downloader
 from report import doreport
 from downloader import fetch
-from lib import mediaplay 
+from lib import mediaplay, scan 
 
 from lib import set_sub_from_config, \
     _get_sub_of_index, \
@@ -76,30 +76,20 @@ def dofetch(args):
 
 
 def doscan(args):
+    '''
+    Take the arbitrary RSS filename given at command line and a text string, print out IDs of episodes that match the given file.  
+    '''
+    # filename from user 
     filename = (args.scan[0])
-    s = (args.scan[1])
-    from lxml.html import document_fromstring
-
-    html = open(filename, 'rb').read()
-    doc = document_fromstring(html)
     
-    myxpath = './/item/description[contains(., "%s")]' % s
-    print(myxpath)
-    elements=doc.xpath(myxpath)
-    print(len(elements))
-    for e in elements:
-        print(e.xpath("guid"))
-    
-    p = Parser()
-    episodes = p.scan_rss_file(filename)
+    # string from user 
+    userstring = (args.scan[1])
 
-    for e in episodes:
-        if s in (e.itunes['description']):
-            html = e.itunes['description']
-            doc = document_fromstring(html)
-            print(doc.text_content())
-            print(e.guid)
-            print("\n")
+    items = scan(filename, userstring)
+
+    for i in items:
+        print(i)
+    
             
 def dourlof(args):
     filename = args.urlof[0]

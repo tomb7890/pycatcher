@@ -1,11 +1,24 @@
 import os
 from configparser import ConfigParser
 import index
+from parser import Parser
 
 from subscription import Subscription, rss_file_name_from_text
 
 DEFAULTCONFIGFILE = "prefs.conf"
 
+def scan(filename, userstring):
+    from lxml.html import document_fromstring
+    p = Parser()
+    episodes = p.scan_rss_file(filename)
+    items = [] 
+    for e in episodes:
+        if userstring in (e.itunes['description']):
+            html = e.itunes['description']
+            doc = document_fromstring(html)
+            i = e.guid, (doc.text_content())
+            items.append(i) 
+    return items 
 
 def sort_rev_chron(episodes):
     """
