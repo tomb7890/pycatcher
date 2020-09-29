@@ -14,6 +14,10 @@ class Parser:
         episodes = []
         root = self._fetch_root(filename)
         elements = root.findall("./channel/item")
+
+        yahoo_ns = {'media': "http://search.yahoo.com/mrss/"}
+        itunes_ns = {'itunes': "http://www.itunes.com/dtds/podcast-1.0.dtd"}
+        
         for el in elements:
             episode = Episode()
             self._pubdate_to_timestamp(el.find('pubDate').text, episode)
@@ -23,6 +27,15 @@ class Parser:
             episode.itunes = {} 
             episode.itunes['description'] = str(el.find('description').text)
             
+
+            elements = el.findall("itunes:image", itunes_ns)
+            if len(elements)>0:
+                episode.image = elements[0].get('href')
+            else:
+                elements = el.findall("media:thumbnail", yahoo_ns)
+                if len(elements)>0:
+                    episode.image = elements[0].get('url')
+
             e = el.find('enclosure')
             if e is not None:
                 episode.url  = e.get('url')
@@ -34,9 +47,13 @@ class Parser:
                 
         return episodes
 
+    def parse_subscription_image(self, filename):
+        tree = ET.parse(filename)
+        x = tree.findall(".//image//url")
+        if len(x) > 0:
+            return x[0].text
+
     def _fetch_root(self, filename):
-        if self.strict is False:
-            self._remove_blank_from_head_of_rss_file(filename)
         tree = ET.parse(filename)
         root = tree.getroot()
         return root
