@@ -137,18 +137,18 @@ class DownloadProgressBar(tqdm):
         self.update(b * bsize - self.n)
 
 def fetch(url, output_path, program, args):
+    # Some very popular podcasts reject the Python user agent. 
+    proxy = ProxyHandler({})
+    opener = build_opener(proxy)
+    opener.addheaders = [('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30')]
+    install_opener(opener)
 
     if not args.quiet:
         with DownloadProgressBar(unit='B', unit_scale=True,
                              miniters=1, desc=program + ' ' + url.split('/')[-1]) as t:
 
-            # Some very popular podcasts reject the Python user agent.
-            proxy = ProxyHandler({})
-            opener = build_opener(proxy)
-            opener.addheaders = [('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30')]
-            install_opener(opener)
+                        
             urlretrieve(url, output_path, t.update_to)
-
     else:
         urlretrieve(url, output_path)
 
