@@ -10,7 +10,7 @@ DEFAULTCONFIGFILE = "prefs.conf"
 def scan(filename, userstring):
     from lxml.html import document_fromstring
     p = Parser()
-    episodes = p.scan_rss_file(filename)
+    episodes = p.parse_rss_file(filename)
     items = [] 
     for e in episodes:
         if userstring in (e.itunes['description']):

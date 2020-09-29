@@ -10,54 +10,9 @@ class Parser:
         # this may be obsolete.
         self.strict = True
 
-    def scan_rss_file(self, filename):
-        episodes = []
-        root = self._fetch_root(filename)
-        # why is this here? may be redundant or cause of confusion if title is set from using the itunes stuff.
-
-        # The answer is that we need title information for the cases
-        # when Subscription objects are not constructed using
-        # itunes. For examaple the tests rely on restoring subscription
-        # objects from RSS files that don't always have nice names.
-        
-        # self.title = (root.findall("./channel/title")[0].text)
-        
-        # logging.info("parse_rss_file is now setting title to be [%s]" % self.title)
-        elements = root.findall("./channel/item")
-        for el in elements:
-            episode = Episode()
-            self._pubdate_to_timestamp(el.findall('pubDate')[0].text, episode)
-            episode.title = el.findall('title')[0].text
-            episode.guid = el.findall('guid')[0].text
-            episode.itunes = {} 
-            # episode.itunessubtitle = el.findall('itunes:subtitle')
-            episode.itunes['description'] = str(el.findall('description')[0].text)
-
-            e = el.findall('enclosure')
-            if e and len(e) > 0:
-                episode.url = e[0].get('url')
-            #     episode.enclosure_length = e[0].get('length')
-            # if episode.pubDate and hasattr(episode, 'url') and episode.title \
-            #    and episode.guid:
-            episodes.append(episode)
-            # else:
-            # print("Problem with episode %s in %s. " % (episode.title, filename))
-        return episodes
-        
-
     def parse_rss_file(self, filename):
         episodes = []
         root = self._fetch_root(filename)
-        # why is this here? may be redundant or cause of confusion if title is set from using the itunes stuff.
-
-        # The answer is that we need title information for the cases
-        # when Subscription objects are not constructed using
-        # itunes. For examaple the tests rely on restoring subscription
-        # objects from RSS files that don't always have nice names.
-        
-        # self.title = (root.findall("./channel/title")[0].text)
-        
-        # logging.info("parse_rss_file is now setting title to be [%s]" % self.title)
         elements = root.findall("./channel/item")
         for el in elements:
             episode = Episode()
@@ -65,6 +20,9 @@ class Parser:
             episode.title = el.find('title').text
             episode.guid = el.find('guid').text
             episode.description = el.find('description').text
+            episode.itunes = {} 
+            episode.itunes['description'] = str(el.find('description').text)
+            
             e = el.find('enclosure')
             if e is not None:
                 episode.url  = e.get('url')
@@ -97,6 +55,7 @@ class Parser:
                     (e, timestamp, episode.title ))
 
     def _trim_tzinfo(self,t):
+        
         # [Sat, 29 Apr 2006 20:38:00]
         # [Sat, 27 Feb 2010 06:00:00 EST]
         # [Fri, 13 June 2008 22:00:00]
