@@ -72,7 +72,8 @@ def write_description_to_container(f, ep):
 
 def write_row_to_container(f, ep):
     image = ep.subscription_image
-    if hasattr(ep, 'image'):
+    if ep.image is not None:
+        
         image = ep.image
         
     templatetext = open('templates/row.html', 'r').read()

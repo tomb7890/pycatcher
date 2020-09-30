@@ -1,8 +1,12 @@
+from dataclasses import dataclass
 import re, string
 
+@dataclass
 class Episode:
-    def __init__(self=None, s=None):
-        pass
+    title: str = None 
+    guid: str = None
+    description: str = None 
+    image: str = None
 
     def filename_base(self):
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)

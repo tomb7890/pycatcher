@@ -44,5 +44,17 @@ def test_yahoo_style_image_as_thumbnail():
 
     assert title == episodes[i].title
     assert episodes[i].image == thumbnail
+    
+def test_parse_subscription_image():
+    p = parser.Parser()
 
+    filename = 'test/data/GlobalNewsPodcast/093020.rss' 
+    image = 'http://ichef.bbci.co.uk/images/ic/3000x3000/p05z434b.jpg'
+    assert image == p.parse_subscription_image(filename)
+
+    filename = "test/data/BeatYourGenes/100120.rss"
+    image = 'https://dasg7xwmldix6.cloudfront.net/hostpics/ec9c5e62-41d4-446e-86d9-2eb37226f16a_logo_jpg.jpg'
+    assert image == p.parse_subscription_image(filename)
+    
+    
     
