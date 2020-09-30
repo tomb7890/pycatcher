@@ -1,4 +1,4 @@
-test:	lint 
+test:	lint clean
 	python3 -m pytest test/
 
 
@@ -9,4 +9,5 @@ tags:
 	etags `find . -type f -iname  \\*py`
 
 clean:
-	find . -name "*.pyc"       -delete
+	-rm __pycache__/*pyc
+	-rm test/__pycache__/*pyc
