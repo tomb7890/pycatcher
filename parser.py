@@ -10,13 +10,19 @@ class Parser:
         # this may be obsolete.
         self.strict = True
 
+    def parse_subscription_image(self, filename):
+        tree = ET.parse(filename)
+        x = tree.findall(".//image//url")
+        if len(x) > 0:
+            return x[0].text
+
     def parse_rss_file(self, filename):
+        yahoo_ns = {'media': "http://search.yahoo.com/mrss/"}
+        itunes_ns = {'itunes': "http://www.itunes.com/dtds/podcast-1.0.dtd"}
+
         episodes = []
         root = self._fetch_root(filename)
         elements = root.findall("./channel/item")
-
-        yahoo_ns = {'media': "http://search.yahoo.com/mrss/"}
-        itunes_ns = {'itunes': "http://www.itunes.com/dtds/podcast-1.0.dtd"}
         
         for el in elements:
             episode = Episode()
@@ -24,14 +30,7 @@ class Parser:
             episode.title = el.find('title').text
             episode.guid = el.find('guid').text
             episode.description = el.find('description').text
-
-            elements = el.findall("itunes:image", itunes_ns)
-            if len(elements)>0:
-                episode.image = elements[0].get('href')
-            else:
-                elements = el.findall("media:thumbnail", yahoo_ns)
-                if len(elements)>0:
-                    episode.image = elements[0].get('url')
+            episode.image = self._set_episode_image(episode, el, itunes_ns, yahoo_ns)
 
             e = el.find('enclosure')
             if e is not None:
@@ -44,11 +43,16 @@ class Parser:
                 
         return episodes
 
-    def parse_subscription_image(self, filename):
-        tree = ET.parse(filename)
-        x = tree.findall(".//image//url")
-        if len(x) > 0:
-            return x[0].text
+    def _set_episode_image(self, episode, el, itunes_ns, yahoo_ns):
+        x = None
+        elements = el.findall("itunes:image", itunes_ns)
+        if len(elements)>0:
+            x = elements[0].get('href')
+        else:
+            elements = el.findall("media:thumbnail", yahoo_ns)
+            if len(elements)>0:
+                x = elements[0].get('url')
+        return x 
 
     def _fetch_root(self, filename):
         tree = ET.parse(filename)
