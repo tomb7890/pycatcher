@@ -24,9 +24,6 @@ class Parser:
             episode.title = el.find('title').text
             episode.guid = el.find('guid').text
             episode.description = el.find('description').text
-            episode.itunes = {} 
-            episode.itunes['description'] = str(el.find('description').text)
-            
 
             elements = el.findall("itunes:image", itunes_ns)
             if len(elements)>0:

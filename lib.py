@@ -13,8 +13,8 @@ def scan(filename, userstring):
     episodes = p.parse_rss_file(filename)
     items = [] 
     for e in episodes:
-        if userstring in (e.itunes['description']):
-            html = e.itunes['description']
+        if userstring in (e.description):
+            html = e.description
             doc = document_fromstring(html)
             i = {}
             i['guid'] = e.guid
