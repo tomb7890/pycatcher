@@ -16,7 +16,9 @@ def scan(filename, userstring):
         if userstring in (e.itunes['description']):
             html = e.itunes['description']
             doc = document_fromstring(html)
-            i = e.guid, (doc.text_content())
+            i = {}
+            i['guid'] = e.guid
+            i['text'] = (doc.text_content())
             items.append(i) 
     return items 
 
