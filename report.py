@@ -1,5 +1,5 @@
 from io import StringIO
-from lib import sort_rev_chron, configsections, set_sub_from_config, full_path_to_index_file
+from lib import sort_reverse_cronologically, configsections, set_sub_from_config, full_path_to_index_file
 from string import Template
 import index
 from subscription import Subscription
@@ -40,7 +40,7 @@ def make_report_text(args, fs):
                 
 
     if len(episodes) > 0 :
-        sort_rev_chron(episodes)
+        sort_reverse_cronologically(episodes)
         return make_report_from_episodes(episodes)
     else:
         return None

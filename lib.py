@@ -20,13 +20,7 @@ def scan(filename, userstring):
             items.append(i) 
     return items 
 
-def sort_rev_chron(episodes):
-    """
-    Reverse chronological sorting
-    """
-
-    if episodes is None:
-        return None
+def sort_reverse_cronologically(episodes):
     episodes.sort(key=lambda x: x.mktime, reverse=True)
 
 
