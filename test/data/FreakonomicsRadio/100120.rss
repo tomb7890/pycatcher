@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:psc="https://podlove.org/simple-chapters/" xmlns:omny="https://omny.fm/rss-extensions" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:acast="https://schema.acast.com/1.0/" version="2.0">
+  <channel>
+    <language>en-US</language>
+    <atom:link rel="self" type="application/rss+xml" href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/podcast.rss" />
+    <atom:link rel="first" type="application/rss+xml" href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/podcast.rss?page=1" />
+    <atom:link rel="last" type="application/rss+xml" href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/podcast.rss?page=1" />
+    <title>Freakonomics Radio</title>
+    <link>http://freakonomics.com/</link>
+    <description><![CDATA[<p>Discover the hidden side of everything with Stephen J. Dubner, co-author of the&nbsp;<em>Freakonomics</em>&nbsp;books. Each week,&nbsp;<em>Freakonomics Radio</em>&nbsp;tells you things you always thought you knew (but didn&rsquo;t) and things you never thought you wanted to know (but do) &mdash;&nbsp;from the economics of sleep to how to become great at just about anything. Dubner speaks with Nobel laureates and provocateurs, intellectuals and entrepreneurs, and various other underachievers. The entire archive, going back to 2010, is available on the <a href="https://www.stitcher.com/download">Stitcher podcast app</a> and at&nbsp;<a href="http://freakonomics.com/" data-saferedirecturl="https://www.google.com/url?q=http://freakonomics.com&amp;source=gmail&amp;ust=1590509555837000&amp;usg=AFQjCNFHpG0N-_WcZE2ZMsOAPtNFtbJ6bw">freakonomics.com</a>.</p>]]></description>
+    <itunes:type>episodic</itunes:type>
+    <itunes:summary>Discover the hidden side of everything with Stephen J. Dubner, co-author of the Freakonomics books. Each week, Freakonomics Radio tells you things you always thought you knew (but didn’t) and things you never thought you wanted to know (but do) — from the economics of sleep to how to become great at just about anything. Dubner speaks with Nobel laureates and provocateurs, intellectuals and entrepreneurs, and various other underachievers. The entire archive, going back to 2010, is available on the Stitcher podcast app and at freakonomics.com.</itunes:summary>
+    <itunes:owner>
+      <itunes:name>Freakonomics Radio + Stitcher</itunes:name>
+      <itunes:email>originals@stitcher.com</itunes:email>
+    </itunes:owner>
+    <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+    <copyright>2020 ​Dubner Productions and Stitcher</copyright>
+    <itunes:explicit>clean</itunes:explicit>
+    <itunes:category text="Society &amp; Culture">
+      <itunes:category text="Documentary" />
+    </itunes:category>
+    <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+    <image>
+      <url>https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large</url>
+      <title>Freakonomics Radio</title>
+      <link>http://freakonomics.com/</link>
+    </image>
+    <item>
+      <title>433. How Are Psychedelics and Other Party Drugs Changing Psychiatry?</title>
+      <itunes:title>How Are Psychedelics and Other Party Drugs Changing Psychiatry?</itunes:title>
+      <description>Three leading researchers from the Mount Sinai Health System discuss how ketamine, cannabis, and ecstasy are being used (or studied) to treat everything from severe depression to addiction to PTSD. We discuss the upsides, downsides, and regulatory puzzles.</description>
+      <content:encoded><![CDATA[<p>Three leading researchers from the Mount Sinai Health System discuss how ketamine, cannabis, and ecstasy are being used (or studied) to treat everything from severe depression to addiction to PTSD. We discuss the upsides, downsides, and regulatory puzzles.</p>]]></content:encoded>
+      <itunes:summary>Three leading researchers from the Mount Sinai Health System discuss how ketamine, cannabis, and ecstasy are being used (or studied) to treat everything from severe depression to addiction to PTSD. We discuss the upsides, downsides, and regulatory puzzles.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>433</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/c25093bc-9f01-4f78-ae1e-ac46016dc1bd/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/how-are-psychedelics-and-other-party-drugs-changin/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">c25093bc-9f01-4f78-ae1e-ac46016dc1bd</guid>
+      <omny:clipId>c25093bc-9f01-4f78-ae1e-ac46016dc1bd</omny:clipId>
+      <pubDate>Thu, 01 Oct 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3213</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/c25093bc-9f01-4f78-ae1e-ac46016dc1bd/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="77136414" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/how-are-psychedelics-and-other-party-drugs-changin</link>
+    </item>
+    <item>
+      <title>432. When Your Safety Becomes My Danger</title>
+      <itunes:title>When Your Safety Becomes My Danger</itunes:title>
+      <description>The families of U.S. troops killed and wounded in Afghanistan are suing several companies that did reconstruction there. Why? These companies, they say, paid the Taliban protection money, which gave them the funding — and opportunity — to attack U.S. soldiers instead. A look at the messy, complicated, and heart-breaking tradeoffs of conflict-zone economies.</description>
+      <content:encoded><![CDATA[<p>The families of U.S. troops killed and wounded in Afghanistan are suing several companies that did reconstruction there. Why? These companies, they say, paid the Taliban protection money, which gave them the funding &mdash; and opportunity &mdash; to attack U.S. soldiers instead. A look at the messy, complicated, and heart-breaking tradeoffs of conflict-zone economies.</p>]]></content:encoded>
+      <itunes:summary>The families of U.S. troops killed and wounded in Afghanistan are suing several companies that did reconstruction there. Why? These companies, they say, paid the Taliban protection money, which gave them the funding — and opportunity — to attack U.S. soldiers instead. A look at the messy, complicated, and heart-breaking tradeoffs of conflict-zone economies.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>432</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/3ef5e9da-dbec-46f0-b392-ac3f0178f86d/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/when-your-safety-becomes-my-danger/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">3ef5e9da-dbec-46f0-b392-ac3f0178f86d</guid>
+      <omny:clipId>3ef5e9da-dbec-46f0-b392-ac3f0178f86d</omny:clipId>
+      <pubDate>Thu, 24 Sep 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2877</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/3ef5e9da-dbec-46f0-b392-ac3f0178f86d/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="69072071" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/when-your-safety-becomes-my-danger</link>
+      <omny:stitcherId>77978943</omny:stitcherId>
+    </item>
+    <item>
+      <title>“One Does Not Know Where an Insight Will Come From” | People I (Mostly) Admire: Kerwin Charles</title>
+      <itunes:title>“One Does Not Know Where an Insight Will Come From” | People I (Mostly) Admire: Kerwin Charles</itunes:title>
+      <description>The dean of Yale’s School of Management grew up in a small village in Guyana. During his unlikely journey, he has researched video-gaming habits, communicable disease, and why so many African-Americans haven’t had the kind of success he’s had. Steve Levitt talks to Charles about his parents’ encouragement, his love of Sports Illustrated, and how he talks to his American-born kids about the complicated history of Blackness in America. </description>
+      <content:encoded><![CDATA[<p>The dean of Yale&rsquo;s School of Management grew up in a small village in Guyana. During his unlikely journey, he has researched video-gaming habits, communicable disease, and why so many African-Americans haven&rsquo;t had the kind of success he&rsquo;s had. Steve Levitt talks to Charles about his parents&rsquo; encouragement, his love of <em>Sports Illustrated</em>, and how he talks to his American-born kids about the complicated history of Blackness in America.&nbsp;</p>]]></content:encoded>
+      <itunes:summary>The dean of Yale’s School of Management grew up in a small village in Guyana. During his unlikely journey, he has researched video-gaming habits, communicable disease, and why so many African-Americans haven’t had the kind of success he’s had. Steve Levitt talks to Charles about his parents’ encouragement, his love of Sports Illustrated, and how he talks to his American-born kids about the complicated history of Blackness in America. </itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/ba46c324-f484-444f-b785-ac39015fda9c/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/one-does-not-know-where-an-insight-will-come-from/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">ba46c324-f484-444f-b785-ac39015fda9c</guid>
+      <omny:clipId>ba46c324-f484-444f-b785-ac39015fda9c</omny:clipId>
+      <pubDate>Sat, 19 Sep 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2369</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/ba46c324-f484-444f-b785-ac39015fda9c/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="56878803" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/one-does-not-know-where-an-insight-will-come-from</link>
+      <omny:stitcherId>77848688</omny:stitcherId>
+    </item>
+    <item>
+      <title>Does Anyone Really Know What Socialism Is? (Ep. 408 Rebroadcast)</title>
+      <itunes:title>Does Anyone Really Know What Socialism Is? (Ep. 408 Rebroadcast)</itunes:title>
+      <description>Trump says it would destroy us. Biden needs the voters who support it (especially the Bernie voters). The majority of millennials would like it to replace capitalism. But what is “it”? We bring in the economists to sort things out and tell us what the U.S. can learn from the good (and bad) experiences of other (supposedly) socialist countries.</description>
+      <content:encoded><![CDATA[<p>Trump says it would destroy us. Biden needs the voters who support it (especially the Bernie voters). The majority of millennials would like it to replace capitalism. But what is &ldquo;it&rdquo;? We bring in the economists to sort things out and tell us what the U.S. can learn from the good (and bad) experiences of other (supposedly) socialist countries.</p>]]></content:encoded>
+      <itunes:summary>Trump says it would destroy us. Biden needs the voters who support it (especially the Bernie voters). The majority of millennials would like it to replace capitalism. But what is “it”? We bring in the economists to sort things out and tell us what the U.S. can learn from the good (and bad) experiences of other (supposedly) socialist countries.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/f8e455f5-d2ac-4734-94e1-ac38017449f2/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/does-anyone-really-know-what-socialism-is-ep-408-r/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">f8e455f5-d2ac-4734-94e1-ac38017449f2</guid>
+      <omny:clipId>f8e455f5-d2ac-4734-94e1-ac38017449f2</omny:clipId>
+      <pubDate>Thu, 17 Sep 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2664</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/f8e455f5-d2ac-4734-94e1-ac38017449f2/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="63960043" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/does-anyone-really-know-what-socialism-is-ep-408-r</link>
+      <omny:stitcherId>77789697</omny:stitcherId>
+    </item>
+    <item>
+      <title>What if Your Company Had No Rules?</title>
+      <itunes:title>What if Your Company Had No Rules?</itunes:title>
+      <description>Netflix co-founder Reed Hastings came to believe that corporate rules can kill creativity and innovation. In this latest edition of the Freakonomics Radio Book Club, guest host Maria Konnikova talks to Hastings about his new book, No Rules Rules, and why for some companies the greatest risk is taking no risks at all.</description>
+      <content:encoded><![CDATA[<p>Netflix co-founder Reed Hastings came to believe that corporate rules can kill creativity and innovation. In this latest edition of the Freakonomics Radio Book Club, guest host Maria Konnikova talks to Hastings about his new book, <em>No Rules Rules</em>, and why for some companies the greatest risk is taking no risks at all.</p>]]></content:encoded>
+      <itunes:summary>Netflix co-founder Reed Hastings came to believe that corporate rules can kill creativity and innovation. In this latest edition of the Freakonomics Radio Book Club, guest host Maria Konnikova talks to Hastings about his new book, No Rules Rules, and why for some companies the greatest risk is taking no risks at all.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/abe89a21-0197-4a35-b4c2-ac34000f37c5/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/what-if-your-company-had-no-rules/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">abe89a21-0197-4a35-b4c2-ac34000f37c5</guid>
+      <omny:clipId>abe89a21-0197-4a35-b4c2-ac34000f37c5</omny:clipId>
+      <pubDate>Sat, 12 Sep 2020 12:00:00 +0000</pubDate>
+      <itunes:duration>3306</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/abe89a21-0197-4a35-b4c2-ac34000f37c5/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="79368287" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/what-if-your-company-had-no-rules</link>
+      <omny:stitcherId>77662338</omny:stitcherId>
+    </item>
+    <item>
+      <title>431. Why Can’t Schools Get What the N.F.L. Has?</title>
+      <itunes:title>Why Can’t Schools Get What the N.F.L. Has?</itunes:title>
+      <description>Thanks to daily Covid testing and regimented protocols, the new football season is underway. Meanwhile, most teachers, students, and parents are essentially waiting for the storm to pass. And school isn’t even a contact sport (usually).</description>
+      <content:encoded><![CDATA[<p>Thanks to daily Covid testing and regimented protocols, the new football season is underway. Meanwhile, most teachers, students, and parents are essentially waiting for the storm to pass. And school isn&rsquo;t even a contact sport (usually).</p>]]></content:encoded>
+      <itunes:summary>Thanks to daily Covid testing and regimented protocols, the new football season is underway. Meanwhile, most teachers, students, and parents are essentially waiting for the storm to pass. And school isn’t even a contact sport (usually).</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>431</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/0b4263a1-6848-4442-bdc0-ac310171a5fc/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/why-can-t-schools-get-what-the-n-f-l-has/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">0b4263a1-6848-4442-bdc0-ac310171a5fc</guid>
+      <omny:clipId>0b4263a1-6848-4442-bdc0-ac310171a5fc</omny:clipId>
+      <pubDate>Thu, 10 Sep 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2977</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/0b4263a1-6848-4442-bdc0-ac310171a5fc/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="71472003" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/why-can-t-schools-get-what-the-n-f-l-has</link>
+      <omny:stitcherId>77604065</omny:stitcherId>
+    </item>
+    <item>
+      <title>"I Started Crying When I Realized How Beautiful the Universe Is” | People I (Mostly) Admire Ep. 2: Mayim Bialik</title>
+      <itunes:title>"I Started Crying When I Realized How Beautiful the Universe Is” | People I (Mostly) Admire Ep. 2: Mayim Bialik</itunes:title>
+      <description>She’s best known for playing neurobiologist Amy Farrah Fowler on The Big Bang Theory, but the award-winning actress has a rich life outside of her acting career, as a teacher, mother — and a real-life neuroscientist.  Steve Levitt tries to learn more about this one-time academic and Hollywood non-conformist, who is both very similar to him and also quite his opposite.</description>
+      <content:encoded><![CDATA[<p>She&rsquo;s best known for playing neurobiologist Amy Farrah Fowler on<em> The Big Bang Theory</em>, but the award-winning actress has a rich life outside of her acting career, as a teacher, mother &mdash; and a real-life neuroscientist. &nbsp;Steve Levitt tries to learn more about this one-time academic and Hollywood non-conformist, who is both very similar to him and also quite his opposite.</p>]]></content:encoded>
+      <itunes:summary>She’s best known for playing neurobiologist Amy Farrah Fowler on The Big Bang Theory, but the award-winning actress has a rich life outside of her acting career, as a teacher, mother — and a real-life neuroscientist.  Steve Levitt tries to learn more about this one-time academic and Hollywood non-conformist, who is both very similar to him and also quite his opposite.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/3816ebcf-75eb-4c8e-af7b-ac2c017b7fca/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/i-started-crying-when-i-realized-how-beautiful-the/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">3816ebcf-75eb-4c8e-af7b-ac2c017b7fca</guid>
+      <omny:clipId>3816ebcf-75eb-4c8e-af7b-ac2c017b7fca</omny:clipId>
+      <pubDate>Sat, 05 Sep 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2727</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/3816ebcf-75eb-4c8e-af7b-ac2c017b7fca/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="65472268" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/i-started-crying-when-i-realized-how-beautiful-the</link>
+      <omny:stitcherId>77486076</omny:stitcherId>
+    </item>
+    <item>
+      <title>America’s Hidden Duopoly (Ep. 356 Rebroadcast)</title>
+      <itunes:title>America’s Hidden Duopoly (Ep. 356 Rebroadcast)</itunes:title>
+      <description>We all know our political system is “broken” — but what if that’s not true? Some say the Republicans and Democrats constitute a wildly successful industry that has colluded to kill off competition, stifle reform, and drive the country apart. So what are you going to do about it?</description>
+      <content:encoded><![CDATA[<p>We all know our political system is &ldquo;broken&rdquo; &mdash; but what if that&rsquo;s not true? Some say the Republicans and Democrats constitute a wildly successful industry that has colluded to kill off competition, stifle reform, and drive the country apart. So what are you going to do about it?</p>]]></content:encoded>
+      <itunes:summary>We all know our political system is “broken” — but what if that’s not true? Some say the Republicans and Democrats constitute a wildly successful industry that has colluded to kill off competition, stifle reform, and drive the country apart. So what are you going to do about it?</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/a81cdf06-5939-4dcf-b6c8-ac290042fb10/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/america-s-hidden-duopoly-ep-356-rebroadcast/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">a81cdf06-5939-4dcf-b6c8-ac290042fb10</guid>
+      <omny:clipId>a81cdf06-5939-4dcf-b6c8-ac290042fb10</omny:clipId>
+      <pubDate>Thu, 03 Sep 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3180</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/a81cdf06-5939-4dcf-b6c8-ac290042fb10/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="76343948" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/america-s-hidden-duopoly-ep-356-rebroadcast</link>
+      <omny:stitcherId>77434351</omny:stitcherId>
+    </item>
+    <item>
+      <title>430. Will a Covid-19 Vaccine Change the Future of Medical Research?</title>
+      <itunes:title>Will a Covid-19 Vaccine Change the Future of Medical Research?</itunes:title>
+      <description>We explore the science, scalability, and (of course) economics surrounding the global vaccine race. Guests include the chief medical officer of the first U.S. firm to go to Phase 3 trials with a vaccine candidate; a former F.D.A. commissioner who’s been warning of a pandemic for years; and an economist who thinks Covid-19 may finally change how diseases are cured.</description>
+      <content:encoded><![CDATA[<p>We explore the science, scalability, and (of course) economics surrounding the global vaccine race. Guests include the chief medical officer of the first U.S. firm to go to Phase 3 trials with a vaccine candidate; a former F.D.A. commissioner who&rsquo;s been warning of a pandemic for years; and an economist who thinks Covid-19 may finally change how diseases are cured.</p>]]></content:encoded>
+      <itunes:summary>We explore the science, scalability, and (of course) economics surrounding the global vaccine race. Guests include the chief medical officer of the first U.S. firm to go to Phase 3 trials with a vaccine candidate; a former F.D.A. commissioner who’s been warning of a pandemic for years; and an economist who thinks Covid-19 may finally change how diseases are cured.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>430</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/8105aa9b-d20c-4784-be1a-ac240015f6ad/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/will-a-covid-19-vaccine-change-the-future-of-medic/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">8105aa9b-d20c-4784-be1a-ac240015f6ad</guid>
+      <omny:clipId>8105aa9b-d20c-4784-be1a-ac240015f6ad</omny:clipId>
+      <pubDate>Thu, 27 Aug 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3504</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/8105aa9b-d20c-4784-be1a-ac240015f6ad/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="84120511" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/will-a-covid-19-vaccine-change-the-future-of-medic</link>
+      <omny:stitcherId>77251648</omny:stitcherId>
+    </item>
+    <item>
+      <title>Introducing “People I (Mostly) Admire"</title>
+      <itunes:title>Introducing “People I (Mostly) Admire"</itunes:title>
+      <description>A new interview show with host Steve Levitt. Today he speaks with the Harvard psychologist and linguist Steven Pinker. By cataloging the steady march of human progress, the self-declared “polite Canadian” has managed to enrage people on opposite ends of the political spectrum. Levitt tries to understand why. </description>
+      <content:encoded><![CDATA[<p>A new interview show with host Steve Levitt. Today he speaks with the Harvard psychologist and linguist Steven Pinker. By cataloging the steady march of human progress, the self-declared &ldquo;polite Canadian&rdquo; has managed to enrage people on opposite ends of the political spectrum. Levitt tries to understand why.&nbsp;</p>]]></content:encoded>
+      <itunes:summary>A new interview show with host Steve Levitt. Today he speaks with the Harvard psychologist and linguist Steven Pinker. By cataloging the steady march of human progress, the self-declared “polite Canadian” has managed to enrage people on opposite ends of the political spectrum. Levitt tries to understand why. </itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/8773b1bf-cc10-4c5c-b2a1-ac1e00dc300d/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/introducing-people-i-mostly-admire/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">8773b1bf-cc10-4c5c-b2a1-ac1e00dc300d</guid>
+      <omny:clipId>8773b1bf-cc10-4c5c-b2a1-ac1e00dc300d</omny:clipId>
+      <pubDate>Sat, 22 Aug 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2573</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/8773b1bf-cc10-4c5c-b2a1-ac1e00dc300d/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="61767614" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/introducing-people-i-mostly-admire</link>
+      <omny:stitcherId>77136529</omny:stitcherId>
+    </item>
+    <item>
+      <title>The Economics of Sports Gambling (Ep. 388 Rebroadcast)</title>
+      <itunes:title>The Economics of Sports Gambling (Ep. 388 Rebroadcast)</itunes:title>
+      <description>What happens when tens of millions of fantasy-sports players are suddenly able to bet real money on real games? We’re about to find out. A recent Supreme Court decision has cleared the way to bring an estimated $300 billion in black-market sports betting into the light. We sort out the winners and losers.</description>
+      <content:encoded><![CDATA[<p>What happens when tens of millions of fantasy-sports players are suddenly able to bet real money on real games? We&rsquo;re about to find out. A recent Supreme Court decision has cleared the way to bring an estimated $300 billion in black-market sports betting into the light. We sort out the winners and losers.</p>]]></content:encoded>
+      <itunes:summary>What happens when tens of millions of fantasy-sports players are suddenly able to bet real money on real games? We’re about to find out. A recent Supreme Court decision has cleared the way to bring an estimated $300 billion in black-market sports betting into the light. We sort out the winners and losers.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/60a6480b-c4b6-4734-a779-ac170129befe/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/the-economics-of-sports-gambling-episode-388-rebro/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">60a6480b-c4b6-4734-a779-ac170129befe</guid>
+      <omny:clipId>60a6480b-c4b6-4734-a779-ac170129befe</omny:clipId>
+      <pubDate>Thu, 20 Aug 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3282</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/60a6480b-c4b6-4734-a779-ac170129befe/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="78792150" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/the-economics-of-sports-gambling-episode-388-rebro</link>
+      <omny:stitcherId>77083111</omny:stitcherId>
+    </item>
+    <item>
+      <title>429. Is Economic Growth the Wrong Goal?</title>
+      <itunes:title>Is Economic Growth the Wrong Goal?</itunes:title>
+      <description>The endless pursuit of G.D.P., argues the economist Kate Raworth, shortchanges too many people and also trashes the planet. Economic theory, she says, “needs to be rewritten” — and Raworth has tried, in a book called Doughnut Economics. It has found an audience among reformers, and now the city of Amsterdam is going whole doughnut.</description>
+      <content:encoded><![CDATA[<p>The endless pursuit of G.D.P., argues the economist Kate Raworth, shortchanges too many people and also trashes the planet. Economic theory, she says, &ldquo;needs to be rewritten&rdquo; &mdash; and Raworth has tried, in a book called <em>Doughnut Economics</em>. It has found an audience among reformers, and now the city of Amsterdam is going whole doughnut.</p>]]></content:encoded>
+      <itunes:summary>The endless pursuit of G.D.P., argues the economist Kate Raworth, shortchanges too many people and also trashes the planet. Economic theory, she says, “needs to be rewritten” — and Raworth has tried, in a book called Doughnut Economics. It has found an audience among reformers, and now the city of Amsterdam is going whole doughnut.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>429</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/3c4102d9-73b1-42af-833a-ac1501749f08/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/is-economic-growth-the-wrong-goal/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">3c4102d9-73b1-42af-833a-ac1501749f08</guid>
+      <omny:clipId>3c4102d9-73b1-42af-833a-ac1501749f08</omny:clipId>
+      <pubDate>Thu, 13 Aug 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2467</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/3c4102d9-73b1-42af-833a-ac1501749f08/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="59232267" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/is-economic-growth-the-wrong-goal</link>
+      <omny:stitcherId>76920777</omny:stitcherId>
+    </item>
+    <item>
+      <title>How the Supermarket Helped America Win the Cold War (Ep. 386 Rebroadcast)</title>
+      <itunes:title>How the Supermarket Helped America Win the Cold War (Ep. 386 Rebroadcast)</itunes:title>
+      <description>Aisle upon aisle of fresh produce, cheap meat, and sugary cereal — a delicious embodiment of free-market capitalism, right? Not quite. The supermarket was in fact the endpoint of the U.S. government’s battle for agricultural abundance against the U.S.S.R. Our farm policies were built to dominate, not necessarily to nourish — and we are still living with the consequences.</description>
+      <content:encoded><![CDATA[<p>Aisle upon aisle of fresh produce, cheap meat, and sugary cereal &mdash; a delicious embodiment of free-market capitalism, right? Not quite. The supermarket was in fact the endpoint of the U.S. government&rsquo;s battle for agricultural abundance against the U.S.S.R. Our farm policies were built to dominate, not necessarily to nourish &mdash; and we are still living with the consequences.</p>]]></content:encoded>
+      <itunes:summary>Aisle upon aisle of fresh produce, cheap meat, and sugary cereal — a delicious embodiment of free-market capitalism, right? Not quite. The supermarket was in fact the endpoint of the U.S. government’s battle for agricultural abundance against the U.S.S.R. Our farm policies were built to dominate, not necessarily to nourish — and we are still living with the consequences.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/671c962b-d07b-4bd0-99ee-ac0d011d2eeb/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/how-the-supermarket-helped-america-win-the-cold-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">671c962b-d07b-4bd0-99ee-ac0d011d2eeb</guid>
+      <omny:clipId>671c962b-d07b-4bd0-99ee-ac0d011d2eeb</omny:clipId>
+      <pubDate>Thu, 06 Aug 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2628</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/671c962b-d07b-4bd0-99ee-ac0d011d2eeb/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="63096757" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/how-the-supermarket-helped-america-win-the-cold-1</link>
+      <omny:stitcherId>76750781</omny:stitcherId>
+    </item>
+    <item>
+      <title>428. The Simple Economics of Saving the Amazon Rain Forest</title>
+      <itunes:title>The Simple Economics of Saving the Amazon Rain Forest</itunes:title>
+      <description>Everyone agrees that massive deforestation is an environmental disaster. But most of the standard solutions — scolding the Brazilians, invoking universal morality — ignore the one solution that might actually work</description>
+      <content:encoded><![CDATA[<p>Everyone agrees that massive deforestation is an environmental disaster. But most of the standard solutions &mdash; scolding the Brazilians, invoking universal morality &mdash; ignore the one solution that might actually work</p>]]></content:encoded>
+      <itunes:summary>Everyone agrees that massive deforestation is an environmental disaster. But most of the standard solutions — scolding the Brazilians, invoking universal morality — ignore the one solution that might actually work</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>428</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/4eefcde5-d2db-4b9b-855d-ac0701748b58/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/the-simple-economics-of-saving-the-amazon-rain-for/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">4eefcde5-d2db-4b9b-855d-ac0701748b58</guid>
+      <omny:clipId>4eefcde5-d2db-4b9b-855d-ac0701748b58</omny:clipId>
+      <pubDate>Thu, 30 Jul 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>1934</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/4eefcde5-d2db-4b9b-855d-ac0701748b58/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="46440228" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/the-simple-economics-of-saving-the-amazon-rain-for</link>
+      <omny:stitcherId>76549934</omny:stitcherId>
+    </item>
+    <item>
+      <title>427. The Pros and Cons of Reparations</title>
+      <itunes:title>The Pros and Cons of Reparations</itunes:title>
+      <description>Most Americans agree that racial discrimination has been, and remains, a big problem. But that is where the agreement ends.</description>
+      <content:encoded><![CDATA[<p>Most Americans agree that racial discrimination has been, and remains, a big problem. But that is where the agreement ends.</p>]]></content:encoded>
+      <itunes:summary>Most Americans agree that racial discrimination has been, and remains, a big problem. But that is where the agreement ends.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>427</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/203bbc8f-29dc-4366-8061-ac0001676b79/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/the-pros-and-cons-of-reparations/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">203bbc8f-29dc-4366-8061-ac0001676b79</guid>
+      <omny:clipId>203bbc8f-29dc-4366-8061-ac0001676b79</omny:clipId>
+      <pubDate>Thu, 23 Jul 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2407</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/203bbc8f-29dc-4366-8061-ac0001676b79/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="57792187" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/the-pros-and-cons-of-reparations</link>
+      <omny:stitcherId>76382478</omny:stitcherId>
+    </item>
+    <item>
+      <title>426. Should America (and FIFA) Pay Reparations?</title>
+      <itunes:title>Should America (and FIFA) Pay Reparations?</itunes:title>
+      <description>The racial wealth gap in the U.S. is massive. We explore the causes, consequences, and potential solutions. Also: another story of discrimination and economic disparity, this one perpetrated by an international sporting authority. The first of a two-part series.</description>
+      <content:encoded><![CDATA[<p>The racial wealth gap in the U.S. is massive. We explore the causes, consequences, and potential solutions. Also: another story of discrimination and economic disparity, this one perpetrated by an international sporting authority. The first of a two-part series.</p>]]></content:encoded>
+      <itunes:summary>The racial wealth gap in the U.S. is massive. We explore the causes, consequences, and potential solutions. Also: another story of discrimination and economic disparity, this one perpetrated by an international sporting authority. The first of a two-part series.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>426</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/2c8b78a2-5204-4c6d-837b-abf901745371/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/should-america-and-fifa-pay-reparations/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">2c8b78a2-5204-4c6d-837b-abf901745371</guid>
+      <omny:clipId>2c8b78a2-5204-4c6d-837b-abf901745371</omny:clipId>
+      <pubDate>Thu, 16 Jul 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2642</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/2c8b78a2-5204-4c6d-837b-abf901745371/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="63432138" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/should-america-and-fifa-pay-reparations</link>
+      <omny:stitcherId>76215767</omny:stitcherId>
+    </item>
+    <item>
+      <title>425. Remembrance of Economic Crises Past</title>
+      <itunes:title>Remembrance of Economic Crises Past</itunes:title>
+      <description>Christina Romer was a top White House economist during the Great Recession. As a researcher, she specializes in the Great Depression. She tells us what those disasters can (and can’t) teach us about the Covid crash.</description>
+      <content:encoded><![CDATA[<p>Christina Romer was a top White House economist during the Great Recession. As a researcher, she specializes in the Great Depression. She tells us what those disasters can (and can&rsquo;t) teach us about the Covid crash.</p>]]></content:encoded>
+      <itunes:summary>Christina Romer was a top White House economist during the Great Recession. As a researcher, she specializes in the Great Depression. She tells us what those disasters can (and can’t) teach us about the Covid crash.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>425</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/757f3f23-a2a8-4b88-ad92-abf2016aaa92/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/remembrance-of-economic-crises-past/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">757f3f23-a2a8-4b88-ad92-abf2016aaa92</guid>
+      <omny:clipId>757f3f23-a2a8-4b88-ad92-abf2016aaa92</omny:clipId>
+      <pubDate>Thu, 09 Jul 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3100</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/757f3f23-a2a8-4b88-ad92-abf2016aaa92/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="49623596" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/remembrance-of-economic-crises-past</link>
+      <omny:stitcherId>75197642</omny:stitcherId>
+    </item>
+    <item>
+      <title>424. How to Make Your Own Luck</title>
+      <itunes:title>How to Make Your Own Luck</itunes:title>
+      <description>Before she decided to become a poker pro, Maria Konnikova didn’t know how many cards are in a deck. But she did have a Ph.D. in psychology, a brilliant coach, and a burning desire to know whether life is driven more by skill or chance. She found some answers in poker — and in her new book The Biggest Bluff, she’s willing to tell us everything she learned.</description>
+      <content:encoded><![CDATA[<p>Before she decided to become a poker pro, Maria Konnikova didn&rsquo;t know how many cards are in a deck. But she did have a Ph.D. in psychology, a brilliant coach, and a burning desire to know whether life is driven more by skill or chance. She found some answers in poker &mdash; and in her new book <em>The Biggest Bluff</em>, she&rsquo;s willing to tell us everything she learned.</p>]]></content:encoded>
+      <itunes:summary>Before she decided to become a poker pro, Maria Konnikova didn’t know how many cards are in a deck. But she did have a Ph.D. in psychology, a brilliant coach, and a burning desire to know whether life is driven more by skill or chance. She found some answers in poker — and in her new book The Biggest Bluff, she’s willing to tell us everything she learned.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>424</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/32a20ed3-ee42-4974-8d6b-abeb018a64ea/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/how-to-make-your-own-luck/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">32a20ed3-ee42-4974-8d6b-abeb018a64ea</guid>
+      <omny:clipId>32a20ed3-ee42-4974-8d6b-abeb018a64ea</omny:clipId>
+      <pubDate>Thu, 02 Jul 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3605</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/32a20ed3-ee42-4974-8d6b-abeb018a64ea/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="57698139" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/how-to-make-your-own-luck</link>
+      <omny:stitcherId>74176579</omny:stitcherId>
+    </item>
+    <item>
+      <title>423. The Doctor Will Zoom You Now</title>
+      <itunes:title>The Doctor Will Zoom You Now</itunes:title>
+      <description>Thanks to the pandemic, the telehealth revolution we’ve been promised for decades has finally arrived. Will it stick? Will it cut costs — and improve outcomes? We ring up two doctors and, of course, an economist to find out.</description>
+      <content:encoded><![CDATA[<p>Thanks to the pandemic, the telehealth revolution we&rsquo;ve been promised for decades has finally arrived. Will it stick? Will it cut costs &mdash; and improve outcomes? We ring up two doctors and, of course, an economist to find out.</p>]]></content:encoded>
+      <itunes:summary>Thanks to the pandemic, the telehealth revolution we’ve been promised for decades has finally arrived. Will it stick? Will it cut costs — and improve outcomes? We ring up two doctors and, of course, an economist to find out.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>423</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/5ee7b2fb-9c34-46ca-9309-abe401717361/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/the-doctor-will-zoom-you-now/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">5ee7b2fb-9c34-46ca-9309-abe401717361</guid>
+      <omny:clipId>5ee7b2fb-9c34-46ca-9309-abe401717361</omny:clipId>
+      <pubDate>Thu, 25 Jun 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>3155</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/5ee7b2fb-9c34-46ca-9309-abe401717361/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="50503393" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/the-doctor-will-zoom-you-now</link>
+      <omny:stitcherId>72817560</omny:stitcherId>
+    </item>
+    <item>
+      <title>422. Introducing "No Stupid Questions"</title>
+      <itunes:title>Introducing "No Stupid Questions"</itunes:title>
+      <description>In this new addition to the Freakonomics Radio Network, co-hosts Stephen Dubner and Angela Duckworth discuss the relationship between age and happiness. Also: does all creativity come from pain? New episodes of "No Stupid Questions" are released every Sunday evening — please subscribe wherever you get your podcasts.</description>
+      <content:encoded><![CDATA[<p>In this new addition to the Freakonomics Radio Network, co-hosts Stephen Dubner and Angela Duckworth discuss the relationship between age and happiness. Also: does all creativity come from pain? New episodes of "No Stupid Questions" are released every Sunday evening &mdash; please subscribe wherever you get your podcasts.</p>]]></content:encoded>
+      <itunes:summary>In this new addition to the Freakonomics Radio Network, co-hosts Stephen Dubner and Angela Duckworth discuss the relationship between age and happiness. Also: does all creativity come from pain? New episodes of "No Stupid Questions" are released every Sunday evening — please subscribe wherever you get your podcasts.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>422</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/2a1d329f-f60e-4756-861a-abdb01232c95/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/introducing-no-stupid-questions/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">2a1d329f-f60e-4756-861a-abdb01232c95</guid>
+      <omny:clipId>2a1d329f-f60e-4756-861a-abdb01232c95</omny:clipId>
+      <pubDate>Thu, 18 Jun 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2036</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/2a1d329f-f60e-4756-861a-abdb01232c95/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="32599698" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/introducing-no-stupid-questions</link>
+      <omny:stitcherId>71355086</omny:stitcherId>
+    </item>
+    <item>
+      <title>421. How to Prevent Another Great Depression</title>
+      <itunes:title>How to Prevent Another Great Depression</itunes:title>
+      <description>Millions and millions are out of work, with some jobs never coming back. We speak with four economists — and one former presidential candidate — about the best policy options and the lessons (good and bad) from the past.</description>
+      <content:encoded><![CDATA[<p>Millions and millions are out of work, with some jobs never coming back. We speak with four economists &mdash; and one former presidential candidate &mdash; about the best policy options and the lessons (good and bad) from the past.</p>]]></content:encoded>
+      <itunes:summary>Millions and millions are out of work, with some jobs never coming back. We speak with four economists — and one former presidential candidate — about the best policy options and the lessons (good and bad) from the past.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>421</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/43849d0c-046b-440f-9650-abd70014d723/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/how-to-prevent-another-great-depression/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">43849d0c-046b-440f-9650-abd70014d723</guid>
+      <omny:clipId>43849d0c-046b-440f-9650-abd70014d723</omny:clipId>
+      <pubDate>Thu, 11 Jun 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2259</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/43849d0c-046b-440f-9650-abd70014d723/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="36167404" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/how-to-prevent-another-great-depression</link>
+      <omny:stitcherId>70722246</omny:stitcherId>
+    </item>
+    <item>
+      <title>420. Which Jobs Will Come Back, and When?</title>
+      <itunes:title>Which Jobs Will Come Back, and When?</itunes:title>
+      <description>Covid-19 is the biggest job killer in a century. As the lockdown eases, what does re-employment look like? Who will be first and who last? Which sectors will surge and which will disappear? Welcome to the Great Labor Reallocation of 2020.</description>
+      <content:encoded><![CDATA[<p>Covid-19 is the biggest job killer in a century. As the lockdown eases, what does re-employment look like? Who will be first and who last? Which sectors will surge and which will disappear? Welcome to the Great Labor Reallocation of 2020.</p>]]></content:encoded>
+      <itunes:summary>Covid-19 is the biggest job killer in a century. As the lockdown eases, what does re-employment look like? Who will be first and who last? Which sectors will surge and which will disappear? Welcome to the Great Labor Reallocation of 2020.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>420</itunes:episode>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/ab3863c8-1586-4362-b0c4-abcf0187e0fe/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/which-jobs-will-come-back-and-when/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">ab3863c8-1586-4362-b0c4-abcf0187e0fe</guid>
+      <omny:clipId>ab3863c8-1586-4362-b0c4-abcf0187e0fe</omny:clipId>
+      <pubDate>Thu, 04 Jun 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2528</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/ab3863c8-1586-4362-b0c4-abcf0187e0fe/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="40471544" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/which-jobs-will-come-back-and-when</link>
+      <omny:stitcherId>70172046</omny:stitcherId>
+    </item>
+    <item>
+      <title>How to Make Meetings Less Terrible (Ep. 389 Rebroadcast)</title>
+      <itunes:title>How to Make Meetings Less Terrible (Ep. 389 Rebroadcast)</itunes:title>
+      <description>In the U.S. alone, we hold 55 million meetings a day. Most of them are woefully unproductive, and tyrannize our offices. The revolution begins now — with better agendas, smaller invite lists, and an embrace of healthy conflict.</description>
+      <content:encoded><![CDATA[<p>In the U.S. alone, we hold 55 million meetings a day. Most of them are woefully unproductive, and tyrannize our offices. The revolution begins now &mdash; with better agendas, smaller invite lists, and an embrace of healthy conflict.</p>]]></content:encoded>
+      <itunes:summary>In the U.S. alone, we hold 55 million meetings a day. Most of them are woefully unproductive, and tyrannize our offices. The revolution begins now — with better agendas, smaller invite lists, and an embrace of healthy conflict.</itunes:summary>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>Freakonomics Radio + Stitcher</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" />
+      <media:content url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/461751b7-0335-4534-ad2f-abc80154e54c/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/freakonomics-radio/how-to-make-meetings-less-terrible-ep-389-rebroadc/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a/image.jpg?t=1589407970&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">461751b7-0335-4534-ad2f-abc80154e54c</guid>
+      <omny:clipId>461751b7-0335-4534-ad2f-abc80154e54c</omny:clipId>
+      <pubDate>Thu, 28 May 2020 03:00:00 +0000</pubDate>
+      <itunes:duration>2557</itunes:duration>
+      <enclosure url="https://chtbl.com/track/288D49/traffic.omny.fm/d/clips/aaea4e69-af51-495e-afc9-a9760146922b/14a43378-edb2-49be-8511-ab0d000a7030/461751b7-0335-4534-ad2f-abc80154e54c/audio.mp3?utm_source=Podcast&amp;in_playlist=d1b9612f-bb1b-4b85-9c0c-ab0d004ab37a" length="40935499" type="audio/mpeg" />
+      <link>https://omny.fm/shows/freakonomics-radio/how-to-make-meetings-less-terrible-ep-389-rebroadc</link>
+      <omny:stitcherId>69981293</omny:stitcherId>
+    </item>
+  </channel>
+</rss>
