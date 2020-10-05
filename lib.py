@@ -2,13 +2,14 @@ import os
 from configparser import ConfigParser
 import index
 from parser import Parser
+from lxml.html import document_fromstring
 
 from subscription import Subscription, rss_file_name_from_text
 
 DEFAULTCONFIGFILE = "prefs.conf"
 
 def scan(filename, userstring):
-    from lxml.html import document_fromstring
+    
     p = Parser()
     episodes = p.parse_rss_file(filename)
     items = [] 
@@ -22,13 +23,18 @@ def scan(filename, userstring):
             items.append(i) 
     return items 
 
-def sort_reverse_cronologically(episodes):
-    episodes.sort(key=lambda x: x.mktime, reverse=True)
+def sort_reverse_chronologically(reportdata):
+    reportdata.sort(key=lambda x: x.mktime, reverse=True)
 
+def db_of_sub(subscription):
+    return index.Index(full_path_to_index_file(subscription))
 
-def max_episode_count(sub, rssfile):
-    episodes = sub.parse_rss_file(rssfile)
-    return len(episodes)
+def full_path_to_index_file(subscription):
+    return os.path.join(
+        data_directory(), 'rss',
+        subscription.filesystem_safe_sub_title() + "." + index.FILE_EXTENSION
+    )
+
 
 def get_rss_file(index):
     cp, sections = configsections()
@@ -41,7 +47,7 @@ def filename_from_fullpath(fullpath):
     filename = fullpath[lastslash]
     return filename
 
-def _get_sub_of_index(index):
+def get_sub_of_index(index):
     cp = ConfigParser()
     cp.read(DEFAULTCONFIGFILE)
     sections = cp.sections()
@@ -54,12 +60,6 @@ def configsections():
     cp = ConfigParser()
     cp.read(DEFAULTCONFIGFILE)
     return cp, cp.sections()
-
-def full_path_to_index_file(subscription):
-    return os.path.join(
-        data_directory(), 'rss',
-        subscription.filesystem_safe_sub_title() + "." + index.FILE_EXTENSION
-    )
 
 def set_sub_from_config(sub, cp, section):
     sub.title = section
@@ -79,9 +79,6 @@ def podcasts_directory():
 
 def rss_directory():
     return os.path.join(data_directory(), 'rss')
-
-def getCmd(rssfile, url):
-    return "wget  --output-document='%s' '%s' " % (rssfile, url)
 
 def mediaplay(filename):
     from sys import platform

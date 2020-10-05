@@ -2,8 +2,6 @@ import subscription
 
 
 def test_episodes_known_to_not_have_data():
-    print("Hello World  ")
-
     s = subscription.Subscription()
     s.rssfile = "test/data/BeatYourGenes/100120.rss"
 

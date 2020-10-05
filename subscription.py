@@ -13,7 +13,7 @@ def rss_file_name_from_text(text):
     return re.sub(r'\W', '', text ) + '.rss' 
 
 class Subscription:
-    def __init__(self, feedurl=None, title=None, maxeps=3):
+    def __init__(self, feedurl=None, title=None, maxeps=3, rssfile=None):
 
         self.parser = Parser()
 
@@ -31,7 +31,8 @@ class Subscription:
         logging.info("Subscription.__init_ is now setting title to be [%s]" % self.title)
 
         self.maxeps = maxeps
-
+        self.rssfile = rssfile
+        
     def parse_rss_file(self, filename=None):
         if filename is None:
             filename = self.rssfile
