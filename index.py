@@ -7,8 +7,6 @@ and from storage.
 """
 
 import json
-import os
-
 
 FILE_EXTENSION = "idx"
 
@@ -20,11 +18,10 @@ class Index:
         
 
     def load(self):
-        if os.path.exists(self.fp):
-            with open(self.fp,'r') as f:
-                text = f.read()
-                self.table = json.loads(text)
-
+        with open(self.fp,'r') as f:
+            text = f.read()
+            self.table = json.loads(text)
+                
     def remove_entry(self, key):
         if key in self.table:
             del self.table[key]
