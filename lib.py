@@ -89,9 +89,8 @@ def traverse(args, sub, handler):
 
     n = 0
     for e in episodes:
-        g = e.guid
-        if g in db.table.keys():
-            filename = db.table[e.guid]
+        if db.find(e.guid):
+            filename = db.get(e)
             if fs.path_exists(filename):
                 n = n + 1
                 handler(e, n, filename)
