@@ -104,11 +104,13 @@ def test_downloading_after_micheievously_deleting_an_episode_registry_key(
     e = set_expectations_for_second_download(sub)
     download_and_test(sub, ffs, fdl, dbfile, e)
 
-    del dbfile.table["http://podcasts.tvo.org/theagenda/video/2597629_12001291615.mp4"]
-    assert len(dbfile.table.keys()) == 5
+    dbfile.remove_entry(
+        "http://podcasts.tvo.org/theagenda/video/2597629_12001291615.mp4"
+    )
+    assert len(dbfile.records()) == 5
 
     download_and_test(sub, ffs, fdl, dbfile, e)
-    assert len(dbfile.table.keys()) == 6
+    assert len(dbfile.records()) == 6
 
     e = set_expectations_for_third_download(sub)
     download_and_test(sub, ffs, fdl, dbfile, e)

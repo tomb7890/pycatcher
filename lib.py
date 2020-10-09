@@ -3,7 +3,7 @@ from configparser import ConfigParser
 import index
 from parser import Parser
 from lxml.html import document_fromstring
-
+import filesystem
 from subscription import Subscription, rss_file_name_from_text
 
 DEFAULTCONFIGFILE = "prefs.conf"
@@ -79,6 +79,22 @@ def _media_subdirectory(subscription):
 
 def data_directory():
     return os.path.expanduser("~/.podcasts-data/")
+
+def traverse(args, sub, handler):
+    episodes = sub.parse_rss_file()
+    db = db_of_sub(sub)
+    db.load()
+
+    fs = filesystem.FileSystem()
+
+    n = 0
+    for e in episodes:
+        g = e.guid
+        if g in db.table.keys():
+            filename = db.table[e.guid]
+            if fs.path_exists(filename):
+                n = n + 1
+                handler(e, n, filename)
 
 def podcasts_directory():
     return os.path.expanduser('~/podcasts')

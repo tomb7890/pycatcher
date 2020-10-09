@@ -76,7 +76,7 @@ def enumerate_all_downloaded_episodes(subscription, db, section, reportdata):
     episodes = subscription.parse_rss_file()
 
     for e in episodes:
-        if e.guid in db.table:
+        if db.find_by_id(e.guid):
             d = construct_reportdatum(e, subscription, section)
             reportdata.append(d)
 

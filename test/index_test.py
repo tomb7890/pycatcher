@@ -10,7 +10,8 @@ def test_valid_index_file():
     db = Index("test/data/NutritionFactswithDrGreger/idx/061020.idx")
     db.load()
     episode_guid="https://nutritionfacts.org/?post_type=audio&p=64971"
-    assert episode_guid in db.table 
+    assert db.find_by_id(episode_guid)
+
     
 
 

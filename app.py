@@ -10,7 +10,7 @@ from downloader import Downloader
 from downloader import fetch
 from filesystem import FileSystem
 from lib import mediaplay, scan, db_of_sub
-from lib import set_sub_from_config, get_sub_of_index, configsections
+from lib import set_sub_from_config, get_sub_of_index, configsections, traverse
 from parser import Parser
 from register import register
 from report import doreport
@@ -138,23 +138,6 @@ def dolistepisodes(args):
         print(">>> %d: %s" % (n, title))
 
     traverse(args, sub, printhandler)
-
-
-def traverse(args, sub, handler):
-    episodes = sub.parse_rss_file()
-    db = db_of_sub(sub)
-    db.load()
-
-    fs = FileSystem()
-
-    n = 0
-    for e in episodes:
-        g = e.guid
-        if g in db.table.keys():
-            filename = db.table[e.guid]
-            if fs.path_exists(filename):
-                n = n + 1
-                handler(e, n, filename)
 
 
 def podcastquery(searchterm):

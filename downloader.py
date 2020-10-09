@@ -62,7 +62,7 @@ class Downloader:
         self.queue.queue(episode, filename)
 
     def _queue_anyway_if_file_is_missing(self, db, episode):
-        registered_filename = db.table[episode.guid]
+        registered_filename = db.filename_of(episode)
         if self._file_of_registered_episode_is_missing(episode, registered_filename):
             self.queue.queue(episode, lib.basename(registered_filename))
 
@@ -80,10 +80,10 @@ class Downloader:
                 except Exception as e:
                     print(e)
             if self.fs.path_exists(fullpath):
-                db.table[episode.guid] = fullpath
+                db.set_path(episode, fullpath)
 
     def _episode_is_registered(self, episode, db):
-        return episode.guid in db.table
+        return db.find_by_id(episode.guid)
 
     def _file_of_registered_episode_is_missing(self, episode, registered_filename):
         return not self.fs.path_exists(registered_filename)
@@ -133,14 +133,15 @@ class Downloader:
         return proposal
 
     def _in_use(self, db, filename):
-        if filename in db.table.values():
+        if db.has_filename(filename):
             return True
         if self.queue.in_use(filename):
             return True
         return False
 
     def _delete_file(self, e, db):
-        self.fs.prune_file(db.table[e.guid])
+
+        self.fs.prune_file(db.filename_of(e))
 
     def _delete_registry_entry(self, e, db):
         db.remove_entry(e.guid)
