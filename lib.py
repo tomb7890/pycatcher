@@ -26,6 +26,12 @@ def scan(filename, userstring):
 def sort_reverse_chronologically(reportdata):
     reportdata.sort(key=lambda x: x.mktime, reverse=True)
 
+def basename(fullpath):
+    segments = fullpath.split("/")
+    basename = segments[-1]
+    return basename
+
+
 def db_of_sub(subscription):
     return index.Index(full_path_to_index_file(subscription))
 

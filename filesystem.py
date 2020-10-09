@@ -1,5 +1,5 @@
 import os
-
+import lib
 import logging
 logger = logging.getLogger()
 # logger.setLevel(logging.INFO)
@@ -45,9 +45,7 @@ class FakeFileSystem (FileSystem):
         return path
 
     def _filename_portion_of_full_path(self, fullpath):
-        segments = fullpath.split("/")
-        basename = segments[-1]
-        return basename
+        return lib.basename(fullpath) 
 
     def __init__(self):
         FileSystem.__init__(self)
@@ -120,9 +118,16 @@ class FakeFileSystem (FileSystem):
     def prune_link(self, fullpath):
         self.prune_file(fullpath)
 
+    def dump(self):
+        for k in self.table.keys():
+            print("key: [%s], \t\t\t value: [%s]." % ( k, self.table[k]))
+
+
+
     def prune_file(self, fullpath):
         path = self._directory_portion_of_full_path(fullpath)
         filename = self._filename_portion_of_full_path(fullpath)
+        # print(f"pruning file with path {path} and filename {filename}")
 
         if path in self._ffs:
             filelist = self._ffs[path]
