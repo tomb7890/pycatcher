@@ -51,6 +51,9 @@ class FakeFileSystem (FileSystem):
         FileSystem.__init__(self)
         self._ffs = {}
 
+    def reset(self):
+        self._ffs = {}
+
     def link(self, src, dest):
         basename = self._filename_portion_of_full_path(dest)
         directory = self._directory_portion_of_full_path(dest)
