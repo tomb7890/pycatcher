@@ -39,14 +39,6 @@ class FileSystem:
         return os.path.join(a,b)
 
 class FakeFileSystem (FileSystem):
-    def _directory_portion_of_full_path(self, fullpath):
-        segments = fullpath.split("/")
-        path = "/".join(segments[0:len(segments)-1])
-        return path
-
-    def _filename_portion_of_full_path(self, fullpath):
-        return lib.basename(fullpath) 
-
     def __init__(self):
         FileSystem.__init__(self)
         self._ffs = {}
@@ -139,6 +131,15 @@ class FakeFileSystem (FileSystem):
 
     def exists(self, filename):
         return self.path_exists(filename)
+
+    def _directory_portion_of_full_path(self, fullpath):
+        segments = fullpath.split("/")
+        path = "/".join(segments[0:len(segments)-1])
+        return path
+
+    def _filename_portion_of_full_path(self, fullpath):
+        return lib.basename(fullpath) 
+
 
 
 if __name__ == '__main__':
