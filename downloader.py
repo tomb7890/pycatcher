@@ -183,9 +183,9 @@ def fetch(url, output_path, program, args):
             unit_scale=True,
             miniters=1,
             desc=program + " " + url.split("/")[-1],
-        ) as t:
+        ) as pb:
 
-            urlretrieve(url, output_path, t.update_to)
+            urlretrieve(url, output_path, pb.update_to) 
     else:
         urlretrieve(url, output_path)
 
