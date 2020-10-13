@@ -144,7 +144,7 @@ class Downloader:
         return self.fs.path_join(self.sub.podcasts_subdir(), b)
 
     def _delete_file(self, e, db):
-        self.fs.prune_file(db.get(e))
+        self.fs.unlink(db.get(e))
 
     def _delete_registry_entry(self, e, db):
         db.delete(e.guid)

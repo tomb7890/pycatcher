@@ -97,7 +97,7 @@ def test_downloading_after_mischievously_deleting_an_episode_disk_file(
     fourth_file = ffs.path_join(sub.podcasts_subdir(), e[3])
     assert "Ontario" in fourth_file
     assert ffs.path_exists(fourth_file)
-    ffs.prune_file(fourth_file)
+    ffs.unlink(fourth_file)
     assert not ffs.path_exists(fourth_file)
 
     e = set_expectations_for_second_download(sub, n)

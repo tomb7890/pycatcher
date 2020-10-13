@@ -9,25 +9,11 @@ class FileSystem:
     def __init__(self):
         pass
 
-    def link_creation_test(self, src, dst):
-        if self.path_exists(src) and not self.path_exists(dst):
-            return True
-        else:
-            return False
-
     def path_exists(self, path):
         return os.path.exists(path)
 
-    def prune_file(self, filename):
-        if os.path.exists(filename):
-            os.unlink(filename)
-
-    def prune_link(self, filename):
-        if os.path.exists(filename):
-            os.unlink(filename)
-
-    def link(self, src, dest):
-        os.link(src, dest)
+    def unlink(filename):
+        os.unlink(filename)
 
     def rename(self, old, new):
         os.rename(old, new)
@@ -45,14 +31,6 @@ class FakeFileSystem (FileSystem):
 
     def reset(self):
         self._ffs = {}
-
-    def link(self, src, dest):
-        basename = self._filename_portion_of_full_path(dest)
-        directory = self._directory_portion_of_full_path(dest)
-        dir = self._ffs[directory]
-        if basename in dir:
-            raise ValueError
-        dir.append(basename)
 
     def mkdir(self, path):
         # if directory doesn't yet exist
@@ -110,16 +88,11 @@ class FakeFileSystem (FileSystem):
         dir = self._ffs[path]
         return dir
 
-    def prune_link(self, fullpath):
-        self.prune_file(fullpath)
-
     def dump(self):
         for k in self.table.keys():
             print("key: [%s], \t\t\t value: [%s]." % ( k, self.table[k]))
 
-
-
-    def prune_file(self, fullpath):
+    def unlink(self, fullpath):
         path = self._directory_portion_of_full_path(fullpath)
         filename = self._filename_portion_of_full_path(fullpath)
         # print(f"pruning file with path {path} and filename {filename}")
