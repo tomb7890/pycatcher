@@ -33,13 +33,10 @@ class FakeFileSystem (FileSystem):
         self._ffs = {}
 
     def mkdir(self, path):
-        # if directory doesn't yet exist
         if path not in self._ffs:
-            # mkdir the dir
             self._ffs[path] = []
         else:
-            # if it already exists, I guess it is an error to call mkdir on a directory that already exists.
-            raise Exception(path)
+            raise FileExistsError
 
     def touch(self, directory, filename):
 

@@ -4,6 +4,7 @@ import random
 from filesystem import FakeFileSystem
 import logging
 
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -43,7 +44,11 @@ def podcastdir(ffs):
 
 
 def test_exception_thrown_on_repeated_call_to_mkdir():
-    pass
+    with pytest.raises(FileExistsError):
+        ffs = FakeFileSystem()
+        ffs.mkdir("foo")
+        ffs.mkdir("foo")
+    
 
 
 def test_fake_listdir(ffs, podcastdir):
