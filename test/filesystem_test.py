@@ -103,7 +103,10 @@ def test_pathexists_for_nested_empty_directory(ffs):
     ffs.mkdir(dir)
     assert (ffs.path_exists(dir))
 
-@pytest.mark.skip(reason="")
+
 def test_file_rename(ffs, hypothetical):
-    ffs.rename(hypothetical.path,
-                    ffs.rename(hypothetical.path) )
+    ffs.mkdir("blah")
+    ffs.touch("blah", "foo")
+    ffs.rename("blah/foo", "blah/bar")
+    assert ffs.path_exists("blah/bar")
+    assert not ffs.path_exists("blah/foo")
