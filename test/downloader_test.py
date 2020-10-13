@@ -74,8 +74,8 @@ def test_downloading(sub, fdl, ffs, db):
         download_and_test(sub, ffs, fdl, db, e)
 
 
-def download_and_test(sub, ffs, fdl, dbfile, expected_files):
-    fdl.dodownload(dbfile)
+def download_and_test(sub, ffs, fdl, db, expected_files):
+    fdl.dodownload(db)
     n = len(ffs.listdir(sub.podcasts_subdir()))
     assert sub.maxeps == n
 
@@ -88,7 +88,7 @@ def download_and_test(sub, ffs, fdl, dbfile, expected_files):
 
 
 def test_downloading_after_mischievously_deleting_an_episode_disk_file(
-    sub, ffs, fdl, dbfile
+    sub, ffs, fdl, db
 ):
     n = 6
     e = set_expectations_for_first_download(sub, n)
@@ -105,7 +105,7 @@ def test_downloading_after_mischievously_deleting_an_episode_disk_file(
 
 
 def test_downloading_after_micheievously_deleting_an_episode_registry_key(
-    sub, ffs, fdl, dbfile
+    sub, ffs, fdl, db
 ):
     n = 6
     e = set_expectations_for_first_download(sub, n)
@@ -114,11 +114,11 @@ def test_downloading_after_micheievously_deleting_an_episode_registry_key(
     e = set_expectations_for_second_download(sub, n)
     download_and_test(sub, ffs, fdl, db, e)
 
-    dbfile.delete("http://podcasts.tvo.org/theagenda/video/2597629_12001291615.mp4")
-    assert len(dbfile.records()) == 5
+    db.delete("http://podcasts.tvo.org/theagenda/video/2597629_12001291615.mp4")
+    assert len(db.records()) == 5
 
-    download_and_test(sub, ffs, fdl, dbfile, e)
-    assert len(dbfile.records()) == 6
+    download_and_test(sub, ffs, fdl, db, e)
+    assert len(db.records()) == 6
 
     e = set_expectations_for_third_download(sub, n)
     download_and_test(sub, ffs, fdl, db, e)
