@@ -68,10 +68,11 @@ class Downloader:
 
     def _download_episode_queue(self, db):
         for tuple in self.queue._queue:
+
             episode, destination_filename = tuple
-            fullpath = self.fs.path_join(
-                self.sub.podcasts_subdir(), destination_filename
-            )
+
+            fullpath = self._full_path(destination_filename)
+
             if self.fs.path_exists(fullpath):
                 print("target file exists! " + fullpath)
             else:
@@ -97,7 +98,7 @@ class Downloader:
     def download_impl(self, episode, destination_filename):
         fetch(
             episode.url,
-            self.fs.path_join(self.sub.podcasts_subdir(), destination_filename),
+            self._full_path(destination_filename),
             self.sub.title,
             self.args,
         )
@@ -139,8 +140,10 @@ class Downloader:
             return True
         return False
 
-    def _delete_file(self, e, db):
+    def _full_path(self, b):
+        return self.fs.path_join(self.sub.podcasts_subdir(), b)
 
+    def _delete_file(self, e, db):
         self.fs.prune_file(db.get(e))
 
     def _delete_registry_entry(self, e, db):
