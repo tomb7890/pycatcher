@@ -9,22 +9,22 @@ from index import FakeIndex
 def sub():
     sub = Subscription(None, "The Agenda with Steve Paikin (Video)")
     sub.maxeps = 6
-    yield sub
+    return sub
 
 
 @pytest.fixture()
 def ffs():
-    yield FakeFileSystem()
+    return FakeFileSystem()
 
 
 @pytest.fixture()
 def fdl(ffs, sub):
-    yield FakeDownloader(ffs, sub)
+    return FakeDownloader(ffs, sub)
 
 
 @pytest.fixture()
-def dbfile():
-    yield FakeIndex()
+def db():
+    return FakeIndex()
 
 
 def set_expectations_for_first_download(sub, n):
