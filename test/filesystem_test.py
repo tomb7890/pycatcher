@@ -48,7 +48,27 @@ def test_exception_thrown_on_repeated_call_to_mkdir():
         ffs = FakeFileSystem()
         ffs.mkdir("foo")
         ffs.mkdir("foo")
-    
+
+def test_unlink_raises_exception_with_nonexistant_file():
+    with pytest.raises(FileNotFoundError):
+        ffs = FakeFileSystem()
+        ffs.unlink("foo")
+
+
+def test_unlink_raises_exception_with_nonexistant_dir_file():
+    with pytest.raises(FileNotFoundError):
+        ffs = FakeFileSystem()
+        ffs.mkdir("foo")
+        ffs.unlink("foo/bar")
+
+
+def test_unlink_raises_exception_with_nonexistant_dir_dir_file():
+    with pytest.raises(FileNotFoundError):
+        ffs = FakeFileSystem()
+        ffs.mkdir("foo")
+        ffs.mkdir("foo/bar")
+        ffs.unlink("foo/bar/baz")
+
 
 
 def test_fake_listdir(ffs, podcastdir):

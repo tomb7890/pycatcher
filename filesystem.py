@@ -86,18 +86,21 @@ class FakeFileSystem (FileSystem):
         return dir
 
     def dump(self):
-        for k in self.table.keys():
-            print("key: [%s], \t\t\t value: [%s]." % ( k, self.table[k]))
+        for k in self._ffs.keys():
+            print("key: [%s], \t\t\t value: [%s]." % ( k, self._ffs[k]))
 
     def unlink(self, fullpath):
+    
         path = self._directory_portion_of_full_path(fullpath)
         filename = self._filename_portion_of_full_path(fullpath)
-        # print(f"pruning file with path {path} and filename {filename}")
 
         if path in self._ffs:
             filelist = self._ffs[path]
             if filename in filelist:
                 filelist.remove(filename)
+                return 
+
+        raise FileNotFoundError 
 
     def exists(self, filename):
         return self.path_exists(filename)
