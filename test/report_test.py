@@ -1,11 +1,8 @@
 from lxml import html
 from subscription import Subscription
-from report import (
-    make_report_from_sorted_data,
-    write_report_file,
-    construct_reportdatum,
-)
+from report import make_report_from_sorted_data, write_report_file, ReportDatum
 import tempfile
+
 
 XPATH_SELECTION_OF_DATE_COLUMN = './/div[@class="col-sm-3 date-column"]'
 EXPECTED_DATE_OF_REPORT = "Thu, 01 Oct 2020 03:30:00 GMT"
@@ -52,15 +49,15 @@ def test_making_report():
 
     with tempfile.NamedTemporaryFile("r") as f:
         subs = gather_all_subscriptions()
-        datas = []
+        data = []
 
         for s in subs:
             episodes = s.parse_rss_file()
             for e in episodes:
-                d = construct_reportdatum(e, s, s.title)
-                datas.append(d)
+                d = ReportDatum(e, s)
+                data.append(d)
 
-        text = make_report_from_sorted_data(datas)
+        text = make_report_from_sorted_data(data)
         write_report_file(f.name, text)
 
         text = f.read()
@@ -92,7 +89,7 @@ def test_making_report_with_one_episode_datum():
         for s in subs:
             episodes = s.parse_rss_file()
             for e in episodes:
-                d = construct_reportdatum(e, s, s.title)
+                d = ReportDatum(e, s)
                 datas.append(d)
 
         text = make_report_from_sorted_data(datas[:1])

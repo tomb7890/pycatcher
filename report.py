@@ -1,5 +1,5 @@
 from io import StringIO
-from dataclasses import dataclass
+
 from string import Template
 import xml.etree.ElementTree
 import string
@@ -16,7 +16,6 @@ from lib import (
 from subscription import Subscription
 
 
-@dataclass
 class ReportDatum:
     thumbnail: string
     textlabel: string
@@ -25,6 +24,19 @@ class ReportDatum:
     pubdate: string
     mktime: object
     description: string
+
+    def __init__(self, e, s):  
+        if e.image is None:
+            self.thumbnail = s.subscription_image
+        else:
+            self.thumbnail = e.image
+
+        self.textlabel = e.title
+        self.href_text = s.title
+        self.href_url = episode_href(e)
+        self.pubdate = e.pubDate
+        self.mktime = e.mktime
+        self.description = e.description
 
 
 def doreport(outputfilename):
@@ -77,27 +89,8 @@ def enumerate_all_downloaded_episodes(subscription, db, section, reportdata):
 
     for e in episodes:
         if db.find(e.guid):
-            d = construct_reportdatum(e, subscription, section)
+            d = ReportDatum(e, subscription)
             reportdata.append(d)
-
-
-def construct_reportdatum(e, s, href_text):
-    if e.image is None:
-        thumbnail = s.subscription_image
-    else:
-        thumbnail = e.image
-
-    textlabel = e.title
-    href_text = href_text
-    href_url = episode_href(e)
-    date = e.pubDate
-    mktime = e.mktime
-    description = e.description
-
-    d = ReportDatum(
-        thumbnail, textlabel, href_text, href_url, date, mktime, description
-    )
-    return d
 
 
 def episode_href(episode):
