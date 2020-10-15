@@ -61,7 +61,7 @@ def try_to_get_episode_data(reportdata, cp, section):
         set_sub_from_config(subscription, cp, section)
         db = db_of_sub(subscription)
         db.load()
-        enumerate_all_downloaded_episodes(subscription, db, section, reportdata)
+        enumerate_all_downloaded_episodes(subscription, db, reportdata)
 
     except FileNotFoundError as e:
         print("Error with subscription %s: %s" % (subscription.title, e))
@@ -75,7 +75,7 @@ def make_report_from_sorted_data(reportdata):
     return make_report_from_episodes(reportdata)
 
 
-def enumerate_all_downloaded_episodes(subscription, db, section, reportdata):
+def enumerate_all_downloaded_episodes(subscription, db, reportdata):
     p = parser.Parser()
     channel_image = p.channel_image(subscription.rssfile)
     episodes = p.items(subscription.rssfile)
