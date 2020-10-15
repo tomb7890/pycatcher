@@ -52,8 +52,6 @@ class FakeFileSystem (FileSystem):
             files = self._ffs[dir]
             if filename in files:
                 return True
-            else:
-                return False 
         return False
 
     def listdir(self, path):
