@@ -100,9 +100,3 @@ def test_pathexists_for_nested_empty_directory(ffs):
     assert (ffs.path_exists(dir))
 
 
-def test_file_rename(ffs, hypothetical):
-    ffs.mkdir("blah")
-    ffs.touch("blah", "foo")
-    ffs.rename("blah/foo", "blah/bar")
-    assert ffs.path_exists("blah/bar")
-    assert not ffs.path_exists("blah/foo")

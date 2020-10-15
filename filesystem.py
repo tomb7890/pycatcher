@@ -15,9 +15,6 @@ class FileSystem:
     def unlink(filename):
         os.unlink(filename)
 
-    def rename(self, old, new):
-        os.rename(old, new)
-
     def mkdir(self, path):
         os.mkdir(path)
 
@@ -63,24 +60,6 @@ class FakeFileSystem (FileSystem):
                 return False 
         return False
 
-    def rename(self, old, new):
-        # First consider the case of renaming a file to the same directory 
-        olddir = self._directory_portion_of_full_path(old)
-        oldfilename = self._filename_portion_of_full_path(old)
-        if olddir not in self._ffs.keys():
-            raise Exception("Rename: no such directory: [%s]" % olddir ) 
-        # get file listing of directory
-        oldfiles = self._ffs[self._directory_portion_of_full_path(old)]
-        if oldfilename  not in oldfiles:
-            raise Exception("Rename: no such file: [%s]" % oldfilename) 
-        newfilelist = []
-        newfilename = self._filename_portion_of_full_path(new)
-        for o in oldfiles:
-            if o != oldfilename:
-                newfilelist.append(o)
-            newfilelist.append(newfilename)
-        self._ffs[self._directory_portion_of_full_path(old)] = newfilelist
-        
     def listdir(self, path):
         dir = self._ffs[path]
         return dir
