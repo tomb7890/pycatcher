@@ -1,9 +1,13 @@
 from lxml import html
 from subscription import Subscription
-from report import make_report_from_sorted_data, write_report_file, ReportDatum
+from report import (
+    make_report_from_sorted_data,
+    write_report_file,
+    ReportDatum,
+    enumerate_all_downloaded_episodes,
+)
 import tempfile
 import parser
-
 
 XPATH_SELECTION_OF_DATE_COLUMN = './/div[@class="col-sm-3 date-column"]'
 EXPECTED_DATE_OF_REPORT = "Thu, 01 Oct 2020 03:30:00 GMT"
@@ -101,3 +105,26 @@ def test_making_report_with_one_episode_datum():
 
         tree = html.fromstring(f.read())
         assert 1 == len(tree.xpath(XPATH_SELECTION_OF_DATE_COLUMN))
+
+
+def test_enumerate_all_downloaded_episodes():
+    ARBITRARY_NUMBER = 9
+
+    class MyFakeIndex:
+        def __init__(self):
+            self.count = 0
+
+        def find(self, guid):
+            self.count = self.count + 1
+            if self.count <= ARBITRARY_NUMBER:
+
+                return True
+            return False
+
+    subscriptions = gather_all_subscriptions()
+    for s in subscriptions:
+        db = MyFakeIndex()
+
+        reportdata = []
+        enumerate_all_downloaded_episodes(s, db, reportdata)
+        assert len(reportdata) == ARBITRARY_NUMBER
