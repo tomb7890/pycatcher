@@ -60,10 +60,6 @@ class FakeFileSystem (FileSystem):
         dir = self._ffs[path]
         return dir
 
-    def dump(self):
-        for k in self._ffs.keys():
-            print("key: [%s], \t\t\t value: [%s]." % ( k, self._ffs[k]))
-
     def unlink(self, fullpath):
     
         path = os.path.dirname(fullpath)
@@ -77,7 +73,11 @@ class FakeFileSystem (FileSystem):
 
         raise FileNotFoundError 
 
+    def _dump(self):
+        for k in self._ffs.keys():
+            print("key: [%s], \t\t\t value: [%s]." % ( k, self._ffs[k]))
 
+    
 
 
 if __name__ == '__main__':
