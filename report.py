@@ -25,7 +25,7 @@ class ReportDatum:
     mktime: object
     description: string
 
-    def __init__(self, e, s):  
+    def __init__(self, e, s):
         if e.image is None:
             self.thumbnail = s.subscription_image
         else:

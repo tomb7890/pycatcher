@@ -1,6 +1,6 @@
 from urllib.request import ProxyHandler, build_opener, install_opener, urlretrieve
 from tqdm import tqdm
-import os 
+import os
 
 from downloadqueue import DownloadQueue
 
@@ -185,7 +185,7 @@ def fetch(url, output_path, program, args):
             desc=program + " " + url.split("/")[-1],
         ) as pb:
 
-            urlretrieve(url, output_path, pb.update_to) 
+            urlretrieve(url, output_path, pb.update_to)
     else:
         urlretrieve(url, output_path)
 
