@@ -2,7 +2,7 @@ from io import StringIO
 
 from string import Template
 import xml.etree.ElementTree
-
+import parser
 
 from lib import (
     sort_reverse_chronologically,
@@ -76,11 +76,13 @@ def make_report_from_sorted_data(reportdata):
 
 
 def enumerate_all_downloaded_episodes(subscription, db, section, reportdata):
-    episodes = subscription.episodes()
+    p = parser.Parser()
+    channel_image = p.channel_image(subscription.rssfile)
+    episodes = p.items(subscription.rssfile)
 
     for e in episodes:
         if db.find(e.guid):
-            d = ReportDatum(e, subscription)
+            d = ReportDatum(e, subscription, channel_image)
             reportdata.append(d)
 
 
