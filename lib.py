@@ -11,7 +11,7 @@ DEFAULTCONFIGFILE = "prefs.conf"
 def scan(filename, userstring):
     
     p = Parser()
-    episodes = p.parse_rss_file(filename)
+    episodes = p.items(filename)
     items = [] 
     for e in episodes:
         if userstring in (e.description):
@@ -76,7 +76,7 @@ def data_directory():
     return os.path.expanduser("~/.podcasts-data/")
 
 def traverse(args, sub, handler):
-    episodes = sub.parse_rss_file()
+    episodes = sub.episodes()
     db = db_of_sub(sub)
     db.load()
 

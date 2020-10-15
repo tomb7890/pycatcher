@@ -2,7 +2,6 @@ from io import StringIO
 
 from string import Template
 import xml.etree.ElementTree
-import string
 
 
 from lib import (
@@ -17,17 +16,9 @@ from subscription import Subscription
 
 
 class ReportDatum:
-    thumbnail: string
-    textlabel: string
-    href_text: string
-    href_url: string
-    pubdate: string
-    mktime: object
-    description: string
-
-    def __init__(self, e, s):
+    def __init__(self, e, s, channel_image):
         if e.image is None:
-            self.thumbnail = s.subscription_image
+            self.thumbnail = channel_image
         else:
             self.thumbnail = e.image
 
@@ -85,7 +76,7 @@ def make_report_from_sorted_data(reportdata):
 
 
 def enumerate_all_downloaded_episodes(subscription, db, section, reportdata):
-    episodes = subscription.parse_rss_file()
+    episodes = subscription.episodes()
 
     for e in episodes:
         if db.find(e.guid):

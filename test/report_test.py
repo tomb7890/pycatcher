@@ -2,6 +2,7 @@ from lxml import html
 from subscription import Subscription
 from report import make_report_from_sorted_data, write_report_file, ReportDatum
 import tempfile
+import parser
 
 
 XPATH_SELECTION_OF_DATE_COLUMN = './/div[@class="col-sm-3 date-column"]'
@@ -52,9 +53,11 @@ def test_making_report():
         data = []
 
         for s in subs:
-            episodes = s.parse_rss_file()
+            p = parser.Parser()
+            channel_image = p.channel_image(s.rssfile)
+            episodes = p.items(s.rssfile)
             for e in episodes:
-                d = ReportDatum(e, s)
+                d = ReportDatum(e, s, channel_image)
                 data.append(d)
 
         text = make_report_from_sorted_data(data)
@@ -87,9 +90,10 @@ def test_making_report_with_one_episode_datum():
         datas = []
 
         for s in subs:
-            episodes = s.parse_rss_file()
+            episodes = s.episodes()
             for e in episodes:
-                d = ReportDatum(e, s)
+                channel_image = None
+                d = ReportDatum(e, s, channel_image)
                 datas.append(d)
 
         text = make_report_from_sorted_data(datas[:1])

@@ -35,7 +35,7 @@ class Downloader:
 
     def _parse_and_inventory_episode_lists(self, db):
         n = self.sub.maxeps
-        self.episodes = self.sub.parse_rss_file()
+        self.episodes = self.sub.episodes()
         self.new_episodes_to_download = self.episodes[0:n]
         self.old_episodes_to_remove = self.episodes[n:]
 

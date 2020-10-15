@@ -33,11 +33,11 @@ class Subscription:
         self.maxeps = maxeps
         self.rssfile = rssfile
         
-    def parse_rss_file(self, filename=None):
+    def episodes(self, filename=None):
         if filename is None:
             filename = self.rssfile
 
-        return self.parser.parse_rss_file(filename)
+        return self.parser.items(filename)
 
     def title(self):
         return self.title

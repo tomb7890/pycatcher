@@ -10,13 +10,13 @@ class Parser:
         # this may be obsolete.
         self.strict = True
 
-    def parse_subscription_image(self, filename):
+    def channel_image(self, filename):
         tree = ET.parse(filename)
         x = tree.findall(".//image//url")
         if len(x) > 0:
             return x[0].text
 
-    def parse_rss_file(self, filename):
+    def items(self, filename):
         yahoo_ns = {'media': "http://search.yahoo.com/mrss/"}
         itunes_ns = {'itunes': "http://www.itunes.com/dtds/podcast-1.0.dtd"}
 
@@ -93,7 +93,7 @@ class Parser:
 
 def dumpx(filepath):
     p = Parser()
-    eps = p.parse_rss_file(filepath)
+    eps = p.items(filepath)
     for e in eps[0:200]:
         print(e.basename()) 
         
