@@ -121,10 +121,11 @@ def test_enumerate_all_downloaded_episodes():
                 return True
             return False
 
+    section = "0xdeadbeef"
     subscriptions = gather_all_subscriptions()
     for s in subscriptions:
         db = MyFakeIndex()
 
         reportdata = []
-        enumerate_all_downloaded_episodes(s, db, reportdata)
+        enumerate_all_downloaded_episodes(s, db, section, reportdata)
         assert len(reportdata) == ARBITRARY_NUMBER
