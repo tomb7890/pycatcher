@@ -8,7 +8,7 @@ class FileSystem:
     def path_exists(self, path):
         return os.path.exists(path)
 
-    def unlink(filename):
+    def unlink(self, filename):
         os.unlink(filename)
 
     def mkdir(self, path):
