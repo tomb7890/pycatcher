@@ -1,6 +1,4 @@
-import os
-import lib
-
+import os.path
 
 class FileSystem:
 
@@ -47,8 +45,8 @@ class FakeFileSystem (FileSystem):
         if path in self._ffs.keys():
             return True
 
-        dir = self._directory_portion_of_full_path(path)
-        filename = self._filename_portion_of_full_path(path)
+        dir = os.path.dirname(path)
+        filename = os.path.basename(path)
 
         if dir in self._ffs:
             files = self._ffs[dir]
@@ -68,8 +66,8 @@ class FakeFileSystem (FileSystem):
 
     def unlink(self, fullpath):
     
-        path = self._directory_portion_of_full_path(fullpath)
-        filename = self._filename_portion_of_full_path(fullpath)
+        path = os.path.dirname(fullpath)
+        filename = os.path.basename(fullpath)
 
         if path in self._ffs:
             filelist = self._ffs[path]
@@ -79,13 +77,6 @@ class FakeFileSystem (FileSystem):
 
         raise FileNotFoundError 
 
-    def _directory_portion_of_full_path(self, fullpath):
-        segments = fullpath.split("/")
-        path = "/".join(segments[0:len(segments)-1])
-        return path
-
-    def _filename_portion_of_full_path(self, fullpath):
-        return lib.basename(fullpath) 
 
 
 

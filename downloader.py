@@ -1,6 +1,6 @@
 from urllib.request import ProxyHandler, build_opener, install_opener, urlretrieve
 from tqdm import tqdm
-import lib
+import os 
 
 from downloadqueue import DownloadQueue
 
@@ -64,7 +64,7 @@ class Downloader:
     def _queue_anyway_if_file_is_missing(self, db, episode):
         registered_filename = db.get(episode)
         if self._file_of_registered_episode_is_missing(episode, registered_filename):
-            self.queue.queue(episode, lib.basename(registered_filename))
+            self.queue.queue(episode, os.path.basename(registered_filename))
 
     def _download_episode_queue(self, db):
         for tuple in self.queue._queue:
