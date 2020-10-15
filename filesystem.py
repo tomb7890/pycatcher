@@ -79,9 +79,6 @@ class FakeFileSystem (FileSystem):
 
         raise FileNotFoundError 
 
-    def exists(self, filename):
-        return self.path_exists(filename)
-
     def _directory_portion_of_full_path(self, fullpath):
         segments = fullpath.split("/")
         path = "/".join(segments[0:len(segments)-1])
