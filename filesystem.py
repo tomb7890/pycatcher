@@ -1,8 +1,6 @@
 import os
 import lib
-import logging
-logger = logging.getLogger()
-# logger.setLevel(logging.INFO)
+
 
 class FileSystem:
 
