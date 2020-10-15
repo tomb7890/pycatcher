@@ -37,7 +37,6 @@ class Subscription:
         if filename is None:
             filename = self.rssfile
 
-        self.subscription_image = self.parser.parse_subscription_image(filename )
         return self.parser.parse_rss_file(filename)
 
     def title(self):
