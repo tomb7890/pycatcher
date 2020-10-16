@@ -8,6 +8,8 @@ from report import (
 )
 import tempfile
 import parser
+import pytest
+
 
 XPATH_SELECTION_OF_DATE_COLUMN = './/div[@class="col-sm-3 date-column"]'
 EXPECTED_DATE_OF_REPORT = "Thu, 01 Oct 2020 03:30:00 GMT"
@@ -107,17 +109,15 @@ def test_making_report_with_one_episode_datum():
         assert 1 == len(tree.xpath(XPATH_SELECTION_OF_DATE_COLUMN))
 
 
-def test_enumerate_all_downloaded_episodes():
-    ARBITRARY_NUMBER = 9
-
+@pytest.mark.parametrize("num_downloaded_episodes", [0, 1, 2])
+def test_enumerate_all_downloaded_episodes(num_downloaded_episodes):
     class MyFakeIndex:
         def __init__(self):
             self.count = 0
 
         def find(self, guid):
             self.count = self.count + 1
-            if self.count <= ARBITRARY_NUMBER:
-
+            if self.count <= num_downloaded_episodes:
                 return True
             return False
 
@@ -127,4 +127,4 @@ def test_enumerate_all_downloaded_episodes():
 
         reportdata = []
         enumerate_all_downloaded_episodes(s, db, reportdata)
-        assert len(reportdata) == ARBITRARY_NUMBER
+        assert len(reportdata) == num_downloaded_episodes
