@@ -9,5 +9,5 @@ tags:
 	@etags `find . -type f -iname  \\*py`
 
 clean:
-	@rm __pycache__/*pyc
-	@rm test/__pycache__/*pyc
+	@-rm __pycache__/*pyc
+	@-rm test/__pycache__/*pyc
