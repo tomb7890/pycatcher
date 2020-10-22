@@ -1,6 +1,5 @@
-import os
-from lib import podcasts_directory, data_directory, rss_directory, _media_subdirectory, \
-    DEFAULTCONFIGFILE
+
+from prefs  import   DEFAULTCONFIGFILE 
 
 from subscription import rss_file_name_from_text, DEFAULT_MAXEPS
 from configparser import ConfigParser, DuplicateSectionError
