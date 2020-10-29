@@ -1,10 +1,10 @@
 import parser
-import lib
+from main import scan 
 
 def test_scan():
     filename = 'test/data/TheAgendawithStevePaikinVideo/012820.rss'
     userstring = 'finance'
-    items = lib.scan(filename, userstring)
+    items = scan(filename, userstring)
     assert len(items) == 3
 
     last = items[len(items)-1]
@@ -12,7 +12,7 @@ def test_scan():
     assert last['guid'] == 'http://podcasts.tvo.org/theagenda/video/2587210_11911071710.mp4'
 
     filename = 'test/data/IntelligenceSquared.xml'
-    items = lib.scan(filename, userstring)
+    items = scan(filename, userstring)
     assert len(items) == 4
     assert str(items[2]['text']).endswith('psychologist.  For information regarding your data privacy, visit acast.com/privacy') 
 

@@ -1,21 +1,27 @@
 import argparser
 import json
 import logging
-
 import sys
 import urllib
 
+from main import scan, play_episode, list_episodes, list_subscriptions
+from lib import (
+    find_subscription_by_index,
+    initialize_subscription,
+    get_all_subscriptions,
+)
 
 from downloader import Downloader
 from downloader import fetch
 from filesystem import FileSystem
-from lib import mediaplay, scan, db_of_sub
-from lib import set_sub_from_config, get_sub_of_index, configsections, traverse
+from prefs import get_subscription_names
+
 from parser import Parser
 from register import register
 from report import doreport
 from subscription import Subscription
 from urllib.request import urlopen
+from mediaplayer import MediaPlayer
 
 
 def main():
@@ -67,7 +73,6 @@ def dosearch(args):
 def dofetch(args):
     searchterm = args.fetch[0]
     index = int(args.fetch[1]) - 1
-
     results = podcastquery(searchterm)
     feedurl = results[r"results"][index][r"feedUrl"]
     print(feedurl)
@@ -112,32 +117,17 @@ def dosubscribe(args):
 
 
 def doplay(args):
-    i = int(args.play[0]) - 1
-    sub = get_sub_of_index(i)
-    selection = int(args.play[1])
-
-    def playhandler(*args):
-        episode = args[0]
-        n = args[1]
-        filename = args[2]
-        print("%d: %s" % (n, episode.title))
-        if n == selection:
-            mediaplay(filename)
-
-    traverse(args, sub, playhandler)
+    fs = FileSystem()
+    player = MediaPlayer()
+    subs = get_all_subscriptions()
+    print(play_episode(fs, player, args, subs))
 
 
 def dolistepisodes(args):
     i = int(args.listepisodes) - 1
-    sub = get_sub_of_index(i)
-
-    def printhandler(*args):
-        episode = args[0]
-        n = args[1]
-        title = episode.title
-        print(">>> %d: %s" % (n, title))
-
-    traverse(args, sub, printhandler)
+    sub = find_subscription_by_index(i)
+    fs = FileSystem()
+    print(list_episodes(sub, fs))
 
 
 def podcastquery(searchterm):
@@ -151,52 +141,50 @@ def podcastquery(searchterm):
 
 
 def doupdate(args):
-    cp, sections = configsections()
+    # cp, sections = configsections()
+    names = get_subscription_names()
     try:
         index = int(args.update) - 1
-        section = sections[index]
-        download_rss_file(cp, section, args)
+        name = names[index]
+        download_rss_file(name, args)
 
     except ValueError:
         if args.update == "all":
-            for section in sections:
-                download_rss_file(cp, section, args)
+            for name in names:
+                download_rss_file(name, args)
 
 
 def dolistsubscriptions(args):
-    cp, sections = configsections()
-    i = 1
-    for s in sections:
-        print("%d: %s " % (i, s))
-        i = i + 1
+    subs = get_all_subscriptions()
+    print(list_subscriptions(subs))
 
 
 def dodownload(args):
     try:
-        cp, sections = configsections()
+        names = get_subscription_names()
         if args.download[0] == "all":
-            for section in sections:
-                download_section(cp, section, args)
+            for name in names:
+                download_subscription_by_name(name, args)
         else:
             i = int(args.download[0]) - 1
-            section = sections[i]
-            download_section(cp, section, args)
+            name = names[i]
+            download_subscription_by_name(name, args)
 
     except urllib.error.URLError as x:
         print(x)
 
 
-def download_section(cp, section, args):
-    subscription = download_rss_file(cp, section, args)
-    db = db_of_sub(subscription)
+def download_subscription_by_name(name, args):
+    subscription = download_rss_file(name, args)
+    db = subscription.get_db()
     fs = FileSystem()
     dl = Downloader(fs, subscription, args)
     dl.dodownload(db)
 
 
-def download_rss_file(cp, section, args):
+def download_rss_file(name, args):
     sub = Subscription()
-    set_sub_from_config(sub, cp, section)
+    initialize_subscription(sub, name)
     fetch(sub.feedurl, sub.rssfile, sub.title, args)
     return sub
 

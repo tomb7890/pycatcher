@@ -20,7 +20,7 @@ def gather_all_subscriptions():
     subs = [
         Subscription(
             None,
-            "The Agenda with Steve Paikin (Video)",
+            "The Rich Roll Podcast",
             maximum_episodes_to_keep,
             "test/data/TheRichRollPodcast/100120.rss",
         ),
@@ -124,7 +124,8 @@ def test_enumerate_all_downloaded_episodes(num_downloaded_episodes):
     subscriptions = gather_all_subscriptions()
     for s in subscriptions:
         db = MyFakeIndex()
+        s.database = db
 
         reportdata = []
-        enumerate_all_downloaded_episodes(s, db, reportdata)
+        enumerate_all_downloaded_episodes(s, reportdata)
         assert len(reportdata) == num_downloaded_episodes

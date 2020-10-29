@@ -1,8 +1,9 @@
-
+import index 
 import re
 import logging
 import os
 from parser import Parser
+from prefs import prefs_dirs_rss, prefs_dirs_podcasts
 
 DEFAULT_MAXEPS=3
 
@@ -27,12 +28,40 @@ class Subscription:
         # the maxeps attribute.
 
         self.feedurl = feedurl
-        self.title = title 
+        
+        self.title = title
         logging.info("Subscription.__init_ is now setting title to be [%s]" % self.title)
 
         self.maxeps = maxeps
         self.rssfile = rssfile
+
+    def set_title(self, title):
+        self.title = title
+
+    def set_feedurl(self, feedurl):
+        self.feedurl = feedurl
+
+    def set_maxeps(self, m):
+        self.maxeps = m
+
+    def set_rssfile(self, x):
+        rssfile = x 
+        self.rssfile = os.path.join(prefs_dirs_rss(), rssfile)
+
+    
         
+        
+
+    def get_db(self):
+        return self.database 
+
+    
+    def full_path_to_index_file(self):
+        return os.path.join(
+            prefs_dirs_rss(), 
+            self.filesystem_safe_sub_title() + "." + index.FILE_EXTENSION)
+    
+
     def episodes(self, filename=None):
         if filename is None:
             filename = self.rssfile
@@ -45,25 +74,14 @@ class Subscription:
     def filesystem_safe_sub_title(self):
         return re.sub(r'\W', '', self.title)
 
-    def rss_file_name_from_title_attribute(self):
-        return self.filesystem_safe_sub_title() + '.rss'
-
-    # def full_path_to_rss_file_name(self):
-    #     filename = self.rss_file_name_from_title_attribute()
-    #     os.path.join(dir, filename)
-
-    # def full_path_to_index_file_name(self):
-    #     filename = self.index_file_name_from_title_attribute()
-    #     os.path.join(dir, filename)
-
     def base_podcasts_dir(self):
-        return os.path.expanduser("~/podcasts")
+        return prefs_dirs_podcasts()
 
     def _sub_dir(self):
         return re.sub(r'\W', '', self.title )
     
     def podcasts_subdir(self): 
-        return os.path.join( self.base_podcasts_dir(), 
+        return os.path.join( prefs_dirs_podcasts(), 
                             self._sub_dir())
     
 if __name__ == '__main__':

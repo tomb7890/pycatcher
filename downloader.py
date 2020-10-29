@@ -31,7 +31,8 @@ class Downloader:
         self._write_updates_to_database(db)
 
     def _initialize_database(self, db):
-        db.load()
+        if db.exists():
+            db.load()
 
     def _parse_and_inventory_episode_lists(self, db):
         n = self.sub.maxeps
@@ -128,9 +129,7 @@ class Downloader:
             count = count + 1
             if not self._in_use(db, proposal):
                 break
-            proposal = (
-                episode.filename_base() + "-%d" % count + episode.filename_extension()
-            )
+            proposal = episode.numerify_filename(count)
         return proposal
 
     def _in_use(self, db, filename):

@@ -1,17 +1,9 @@
 from io import StringIO
-
+import prefs
 from string import Template
 import xml.etree.ElementTree
 import parser
-
-from lib import (
-    sort_reverse_chronologically,
-    configsections,
-    set_sub_from_config,
-    db_of_sub,
-)
-
-
+from lib import initialize_subscription
 from subscription import Subscription
 
 
@@ -49,19 +41,16 @@ def write_report_file(filename, text):
 
 def gather_episode_data_from_all_downloaded_podcasts():
     reportdata = []
-    cp, sections = configsections()
-    for section in sections:
-        try_to_get_episode_data(reportdata, cp, section)
+    for name in prefs.get_subscription_names():
+        try_to_get_episode_data(reportdata, name)
     return reportdata
 
 
-def try_to_get_episode_data(reportdata, cp, section):
+def try_to_get_episode_data(reportdata, subname):
     subscription = Subscription()
     try:
-        set_sub_from_config(subscription, cp, section)
-        db = db_of_sub(subscription)
-        db.load()
-        enumerate_all_downloaded_episodes(subscription, db, reportdata)
+        initialize_subscription(subscription, subname)
+        enumerate_all_downloaded_episodes(subscription, reportdata)
 
     except FileNotFoundError as e:
         print("Error with subscription %s: %s" % (subscription.title, e))
@@ -75,13 +64,17 @@ def make_report_from_sorted_data(reportdata):
     return make_report_from_episodes(reportdata)
 
 
-def enumerate_all_downloaded_episodes(subscription, db, reportdata):
+def sort_reverse_chronologically(reportdata):
+    reportdata.sort(key=lambda x: x.mktime, reverse=True)
+
+
+def enumerate_all_downloaded_episodes(subscription, reportdata):
     p = parser.Parser()
     channel_image = p.channel_image(subscription.rssfile)
     episodes = p.items(subscription.rssfile)
 
     for e in episodes:
-        if db.find(e.guid):
+        if subscription.database.find(e.guid):
             d = ReportDatum(e, subscription, channel_image)
             reportdata.append(d)
 

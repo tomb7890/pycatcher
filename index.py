@@ -6,7 +6,7 @@ and from storage.
 
 """
 
-import json
+import json, os
 
 FILE_EXTENSION = "idx"
 
@@ -15,6 +15,9 @@ class Index:
     def __init__(self, filepath):
         self.fp = filepath
         self._table = {}
+
+    def exists(self):
+        return os.path.exists(self.fp)
 
     def load(self):
         with open(self.fp,'r') as f:
@@ -57,6 +60,9 @@ class Index:
 class FakeIndex(Index):
     def __init__(self):
         Index.__init__(self, None)
+
+    def exists(self):
+        return False 
 
     def load(self):
         # override

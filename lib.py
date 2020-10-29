@@ -1,121 +1,35 @@
-import os
-from configparser import ConfigParser
-import index
-from parser import Parser
-from lxml.html import document_fromstring
-import filesystem
-from subscription import Subscription, rss_file_name_from_text
-
-DEFAULTCONFIGFILE = "prefs.conf"
-
-def scan(filename, userstring):
-    
-    p = Parser()
-    episodes = p.items(filename)
-    items = [] 
-    for e in episodes:
-        if userstring in (e.description):
-            html = e.description
-            doc = document_fromstring(html)
-            i = {}
-            i['guid'] = e.guid
-            i['text'] = (doc.text_content())
-            items.append(i) 
-    return items 
-
-def sort_reverse_chronologically(reportdata):
-    reportdata.sort(key=lambda x: x.mktime, reverse=True)
+from prefs import get_subscription_names, lookup_int, lookup_string
+from subscription import Subscription
+from index import Index
 
 
-def db_of_sub(subscription):
-    return index.Index(full_path_to_index_file(subscription))
 
-def full_path_to_index_file(subscription):
-    return os.path.join(
-        data_directory(), 'rss',
-        subscription.filesystem_safe_sub_title() + "." + index.FILE_EXTENSION
-    )
-
-
-def get_rss_file(index):
-    cp, sections = configsections()
-    s = sections[index]
-    rssfile = os.path.join(rss_directory(), cp.get(s, 'rssfile'))
-    return rssfile
-
-def filename_from_fullpath(fullpath):
-    lastslash = fullpath.rfind('/') + 1
-    filename = fullpath[lastslash]
-    return filename
-
-def get_sub_of_index(index):
-    cp = ConfigParser()
-    cp.read(DEFAULTCONFIGFILE)
-    sections = cp.sections()
-    section = sections[index]
-    s = Subscription()
-    set_sub_from_config(s, cp, section)
-    return s
-
-def configsections():
-    cp = ConfigParser()
-    cp.read(DEFAULTCONFIGFILE)
-    return cp, cp.sections()
-
-def set_sub_from_config(sub, cp, section):
-    sub.title = section
-    sub.feedurl = cp.get(section, 'url')
-    sub.maxeps = cp.getint(section, 'maxeps')
-    r = cp.get(section, 'rssfile')
-    sub.rssfile = os.path.join(rss_directory(), r)
-
-def _media_subdirectory(subscription):
-    return rss_file_name_from_text(subscription)
-
-def data_directory():
-    return os.path.expanduser("~/.podcasts-data/")
-
-def traverse(args, sub, handler):
-    episodes = sub.episodes()
-    db = db_of_sub(sub)
-    db.load()
-
-    fs = filesystem.FileSystem()
-
-    n = 0
-    for e in episodes:
-        if db.find(e.guid):
-            filename = db.get(e)
-            if fs.path_exists(filename):
-                n = n + 1
-                handler(e, n, filename)
-
-def podcasts_directory():
-    return os.path.expanduser('~/podcasts')
-
-def rss_directory():
-    return os.path.join(data_directory(), 'rss')
-
-def mediaplay(filename):
-    from sys import platform
-    if platform == "linux" or platform == "linux2":
-        cmd = "xvlc '%s'" % filename
-        # linux
-    elif platform == "darwin":
-        # OS X
-        cmd = "/Applications/VLC.app/Contents/MacOS/VLC '%s'" % (filename)
-    elif platform == "win32":
-        pass
-    '''
-
-    See https://wiki.videolan.org/Mac_OS_X/
-
-    /Applications/VLC.app/Contents/MacOS/VLC ~/Desktop/mymovie.mp4 --intf=rc --sout "#transcode{vcodec=VP80,vb=800,scale=1,acodec=vorbis,ab=128,channels=2}:std{access=file,mux="ffmpeg{mux=webm}",dst=my_first_transcoded_movie.webm}"
-
-'''
-    os.system(cmd)
-    print(cmd)
+def find_subscription_by_index(index):
+    names = get_subscription_names()
+    section = names[index]
+    subscription = Subscription()
+    initialize_subscription(subscription, section)
+    return subscription
 
 
-if __name__ == '__main__':
-    pass
+def initialize_subscription(subscription, name):
+    subscription.set_title(name)
+    subscription.set_feedurl(lookup_string(name, "url")) 
+    subscription.set_maxeps(lookup_int(name, "maxeps") )
+    subscription.set_rssfile(lookup_string(name, "rssfile"))
+    initialize_database(subscription)
+
+def initialize_database(subscription):
+    fullpath = subscription.full_path_to_index_file()
+    subscription.database = Index(fullpath)
+    subscription.database.load()
+
+
+def get_all_subscriptions():
+    names = get_subscription_names()
+    a = []
+    for n in names:
+        s = Subscription()
+        initialize_subscription(s, n)
+        a.append(s)
+    return a

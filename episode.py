@@ -25,6 +25,10 @@ class Episode:
         extension = re.sub(r'(.*)\?(.*)', '\\1', extension )
         return extension
 
+    def numerify_filename(self, count):
+        return self.filename_base() + "-%d" % count + self.filename_extension()
+
+
 
 if __name__ == '__main__':
     pass
