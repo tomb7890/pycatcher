@@ -33,23 +33,21 @@ def scan(filename, userstring):
 
 def list_episodes(subscription, fs):
     episodes = downloaded_episodes(subscription, fs)
-    items = []
-    n = 0
-    for e in episodes:
-        n = n + 1
-        items.append(f">>> {n}. {e.title}")
-    d = "\n".join(items)
-    return d
+    return list_elements(episodes)
 
 
 def list_subscriptions(subscriptions):
-    n = 0
+    return list_elements(subscriptions)
+
+
+def list_elements(elements):
     items = []
-    for s in subscriptions:
+    n = 0
+    for e in elements:
         n = n + 1
-        items.append(f">>> {n}. {s.title}")
-    d = "\n".join(items)
-    return d
+        items.append(f">>> {n}. {e.title}")
+    formatted_text = "\n".join(items)
+    return formatted_text
 
 
 def play_episode(fs, player, args, subs):
