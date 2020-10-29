@@ -141,7 +141,6 @@ def podcastquery(searchterm):
 
 
 def doupdate(args):
-    # cp, sections = configsections()
     names = get_subscription_names()
     try:
         index = int(args.update) - 1
