@@ -1,5 +1,5 @@
 test:	lint clean
-	@python3 -m pytest --capture=no -q test/
+	@python3 -m pytest --capture=no -x -q test/
 
 
 lint:	tags
