@@ -1,0 +1,12 @@
+[run]
+omit =
+     *__init__*
+     *lib/python*
+     *test*
+
+
+
+        
+        
+        
+                        

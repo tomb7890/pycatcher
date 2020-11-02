@@ -2,3 +2,5 @@
 /TAGS
 /prefs.conf
 /report.html
+/.coverage
+/htmlcov/
