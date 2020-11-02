@@ -1,6 +1,8 @@
-from parser import Parser
-from lxml.html import document_fromstring
+
 from result import Result
+import urllib, json
+
+from  urllib.request import urlopen
 
 
 def downloaded_episodes(subscription, fs):
@@ -14,21 +16,15 @@ def downloaded_episodes(subscription, fs):
     return de
 
 
-def scan(filename, userstring):
-    p = Parser()
+def podcastquery(searchterm):
+    url = (
+        "https://itunes.apple.com/search?term=%s&limit=25&entity=podcast"
+        % urllib.parse.quote_plus(searchterm)
+    )
+    response = urlopen(url)
+    data = response.read().decode("utf-8")
+    return json.loads(data)
 
-    ## TODO wrap this in try/catch!
-    episodes = p.items(filename)
-    items = []
-    for e in episodes:
-        if userstring in (e.description):
-            html = e.description
-            doc = document_fromstring(html)
-            i = {}
-            i["guid"] = e.guid
-            i["text"] = doc.text_content()
-            items.append(i)
-    return items
 
 
 def list_episodes(subscription, fs):

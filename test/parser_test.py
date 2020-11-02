@@ -1,5 +1,5 @@
 import parser
-from main import scan 
+from extras import scan 
 
 def test_scan():
     filename = 'test/data/TheAgendawithStevePaikinVideo/012820.rss'

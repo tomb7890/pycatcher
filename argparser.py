@@ -20,9 +20,6 @@ def argparser(x=None):
 
     p.add_argument('-s', '--search', dest='search', action='store',help='Search iTunes for a podcast')
     p.add_argument('-x', '--subscribe', nargs=2, dest='subscribe', action='store',help='Subscribe to a podcast')
-    p.add_argument('-f', '--fetch', nargs=2, dest='fetch', action='store',help='Fetch to a podcast\'s RSS file ')
-    p.add_argument('-z', '--scan', nargs=2, dest='scan', action='store',help='scan an RSS file for text strings ')
-    p.add_argument('-g', '--urlof', nargs=2, dest='urlof', action='store',help='print out URL of episode given its RSS file and guid  ')
     
     p.add_argument('-p', '--play',      nargs=2, dest='play',      action='store',help='Play a podcast')
     p.add_argument('-c', '--config', dest='configfile', action='store',help='Set alternate config file ')
