@@ -102,33 +102,37 @@ def dolistsubscriptions(args):
 
 
 def dodownload(args):
-    try:
-        names = get_subscription_names()
-        if args.download[0] == "all":
-            for name in names:
-                download_subscription_by_name(name, args)
-        else:
-            i = int(args.download[0]) - 1
-            name = names[i]
+    names = get_subscription_names()
+    if args.download[0] == "all":
+        for name in names:
             download_subscription_by_name(name, args)
+    else:
+        i = int(args.download[0]) - 1
+        name = names[i]
+        download_subscription_by_name(name, args)
 
+
+def download_subscription_by_name(name, args):
+    try:
+        subscription = download_rss_file(name, args)
+        db = subscription.get_db()
+        fs = FileSystem()
+        dl = Downloader(fs, subscription, args)
+        dl.dodownload(db)
     except urllib.error.URLError as x:
         print(x)
 
 
-def download_subscription_by_name(name, args):
-    subscription = download_rss_file(name, args)
-    db = subscription.get_db()
-    fs = FileSystem()
-    dl = Downloader(fs, subscription, args)
-    dl.dodownload(db)
-
-
 def download_rss_file(name, args):
-    sub = Subscription()
-    initialize_subscription(sub, name)
-    fetch(sub.feedurl, sub.rssfile, sub.title, args)
-    return sub
+    try:
+        sub = Subscription()
+        initialize_subscription(sub, name)
+        fetch(sub.feedurl, sub.rssfile, sub.title, args)
+        return sub
+    except urllib.error.URLError as x:
+        print(x)
+
+
 
 
 def print_debug(episodes, subscription, db, rssfile):
