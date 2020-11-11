@@ -5,7 +5,7 @@ import sys
 from lxml.html import document_fromstring
 
 
-from main import podcastquery
+from podcasts import PodcastsAPI
 
 
 def argparser(x=None):
@@ -45,10 +45,10 @@ def dofeedurl(args):
     """Do an itunes search for podcast subscriptions, and instead of subscribing, simply print the URL of the feed"""
     searchterm = args.feedurl[0]
     index = int(args.feedurl[1]) - 1
-    results = podcastquery(searchterm)
-    feedurl = results[r"results"][index][r"feedUrl"]
+    podcastsdb = PodcastsAPI()
+    podcastsdb.search(searchterm)
+    feedurl = podcastsdb.feed_url(index)
     print(feedurl)
-
 
 def doscan(args):
     """

@@ -1,9 +1,5 @@
-
-from result import Result
-import urllib, json
-
-from  urllib.request import urlopen
-
+from error import BadUserInputError
+from podcasts import decorate_results, search_for_podcast_and_decorate_results
 
 def downloaded_episodes(subscription, fs):
     episodes = subscription.episodes()
@@ -16,20 +12,59 @@ def downloaded_episodes(subscription, fs):
     return de
 
 
-def podcastquery(searchterm):
-    url = (
-        "https://itunes.apple.com/search?term=%s&limit=25&entity=podcast"
-        % urllib.parse.quote_plus(searchterm)
-    )
-    response = urlopen(url)
-    data = response.read().decode("utf-8")
-    return json.loads(data)
+def search_for_podcast(args):
+    return search_for_podcast_and_decorate_results(args.search)
+
+def subscribe_to_podcast(args, registry, api):
+    results = None 
+    try:
+        searchterm = args.subscribe[0]
+        results = api.search(searchterm)
+        index = int(args.subscribe[1]) - 1
+        feedurl = api.feed_url(index)
+        collectionname = api.collection_name(index)
+        registry.register(feedurl, collectionname)
+    except ValueError:
+        message = (
+            f"{args.subscribe[1]} is not a valid integer. "
+            + "Please try again from this list: \n"
+            + decorate_results(results) 
+        )
+        raise BadUserInputError(message)
+
+    except IndexError:
+        message = (
+            f"{args.subscribe[1]} is not in the correct range. "
+            + "Please try again from this list: \n"
+            + decorate_results(results)
+        )
+        raise BadUserInputError(message)
 
 
 
-def list_episodes(subscription, fs):
-    episodes = downloaded_episodes(subscription, fs)
-    return list_elements(episodes)
+def list_episodes(fs, args, subs):
+    try:
+        s = args.listepisodes
+        si = int(s) - 1
+        subscription = subs[si]
+        episodes = downloaded_episodes(subscription, fs)
+        return list_elements(episodes)
+
+    except ValueError:
+        message = (
+            f"{s} is not a valid integer. "
+            + "Please try again from this list: \n"
+            + str(list_subscriptions(subs))
+        )
+        raise BadUserInputError(message)
+
+    except IndexError:
+        message = (
+            f"{s} is not in the correct range. "
+            + "Please try again from this list: \n"
+            + str(list_subscriptions(subs))
+        )
+        raise BadUserInputError(message)
 
 
 def list_subscriptions(subscriptions):
@@ -50,17 +85,16 @@ def play_episode(fs, player, args, subs):
     episodes = None
     try:
         s = args.play[0]
-        si = int(s) - 1  # This might raise Value error
-        subscription = subs[si]  # this might raise index error
+        si = int(s) - 1
+        subscription = subs[si]
         subscription.database.load()
         episodes = downloaded_episodes(subscription, fs)
 
         e = args.play[1]
-        ei = int(e) - 1  # This might raise Value Error
-        episode = episodes[ei]  # this might raise  Index Eror
+        ei = int(e) - 1
+        episode = episodes[ei]
         fullpath = subscription.database.get(episode)
         player.play(fullpath)
-        return Result.ok()
 
     except IndexError:
         if episodes is None:
@@ -73,10 +107,10 @@ def play_episode(fs, player, args, subs):
             message = (
                 f"{ei} is not in the correct range. "
                 + "Please try again from this list: \n"
-                + list_episodes(subscription, fs)
+                + _list_episodes(subscription, fs)
             )
 
-        return Result.fail(message)
+        raise BadUserInputError(message)
 
     except ValueError:
         if episodes is None:
@@ -89,7 +123,14 @@ def play_episode(fs, player, args, subs):
             message = (
                 f"{e} is not a valid integer. "
                 + "Please try again from this list: \n"
-                + list_episodes(subscription, fs)
+                + _list_episodes(subscription, fs)
             )
 
-        return Result.fail(message)
+        raise BadUserInputError(message)
+
+
+def _list_episodes(subscription, fs):
+    episodes = downloaded_episodes(subscription, fs)
+    return list_elements(episodes)
+
+

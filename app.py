@@ -1,12 +1,14 @@
 import argparser
-
 import logging
 import sys
 import urllib
 
-from main import play_episode, list_episodes, list_subscriptions, podcastquery
+from error import BadUserInputError
+from registry import Registry
+from main import play_episode, list_episodes, list_subscriptions, subscribe_to_podcast, search_for_podcast
+
 from lib import (
-    find_subscription_by_index,
+
     initialize_subscription,
     get_all_subscriptions,
 )
@@ -17,12 +19,12 @@ from filesystem import FileSystem
 from prefs import get_subscription_names
 
 
-from register import register
+
 from report import doreport
 from subscription import Subscription
 
 from mediaplayer import MediaPlayer
-
+from podcasts import PodcastsAPI
 
 def main():
     p = argparser.argparser()
@@ -52,35 +54,34 @@ def main():
 
 
 def dosearch(args):
-    results = podcastquery(args.search)
-    print("\n\n")
-    i = 1
-    for p in results[r"results"]:
-        print("%d. [%s] %s " % (i, p[r"artistName"], p[r"collectionName"]))
-        i = i + 1
+    print(search_for_podcast(args))
 
 
 def dosubscribe(args):
-    searchterm = args.subscribe[0]
-    index = int(args.subscribe[1]) - 1
-    results = podcastquery(searchterm)
-    feedurl = results[r"results"][index][r"feedUrl"]
-    collectionname = results[r"results"][index][r"collectionName"]
-    register(feedurl, collectionname)
+    try:
+        subscribe_to_podcast(args, Registry(), PodcastsAPI())
+    except BadUserInputError as e:
+        print(e.msg())
 
 
 def doplay(args):
-    fs = FileSystem()
-    player = MediaPlayer()
-    subs = get_all_subscriptions()
-    print(play_episode(fs, player, args, subs))
+    try:
+        fs = FileSystem()
+        player = MediaPlayer()
+        subs = get_all_subscriptions()
+        play_episode(fs, player, args, subs)
+    except BadUserInputError as e:
+        print(e.msg())
+        
 
 
 def dolistepisodes(args):
-    i = int(args.listepisodes) - 1
-    sub = find_subscription_by_index(i)
-    fs = FileSystem()
-    print(list_episodes(sub, fs))
+    try:
+        fs = FileSystem()
+        subs = get_all_subscriptions()
+        print(list_episodes(fs, args, subs))
+    except BadUserInputError as e:
+        print(e.msg())
 
 
 def doupdate(args):

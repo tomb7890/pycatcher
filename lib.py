@@ -1,7 +1,7 @@
 from prefs import get_subscription_names, lookup_int, lookup_string
 from subscription import Subscription
 from index import Index
-
+import os 
 
 
 def find_subscription_by_index(index):
@@ -22,7 +22,8 @@ def initialize_subscription(subscription, name):
 def initialize_database(subscription):
     fullpath = subscription.full_path_to_index_file()
     subscription.database = Index(fullpath)
-    subscription.database.load()
+    if os.path.exists(fullpath):
+        subscription.database.load()
 
 
 def get_all_subscriptions():
