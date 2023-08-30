@@ -1,10 +1,8 @@
-from urllib.request import ProxyHandler, build_opener, install_opener, urlretrieve
+import requests
 from tqdm import tqdm
 import os
 
 from downloadqueue import DownloadQueue
-
-
 class Downloader:
     def __init__(self, f, s, a=None):
         self.fs = f
@@ -163,30 +161,21 @@ class DownloadProgressBar(tqdm):
             self.total = tsize
         self.update(b * bsize - self.n)
 
-
 def fetch(url, output_path, program, args):
-    # Some very popular podcasts reject the Python user agent.
-    proxy = ProxyHandler({})
-    opener = build_opener(proxy)
-    opener.addheaders = [
-        (
-            "User-Agent",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30",
-        )
-    ]
-    install_opener(opener)
 
-    if not args.quiet:
-        with DownloadProgressBar(
-            unit="B",
-            unit_scale=True,
-            miniters=1,
-            desc=program + " " + url.split("/")[-1],
-        ) as pb:
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
 
-            urlretrieve(url, output_path, pb.update_to)
-    else:
-        urlretrieve(url, output_path)
+    total_size = int(response.headers.get('content-length', 0))
+    if response.status_code == 200:
+        with open(output_path, 'wb') as file, tqdm(
+            total=total_size, unit='B', unit_scale=True, desc=program + " " + url.split('/')[-1],
+            ncols=80, disable=args.quiet
+        ) as progress_bar:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    file.write(chunk)
+                    progress_bar.update(len(chunk))
 
 
 if __name__ == "__main__":
