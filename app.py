@@ -2,6 +2,7 @@ import argparser
 import logging
 import sys
 import urllib
+import requests
 
 from error import BadUserInputError
 from registry import Registry
@@ -120,20 +121,20 @@ def download_subscription_by_name(name, args):
         fs = FileSystem()
         dl = Downloader(fs, subscription, args)
         dl.dodownload(db)
-    except urllib.error.URLError as x:
-        print(x)
+    except urllib.error.URLError as e:
+        logging.info("app.py catching URLError: \n %s\n\n" % str(e))
 
+    except requests.exceptions.HTTPError as e:
+        logging.info("app.py catching HTTPError: \n %s\n\n" % str(e))
+
+    except requests.exceptions.RequestException as e:
+        logging.info("app.py catching RequestException: \n %s\n\n" % str(e))
 
 def download_rss_file(name, args):
-    try:
-        sub = Subscription()
-        initialize_subscription(sub, name)
-        fetch(sub.feedurl, sub.rssfile, sub.title, args)
-        return sub
-    except urllib.error.URLError as x:
-        print(x)
-
-
+    sub = Subscription()
+    initialize_subscription(sub, name)
+    fetch(sub.feedurl, sub.rssfile, sub.title, args)
+    return sub
 
 
 def print_debug(episodes, subscription, db, rssfile):
