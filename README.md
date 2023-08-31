@@ -3,9 +3,6 @@
 
 Pycatcher is a Python command-line podcast client designed to be used with a preferred media player application. Pycatcher processes a configuration file for subscription information, and downloads media content as ordinary files. Individual media items (episodes) are written to disk with filenames derived from the text of the RSS TITLE elements.
 
-### Requirements
-Pycatcher requires Python 2.7 and the `wget` utility.
-
 ### Configuration
 A `pycatcher.conf` configuration file is used to specify the selection and configuration of the downloading of media content.
 The main section, `[general]`, is used to specify the file system location of media content, using `podcasts-directory`.  An optional `data-directory` can be used to override the location of primary data storage.
