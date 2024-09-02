@@ -2,6 +2,10 @@ test:	lint clean
 	@python3 -m pytest --capture=no -x -q test/
 
 
+web:
+	@python3 app.py --report
+	cp report.html ~/public_html/report.html 
+
 lint:	tags
 	@python3 -m flake8
 
