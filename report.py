@@ -61,7 +61,7 @@ def try_to_get_episode_data(reportdata, subname):
 
 def make_report_from_sorted_data(reportdata):
     sort_reverse_chronologically(reportdata)
-    return make_report_from_episodes(reportdata)
+    return generate_podcast_report(reportdata)
 
 
 def sort_reverse_chronologically(reportdata):
@@ -83,16 +83,25 @@ def episode_href(episode):
     return episode.guid
 
 
-def make_report_from_episodes(reportdata):
+def generate_podcast_report(episode_data):
     template = open_template_from_template_file("templates/main.html")
     with open("templates/header.html", "r") as f:
         header = f.read()
-        buffer = StringIO()
-        for d in reportdata:
-            write_row_to_container(buffer, d)
-        for d in reportdata:
-            write_description_to_container(buffer, d)
-        return template.substitute(bootstrap=header, body=buffer.getvalue())
+        
+        # summaries 
+        summary_table = StringIO()
+        for d in episode_data:
+            _generate_episode_summary_row(summary_table, d)
+
+        # descriptions
+        description_list = StringIO()
+        for d in episode_data:
+            _generate_episode_description_item(description_list, d)
+
+        return template.substitute(header=header,
+                                   episode_summaries=summary_table.getvalue(),
+                                   episode_descriptions=description_list.getvalue()
+                                   )
 
 
 def open_template_from_template_file(filename):
@@ -101,12 +110,12 @@ def open_template_from_template_file(filename):
         return Template(templatetext)
 
 
-def write_description_to_container(f, d):
+def _generate_episode_description_item(f, d):
     template = open_template_from_template_file("templates/panel.html")
     f.write(template.substitute(id=d.href_url, heading=d.textlabel, body=d.description))
 
 
-def write_row_to_container(f, d):
+def _generate_episode_summary_row(f, d):
     template = open_template_from_template_file("templates/row.html")
     f.write(
         template.substitute(
