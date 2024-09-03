@@ -18,7 +18,11 @@ ignore =
     # E501: Line too long - Covered by max-line-length
     E501,
     # W503: Line break before binary operator (PEP8 change)
-    W503 
+    W503,
+    # E203: the Black formatter needs this to play nicely
+    E203
+
+
 
 #-------------------------------------------------------------------------------
 # Code Complexity (McCabe)
