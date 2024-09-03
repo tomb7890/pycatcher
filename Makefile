@@ -10,7 +10,7 @@ lint:	tags
 	@python3 -m flake8
 
 tags:
-	@etags `find . -type f -iname  \\*py`
+	@ctags -e   `find . -type f -iname  \\*py`
 
 clean:
 	@-rm __pycache__/*pyc report.html
