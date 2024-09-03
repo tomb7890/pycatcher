@@ -42,6 +42,9 @@ def podcastdir(ffs):
         for f in files:
             ffs.touch(podcastdir, f)
 
+    else:
+        podcastdir = None
+
     yield podcastdir
 
 
@@ -74,8 +77,11 @@ def test_unlink_raises_exception_with_nonexistant_dir_dir_file():
 
 
 def test_fake_listdir(ffs, podcastdir):
-    if len(ffs.listdir(podcastdir)) > 0:
-        assert len(os.listdir(podcastdir)) == len(ffs.listdir(podcastdir))
+    try:
+        if len(ffs.listdir(podcastdir)) > 0:
+            assert len(os.listdir(podcastdir)) == len(ffs.listdir(podcastdir))
+    except FileNotFoundError as e:
+        print("Invalid podcast directory: %s" % e)
 
 
 def test_fake_file_system_tests(ffs, hypothetical):

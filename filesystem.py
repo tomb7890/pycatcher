@@ -57,6 +57,8 @@ class FakeFileSystem(FileSystem):
         return False
 
     def listdir(self, path):
+        if path is None:
+            raise FileNotFoundError("Cannot list directory: path is None")
         dir = self._ffs[path]
         return dir
 
