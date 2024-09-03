@@ -16,7 +16,7 @@ def argparser(x=None):
         nargs=2,
         dest="feedurl",
         action="store",
-        help="Show a feed URL for a given podcast search"
+        help="Show a feed URL for a given podcast search",
     )
     p.add_argument(
         "-s",
@@ -24,7 +24,7 @@ def argparser(x=None):
         nargs=2,
         dest="scan",
         action="store",
-        help="scan an RSS file for text strings"
+        help="scan an RSS file for text strings",
     )
     p.add_argument(
         "-u",
@@ -32,7 +32,7 @@ def argparser(x=None):
         nargs=2,
         dest="urlof",
         action="store",
-        help="print out URL of episode given its RSS file and guid"
+        help="print out URL of episode given its RSS file and guid",
     )
 
     if x:
@@ -49,6 +49,7 @@ def dofeedurl(args):
     podcastsdb.search(searchterm)
     feedurl = podcastsdb.feed_url(index)
     print(feedurl)
+
 
 def doscan(args):
     """

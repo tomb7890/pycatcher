@@ -87,8 +87,8 @@ def generate_podcast_report(episode_data):
     template = open_template_from_template_file("templates/main.html")
     with open("templates/header.html", "r") as f:
         header = f.read()
-        
-        # summaries 
+
+        # summaries
         summary_table = StringIO()
         for d in episode_data:
             _generate_episode_summary_row(summary_table, d)
@@ -98,10 +98,11 @@ def generate_podcast_report(episode_data):
         for d in episode_data:
             _generate_episode_description_item(description_list, d)
 
-        return template.substitute(header=header,
-                                   episode_summaries=summary_table.getvalue(),
-                                   episode_descriptions=description_list.getvalue()
-                                   )
+        return template.substitute(
+            header=header,
+            episode_summaries=summary_table.getvalue(),
+            episode_descriptions=description_list.getvalue(),
+        )
 
 
 def open_template_from_template_file(filename):

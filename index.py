@@ -6,12 +6,14 @@ and from storage.
 
 """
 
-import json, os
+import json
+import os
 
 FILE_EXTENSION = "idx"
 
+
 class Index:
-    
+
     def __init__(self, filepath):
         self.fp = filepath
         self._table = {}
@@ -20,13 +22,13 @@ class Index:
         return os.path.exists(self.fp)
 
     def load(self):
-        with open(self.fp,'r') as f:
+        with open(self.fp, "r") as f:
             text = f.read()
             self._table = json.loads(text)
 
     def save(self):
         s = json.dumps(self._table)
-        with open(self.fp,'w') as f:
+        with open(self.fp, "w") as f:
             f.write(s)
             f.close
 
@@ -37,8 +39,7 @@ class Index:
         return filename in self._table.values()
 
     def get(self, episode):
-        '''Given an episode, return it's filename.
-        '''
+        """Given an episode, return it's filename."""
         return self._table[episode.guid]
 
     def set(self, episode, fullpath):
@@ -46,15 +47,15 @@ class Index:
 
     def records(self):
         return self._table.keys()
-                
+
     def delete(self, guid):
-        key = guid 
+        key = guid
         if key in self._table:
             del self._table[key]
 
     def dump(self):
         for k in self._table.keys():
-            print("key: [%s], \t\t\t value: [%s]." % ( k, self._table[k]))
+            print("key: [%s], \t\t\t value: [%s]." % (k, self._table[k]))
 
 
 class FakeIndex(Index):
@@ -62,7 +63,7 @@ class FakeIndex(Index):
         Index.__init__(self, None)
 
     def exists(self):
-        return False 
+        return False
 
     def load(self):
         # override
@@ -73,5 +74,5 @@ class FakeIndex(Index):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

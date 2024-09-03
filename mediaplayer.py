@@ -23,11 +23,10 @@ class MediaPlayer:
 
 class FakeMediaPlayer(MediaPlayer):
     def __init__(self):
-        self._played_cmd = None 
-    
+        self._played_cmd = None
+
     def play(self, filename):
         self._played_cmd = self._play(filename)
 
     def played(self):
         return self._played_cmd
-    

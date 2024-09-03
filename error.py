@@ -4,5 +4,3 @@ class BadUserInputError(BaseException):
 
     def msg(self):
         return self._msg
-        
-    

@@ -1,16 +1,18 @@
 from dataclasses import dataclass
-import re, string
+import re
+import string
+
 
 @dataclass
 class Episode:
-    title: str = None 
+    title: str = None
     guid: str = None
-    description: str = None 
+    description: str = None
     image: str = None
 
     def filename_base(self):
         validchars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-        basename = ''
+        basename = ""
         for char in self.title:
             if char in validchars:
                 basename = basename + char
@@ -22,13 +24,12 @@ class Episode:
     def filename_extension(self):
         thedot = self.url.rfind(".")
         extension = self.url[thedot:]
-        extension = re.sub(r'(.*)\?(.*)', '\\1', extension )
+        extension = re.sub(r"(.*)\?(.*)", "\\1", extension)
         return extension
 
     def numerify_filename(self, count):
         return self.filename_base() + "-%d" % count + self.filename_extension()
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

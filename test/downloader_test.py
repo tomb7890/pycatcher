@@ -88,9 +88,6 @@ def download_and_test(sub, ffs, fdl, db, expected_files):
         assert db.has(t)
 
 
-    
-
-
 def test_downloading_after_mischievously_deleting_an_episode_disk_file(
     sub, ffs, fdl, db
 ):

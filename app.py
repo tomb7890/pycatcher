@@ -6,10 +6,15 @@ import requests
 
 from error import BadUserInputError
 from registry import Registry
-from main import play_episode, list_episodes, list_subscriptions, subscribe_to_podcast, search_for_podcast
+from main import (
+    play_episode,
+    list_episodes,
+    list_subscriptions,
+    subscribe_to_podcast,
+    search_for_podcast,
+)
 
 from lib import (
-
     initialize_subscription,
     get_all_subscriptions,
 )
@@ -20,12 +25,12 @@ from filesystem import FileSystem
 from prefs import get_subscription_names
 
 
-
 from report import doreport
 from subscription import Subscription
 
 from mediaplayer import MediaPlayer
 from podcasts import PodcastsAPI
+
 
 def main():
     p = argparser.argparser()
@@ -73,7 +78,6 @@ def doplay(args):
         play_episode(fs, player, args, subs)
     except BadUserInputError as e:
         print(e.msg())
-        
 
 
 def dolistepisodes(args):
@@ -130,6 +134,7 @@ def download_subscription_by_name(name, args):
     except requests.exceptions.RequestException as e:
         logging.info("app.py catching RequestException: \n %s\n\n" % str(e))
 
+
 def download_rss_file(name, args):
     sub = Subscription()
     initialize_subscription(sub, name)
@@ -138,7 +143,7 @@ def download_rss_file(name, args):
 
 
 def print_debug(episodes, subscription, db, rssfile):
-    for e in episodes[0 : subscription.maxeps]:
+    for e in episodes[0: subscription.maxeps]:
         print("guid:" + e.guid)
         print("url:" + e.url)
         print("title:" + e.title)

@@ -3,6 +3,8 @@ from tqdm import tqdm
 import os
 
 from downloadqueue import DownloadQueue
+
+
 class Downloader:
     def __init__(self, f, s, a=None):
         self.fs = f
@@ -103,7 +105,6 @@ class Downloader:
         )
 
     def _generate_file_name(self, episode, db, max):
-
         """
 
         Generate a new file name that is not yet in use
@@ -161,16 +162,21 @@ class DownloadProgressBar(tqdm):
             self.total = tsize
         self.update(b * bsize - self.n)
 
+
 def fetch(url, output_path, program, args):
 
     response = requests.get(url, stream=True)
     response.raise_for_status()
 
-    total_size = int(response.headers.get('content-length', 0))
+    total_size = int(response.headers.get("content-length", 0))
     if response.status_code == 200:
-        with open(output_path, 'wb') as file, tqdm(
-            total=total_size, unit='B', unit_scale=True, desc=program + " " + url.split('/')[-1],
-            ncols=80, disable=args.quiet
+        with open(output_path, "wb") as file, tqdm(
+            total=total_size,
+            unit="B",
+            unit_scale=True,
+            desc=program + " " + url.split("/")[-1],
+            ncols=80,
+            disable=args.quiet,
         ) as progress_bar:
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:

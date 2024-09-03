@@ -1,5 +1,6 @@
 import os.path
 
+
 class FileSystem:
 
     def __init__(self):
@@ -15,9 +16,10 @@ class FileSystem:
         os.mkdir(path)
 
     def path_join(self, a, b):
-        return os.path.join(a,b)
+        return os.path.join(a, b)
 
-class FakeFileSystem (FileSystem):
+
+class FakeFileSystem(FileSystem):
     def __init__(self):
         FileSystem.__init__(self)
         self._ffs = {}
@@ -39,7 +41,7 @@ class FakeFileSystem (FileSystem):
         else:
             files = []
             files.append(filename)
-            self._ffs[directory] = files 
+            self._ffs[directory] = files
 
     def path_exists(self, path):
         if path in self._ffs.keys():
@@ -59,7 +61,7 @@ class FakeFileSystem (FileSystem):
         return dir
 
     def unlink(self, fullpath):
-    
+
         path = os.path.dirname(fullpath)
         filename = os.path.basename(fullpath)
 
@@ -67,16 +69,14 @@ class FakeFileSystem (FileSystem):
             filelist = self._ffs[path]
             if filename in filelist:
                 filelist.remove(filename)
-                return 
+                return
 
-        raise FileNotFoundError 
+        raise FileNotFoundError
 
     def _dump(self):
         for k in self._ffs.keys():
-            print("key: [%s], \t\t\t value: [%s]." % ( k, self._ffs[k]))
-
-    
+            print("key: [%s], \t\t\t value: [%s]." % (k, self._ffs[k]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

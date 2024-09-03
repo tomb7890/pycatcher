@@ -1,7 +1,7 @@
 from prefs import get_subscription_names, lookup_int, lookup_string
 from subscription import Subscription
 from index import Index
-import os 
+import os
 
 
 def find_subscription_by_index(index):
@@ -14,10 +14,11 @@ def find_subscription_by_index(index):
 
 def initialize_subscription(subscription, name):
     subscription.set_title(name)
-    subscription.set_feedurl(lookup_string(name, "url")) 
-    subscription.set_maxeps(lookup_int(name, "maxeps") )
+    subscription.set_feedurl(lookup_string(name, "url"))
+    subscription.set_maxeps(lookup_int(name, "maxeps"))
     subscription.set_rssfile(lookup_string(name, "rssfile"))
     initialize_database(subscription)
+
 
 def initialize_database(subscription):
     fullpath = subscription.full_path_to_index_file()

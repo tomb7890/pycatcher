@@ -8,18 +8,10 @@ class Result:
     def success(self):
         return self._success
 
-
     @staticmethod
     def ok(err_message=None, value=None):
         return Result(True, err_message, value)
 
-
     @staticmethod
     def fail(err_message=None, value=None):
         return Result(False, err_message, value)
-
-        
-
-
-
-

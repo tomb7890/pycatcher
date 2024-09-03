@@ -1,7 +1,8 @@
-from prefs  import   DEFAULTCONFIGFILE
+from prefs import DEFAULTCONFIGFILE
 
 from subscription import rss_file_name_from_text, DEFAULT_MAXEPS
 from configparser import ConfigParser, DuplicateSectionError
+
 
 class Registry:
     def __init__(self):
@@ -19,10 +20,10 @@ class Registry:
         section = title
 
         cp.add_section(section)
-        cp.set(section, 'url', feedurl)
-        cp.set(section, 'rssfile', rss_file_name_from_text(title))
-        cp.set(section, 'maxeps', str(DEFAULT_MAXEPS))
-        cp.write(open(DEFAULTCONFIGFILE, 'w'))
+        cp.set(section, "url", feedurl)
+        cp.set(section, "rssfile", rss_file_name_from_text(title))
+        cp.set(section, "maxeps", str(DEFAULT_MAXEPS))
+        cp.write(open(DEFAULTCONFIGFILE, "w"))
 
 
 class FakeRegistry(Registry):
@@ -31,8 +32,7 @@ class FakeRegistry(Registry):
 
     def register(self, foo, bar):
         pass
-        
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

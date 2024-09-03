@@ -1,6 +1,7 @@
 from error import BadUserInputError
 from podcasts import decorate_results, search_for_podcast_and_decorate_results
 
+
 def downloaded_episodes(subscription, fs):
     episodes = subscription.episodes()
     de = []
@@ -15,8 +16,9 @@ def downloaded_episodes(subscription, fs):
 def search_for_podcast(args):
     return search_for_podcast_and_decorate_results(args.search)
 
+
 def subscribe_to_podcast(args, registry, api):
-    results = None 
+    results = None
     try:
         searchterm = args.subscribe[0]
         results = api.search(searchterm)
@@ -28,7 +30,7 @@ def subscribe_to_podcast(args, registry, api):
         message = (
             f"{args.subscribe[1]} is not a valid integer. "
             + "Please try again from this list: \n"
-            + decorate_results(results) 
+            + decorate_results(results)
         )
         raise BadUserInputError(message)
 
@@ -39,7 +41,6 @@ def subscribe_to_podcast(args, registry, api):
             + decorate_results(results)
         )
         raise BadUserInputError(message)
-
 
 
 def list_episodes(fs, args, subs):
@@ -132,5 +133,3 @@ def play_episode(fs, player, args, subs):
 def _list_episodes(subscription, fs):
     episodes = downloaded_episodes(subscription, fs)
     return list_elements(episodes)
-
-

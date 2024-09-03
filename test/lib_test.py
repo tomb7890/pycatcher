@@ -1,6 +1,6 @@
 import pytest
 
-from main import  list_episodes, play_episode, subscribe_to_podcast
+from main import list_episodes, play_episode, subscribe_to_podcast
 from subscription import Subscription
 from filesystem import FakeFileSystem
 from mediaplayer import FakeMediaPlayer
@@ -10,6 +10,7 @@ import argparser
 from error import BadUserInputError
 from registry import FakeRegistry
 from podcasts import FakePodcastsAPI
+
 
 @pytest.fixture()
 def allsubs():
@@ -25,9 +26,8 @@ def allsubs():
             None,
             "The Agenda with Steve Paikin (Video)",
             maximum_episodes_to_keep,
-            "test/data/TheAgendawithStevePaikinVideo/012820.rss"
+            "test/data/TheAgendawithStevePaikinVideo/012820.rss",
         ),
-        
         Subscription(
             None,
             "Beat Your Genes",
@@ -56,9 +56,8 @@ def allsubs():
 
     for s in allsubs:
         s.database = FakeIndex()
-        
-    return allsubs
 
+    return allsubs
 
 
 @pytest.fixture()
@@ -81,28 +80,28 @@ def ffs():
 
 def test_search_for_podcast_with_term():
     podcastsdb = FakePodcastsAPI()
-    podcastsdb.search('terminator')
-    assert 'SKYNET\'S ARMY Terminator Fans' == podcastsdb.collection_name(7) 
-    
+    podcastsdb.search("terminator")
+    assert "SKYNET'S ARMY Terminator Fans" == podcastsdb.collection_name(7)
+
 
 def test_subscribe_command_with_valid_index():
     args = argparser.argparser("--subscribe terminator 3")
-    subscribe_to_podcast(args, FakeRegistry(), FakePodcastsAPI() )
-    
+    subscribe_to_podcast(args, FakeRegistry(), FakePodcastsAPI())
+
+
 def test_subscribe_command_with_out_of_bounds_index():
     with pytest.raises(BadUserInputError):
         args = argparser.argparser("--subscribe terminator 33333")
-        subscribe_to_podcast(args, FakeRegistry(), FakePodcastsAPI() )
+        subscribe_to_podcast(args, FakeRegistry(), FakePodcastsAPI())
+
 
 def test_subscribe_command_with_wrong_type_for_index_():
     try:
         args = argparser.argparser("--subscribe terminator g")
-        subscribe_to_podcast(args, FakeRegistry(), FakePodcastsAPI() )
-    except BadUserInputError as  e:
-        assert 'Please try again from this list' in e.msg()
-        
+        subscribe_to_podcast(args, FakeRegistry(), FakePodcastsAPI())
+    except BadUserInputError as e:
+        assert "Please try again from this list" in e.msg()
 
-    
 
 def test_list_episodes(allsubs, ffs, fdl):
     expected = """>>> 1. Mistakes, Bad Decisions, and Fallout
@@ -118,11 +117,13 @@ def test_list_episodes(allsubs, ffs, fdl):
     output = list_episodes(ffs, args, allsubs)
     assert output == expected
 
+
 def test_list_episode_out_of_bounds_index(allsubs, ffs, fdl):
     with pytest.raises(BadUserInputError):
         select_subscription_download_and_verify(allsubs, fdl, ffs)
         args = argparser.argparser("--list-episodes 999999")
         list_episodes(ffs, args, allsubs)
+
 
 def test_list_episodes_with_non_integer_argument(allsubs, ffs, fdl):
     with pytest.raises(BadUserInputError):
@@ -147,10 +148,13 @@ def download_and_test(sub, ffs, fdl):
 def test_play_episode_valid_choice(allsubs, ffs, fdl):
     player = FakeMediaPlayer()
     select_subscription_download_and_verify(allsubs, fdl, ffs)
-    
+
     args = argparser.argparser("--play 2 5")
     play_episode(ffs, player, args, allsubs)
-    assert player.played() == "xvlc '/home/tomb/podcasts/TheAgendawithStevePaikinVideo/New Supports for Northern Farmers.mp4'"
+    assert (
+        player.played()
+        == "xvlc '/home/tomb/podcasts/TheAgendawithStevePaikinVideo/New Supports for Northern Farmers.mp4'"
+    )
 
 
 def test_play_episode_with_out_of_bounds_episode(allsubs, ffs, fdl):
@@ -160,19 +164,22 @@ def test_play_episode_with_out_of_bounds_episode(allsubs, ffs, fdl):
         args = argparser.argparser("--play 2 999999")
         play_episode(ffs, player, args, allsubs)
 
+
 def test_play_episode_with_out_of_bounds_subscription(allsubs, ffs, fdl):
     with pytest.raises(BadUserInputError):
         player = FakeMediaPlayer()
         select_subscription_download_and_verify(allsubs, fdl, ffs)
         args = argparser.argparser(f"--play {len(allsubs) + 1} 1 ")
         play_episode(ffs, player, args, allsubs)
-    
+
+
 def test_play_episode_with_bad_type_for_subscription(allsubs, ffs, fdl):
     with pytest.raises(BadUserInputError):
         player = FakeMediaPlayer()
         select_subscription_download_and_verify(allsubs, fdl, ffs)
         args = argparser.argparser("--play # 1")
         play_episode(ffs, player, args, allsubs)
+
 
 def test_play_episode_with_bad_type_for_episode(allsubs, ffs, fdl):
     with pytest.raises(BadUserInputError):

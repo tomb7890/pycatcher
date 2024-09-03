@@ -1,4 +1,4 @@
-import parser 
+import parser
 
 
 def test_episodes_known_to_not_have_data():
@@ -12,18 +12,18 @@ def test_episodes_known_to_not_have_data():
         assert channel_image == reference_image
         assert e.image is None
 
+
 def test_episodes_known_to_have_data():
     p = parser.Parser()
-    filename = 'test/data/TheAgendawithStevePaikinVideo/012820.rss'
+    filename = "test/data/TheAgendawithStevePaikinVideo/012820.rss"
     episodes = p.items(filename)
 
     i = 235
-    title = 'Marc Bennetts: Developing Dissidence'
-    thumbnail = 'http://podcasts.tvo.org/theagenda/images/2179798_320x240_1.jpg'
+    title = "Marc Bennetts: Developing Dissidence"
+    thumbnail = "http://podcasts.tvo.org/theagenda/images/2179798_320x240_1.jpg"
 
     e = episodes[i]
 
     assert title == episodes[i].title
-    assert hasattr(e, 'image')
+    assert hasattr(e, "image")
     assert e.image == thumbnail
-    

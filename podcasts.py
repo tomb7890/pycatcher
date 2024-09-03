@@ -1,4 +1,5 @@
-import urllib, json
+import urllib
+import json
 from urllib.request import urlopen
 
 

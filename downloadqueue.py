@@ -10,5 +10,4 @@ class DownloadQueue:
         self._queue.append(item)
 
     def in_use(self, filename):
-        return any(y == filename  for x,y in self._queue)
-
+        return any(y == filename for x, y in self._queue)

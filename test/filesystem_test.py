@@ -1,5 +1,5 @@
 import os
-import pytest 
+import pytest
 import random
 from filesystem import FakeFileSystem
 import logging
@@ -17,13 +17,12 @@ def hypothetical():
         dir = "/".join(path.split("/")[0:-1])
 
     h = Hypothetical()
-    yield h 
-
+    yield h
 
 
 @pytest.fixture()
 def ffs():
-    ffs =  FakeFileSystem()
+    ffs = FakeFileSystem()
     yield ffs
 
 
@@ -32,7 +31,11 @@ def podcastdir(ffs):
     podcastroot = os.path.expanduser("~/podcasts")
     if os.path.exists(podcastroot):
         files = os.listdir(podcastroot)
-        dirs = [os.path.join(podcastroot, f)   for f in files if           os.path.isdir(os.path.join(podcastroot, f))]
+        dirs = [
+            os.path.join(podcastroot, f)
+            for f in files
+            if os.path.isdir(os.path.join(podcastroot, f))
+        ]
         rdir = random.choice(dirs)
         podcastdir = rdir
         files = os.listdir(podcastdir)
@@ -42,12 +45,12 @@ def podcastdir(ffs):
     yield podcastdir
 
 
-
 def test_exception_thrown_on_repeated_call_to_mkdir():
     with pytest.raises(FileExistsError):
         ffs = FakeFileSystem()
         ffs.mkdir("foo")
         ffs.mkdir("foo")
+
 
 def test_unlink_raises_exception_with_nonexistant_file():
     with pytest.raises(FileNotFoundError):
@@ -70,11 +73,11 @@ def test_unlink_raises_exception_with_nonexistant_dir_dir_file():
         ffs.unlink("foo/bar/baz")
 
 
-
 def test_fake_listdir(ffs, podcastdir):
     if len(ffs.listdir(podcastdir)) > 0:
         assert len(os.listdir(podcastdir)) == len(ffs.listdir(podcastdir))
-        
+
+
 def test_fake_file_system_tests(ffs, hypothetical):
 
     assert not ffs.path_exists(hypothetical.dir)
@@ -82,21 +85,19 @@ def test_fake_file_system_tests(ffs, hypothetical):
 
     ffs.touch(hypothetical.dir, hypothetical.filename)
 
-    assert(1 == len(ffs.listdir(hypothetical.dir)))
-    assert (ffs.path_exists(hypothetical.path))
+    assert 1 == len(ffs.listdir(hypothetical.dir))
+    assert ffs.path_exists(hypothetical.path)
 
     ffs.unlink(hypothetical.path)
 
     assert not (ffs.path_exists(hypothetical.path))
-    assert (0 == len(ffs.listdir(hypothetical.dir)))
+    assert 0 == len(ffs.listdir(hypothetical.dir))
 
     known_unknown = "~/foo-bar/known_unknown.mp3"
     assert not (ffs.path_exists(known_unknown))
 
 
 def test_pathexists_for_nested_empty_directory(ffs):
-    dir = '/foo/bar'
+    dir = "/foo/bar"
     ffs.mkdir(dir)
-    assert (ffs.path_exists(dir))
-
-
+    assert ffs.path_exists(dir)
