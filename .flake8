@@ -1,7 +1,46 @@
 [flake8]
-ignore = E503, W503, E123,E126,E127,E128,E2,E3,E401,E50,W2,W3, CCE001
-# max-complexity = 10 
-#ignore = E302, E501
-max-line-length = 88
-extend-ignore = E203,W503
+# Error Codes:
+#   E***/W*** =  flake8 & pycodestyle errors/warnings (style)
+#   F***     =  Pyflakes errors (logic)
+#   C9**     =  mccabe (code complexity)
+#   ...
+#   (See https://flake8.pycqa.org/en/latest/user/error-codes.html)
 
+#-------------------------------------------------------------------------------
+# Style Guide Enforcement
+#-------------------------------------------------------------------------------
+
+# Maximum line length (PEP 8 recommends 79, adjust to your preference)
+max-line-length = 100
+
+# Ignore specific errors (use with caution)
+ignore =
+    # E501: Line too long - Covered by max-line-length
+    E501,
+    # W503: Line break before binary operator (PEP8 change)
+    W503 
+
+#-------------------------------------------------------------------------------
+# Code Complexity (McCabe)
+#-------------------------------------------------------------------------------
+
+# Maximum McCabe complexity score (default is 10, adjust as needed)
+max-complexity = 12
+
+#-------------------------------------------------------------------------------
+# Other Settings
+#-------------------------------------------------------------------------------
+
+# Exclude directories/files (e.g., migrations, __init__.py)
+exclude = 
+    .git,
+    __pycache__,
+    migrations,
+    *.egg-info,
+    venv,
+    .venv
+
+# Enable docstring conventions (requires flake8-docstrings plugin)
+# docstring-convention = numpy
+
+# More options: https://flake8.pycqa.org/en/latest/user/configuration.html
