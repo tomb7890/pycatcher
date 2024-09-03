@@ -153,9 +153,9 @@ def test_play_episode_valid_choice(allsubs, ffs, fdl):
     args = argparser.argparser("--play 2 5")
     play_episode(ffs, player, args, allsubs)
     home_dir = os.path.expanduser("~")
-    assert (
-        player.played()
-        == "xvlc '%s'" % os.path.join(home_dir, 'podcasts/TheAgendawithStevePaikinVideo/New Supports for Northern Farmers.mp4')
+    assert player.played() == "xvlc '%s'" % os.path.join(
+        home_dir,
+        "podcasts/TheAgendawithStevePaikinVideo/New Supports for Northern Farmers.mp4",
     )
 
 

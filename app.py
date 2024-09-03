@@ -143,7 +143,7 @@ def download_rss_file(name, args):
 
 
 def print_debug(episodes, subscription, db, rssfile):
-    for e in episodes[0: subscription.maxeps]:
+    for e in episodes[0 : subscription.maxeps]:
         print("guid:" + e.guid)
         print("url:" + e.url)
         print("title:" + e.title)
