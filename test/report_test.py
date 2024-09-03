@@ -11,7 +11,7 @@ import parser
 import pytest
 
 
-XPATH_SELECTION_OF_DATE_COLUMN = './/div[@class="col-sm-3 date-column"]'
+XPATH_SELECTION_OF_DATE_COLUMN = './/div[@class="content date-column"]'
 EXPECTED_DATE_OF_REPORT = "Thu, 01 Oct 2020 03:30:00 GMT"
 
 
@@ -74,7 +74,7 @@ def test_making_report():
 
         tree = html.fromstring(text)
         date_of_third_row = tree.xpath(XPATH_SELECTION_OF_DATE_COLUMN)[3]
-        assert date_of_third_row.text == EXPECTED_DATE_OF_REPORT
+        assert date_of_third_row.text.strip() == EXPECTED_DATE_OF_REPORT
 
 
 def test_making_report_with_no_episode_data():
