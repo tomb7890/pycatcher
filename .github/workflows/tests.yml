@@ -29,12 +29,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install dev dependencies
-        run: pip install -r requirements-dev.txt
-
-      - name: Debug environment
         run: |
-          pip freeze
-          ls -la
+          source .venv/bin/activate  
+          pip install -r requirements-dev.txt
 
       - name: Run tests
-        run: make test
+        run: |
+          source .venv/bin/activate  
+          make test 
