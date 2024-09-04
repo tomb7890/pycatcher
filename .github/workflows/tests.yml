@@ -24,6 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           sudo apt-get update 
           sudo apt-get install -y libxml2-dev libxslt-dev python3-dev exuberant-ctags
+
+          python -m venv .venv
+          source .venv/bin/activate
+          
           pip install -r requirements.txt
           pip install flake8 pytest
 
