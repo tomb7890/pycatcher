@@ -8,10 +8,10 @@ logging.basicConfig(level=logging.INFO)
 
 
 class Downloader:
-    def __init__(self, f, s, a=None):
-        self.fs = f
-        self.sub = s
-        self.args = a
+    def __init__(self, filesystem, subscription, args=None):
+        self.fs = filesystem
+        self.sub = subscription
+        self.args = args
         self.queue = DownloadQueue()
 
     def dodownload(self, db):
