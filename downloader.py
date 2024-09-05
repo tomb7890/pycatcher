@@ -1,8 +1,10 @@
 import requests
 from tqdm import tqdm
 import os
+import logging
 
 from downloadqueue import DownloadQueue
+logging.basicConfig(level=logging.INFO)
 
 
 class Downloader:
@@ -75,7 +77,7 @@ class Downloader:
             fullpath = self._full_path(destination_filename)
 
             if self.fs.path_exists(fullpath):
-                print("target file exists! " + fullpath)
+                logging.info("Target file already exists: %s", fullpath)
             else:
                 try:
                     self.download_impl(episode, destination_filename)
