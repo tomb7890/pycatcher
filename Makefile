@@ -13,5 +13,6 @@ tags:
 	@ctags -e   `find . -type f -iname  \\*py`
 
 clean:
-	@-rm __pycache__/*pyc report.html
+	@-rm __pycache__/*pyc 
 	@-rm test/__pycache__/*pyc
+	rm -f report.html > /dev/null
