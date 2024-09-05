@@ -82,7 +82,7 @@ class Downloader:
                 try:
                     self.download_impl(episode, destination_filename)
                 except Exception as e:
-                    print(e)
+                    logging.exception("Error downloading %s: %s", destination_filename, e)
             if self.fs.path_exists(fullpath):
                 db.set(episode, fullpath)
 
