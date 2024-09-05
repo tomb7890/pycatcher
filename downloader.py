@@ -25,29 +25,28 @@ class Downloader:
                 self.fs.mkdir(d)
 
     def _parse_download_and_purge_episodes(self, db):
-
         self._initialize_database(db)
-        self._parse_and_inventory_episode_lists(db)
-        self._download_the_new_episodes(db)
-        self._purge_the_old_episodes(db)
+        self._organize_episodes_to_fetch_and_destroy(db)
+        self._fetch_the_new_episodes(db)
+        self._destroy_the_old_episodes(db)
         self._write_updates_to_database(db)
 
     def _initialize_database(self, db):
         if db.exists():
             db.load()
 
-    def _parse_and_inventory_episode_lists(self, db):
+    def _organize_episodes_to_fetch_and_destroy(self, db):
         n = self.sub.maxeps
         self.episodes = self.sub.episodes()
         self.new_episodes_to_download = self.episodes[0:n]
         self.old_episodes_to_remove = self.episodes[n:]
 
-    def _download_the_new_episodes(self, db):
+    def _fetch_the_new_episodes(self, db):
         for e in self.new_episodes_to_download:
             self._queue_episode(e, db)
         self._download_episode_queue(db)
 
-    def _purge_the_old_episodes(self, db):
+    def _destroy_the_old_episodes(self, db):
         self._remove_old_episodes(db)
         self.queue.clear()
 
