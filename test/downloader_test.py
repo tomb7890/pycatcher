@@ -1,3 +1,4 @@
+from episodesynchronizer import EpisodeSynchronizer
 import pytest
 from subscription import Subscription
 from filesystem import FakeFileSystem
@@ -63,6 +64,56 @@ Success Through Failure.mp4""".splitlines()[
     ]
 
 
+def test_downloading_with_rollover(sub, fdl, ffs, db):
+    """Tests episode download and rollover with a changing RSS feed."""
+    # Scenario 1: Initial Download
+    sub.maxeps = 3
+    sub.rssfile = "test/data/TheAgendawithStevePaikinVideo/012820.rss"
+    es = EpisodeSynchronizer(ffs, sub, fdl)
+    es.dodownload(db)
+
+    expected_titles = [
+        "Mistakes Bad Decisions and Fallout.mp4",
+        "Success Through Failure.mp4",
+        "Meeting Canadas Greenhouse Gas Targets.mp4",
+        "Infrastructure Challenges in Ontario.mp4",
+        "New Supports for Northern Farmers.mp4",
+        "Conservative Leadership Race Begins.mp4",
+    ]
+    assert_downloaded_episodes(ffs, sub, expected_titles[0:3], db)
+
+    # Scenario 2: New Episode, Rollover
+    sub.rssfile = "test/data/TheAgendawithStevePaikinVideo/013020.rss"
+    es = EpisodeSynchronizer(ffs, sub, fdl)  # Recreate for new RSS
+    es.dodownload(db)
+
+    expected_titles = [
+        "Old Age The Secret to Happiness.mp4",
+        "Daniel Levitin How to Age Well.mp4",
+        "Mistakes Bad Decisions and Fallout.mp4",
+        "Success Through Failure.mp4",
+        "Meeting Canadas Greenhouse Gas Targets.mp4",
+        "Infrastructure Challenges in Ontario.mp4",
+    ]
+    assert_downloaded_episodes(ffs, sub, expected_titles[0:3], db)
+    assert_episode_not_downloaded(ffs, sub, "Conservative Leadership Race Begins.mp4")
+
+
+# Helper functions for assertions:
+def assert_downloaded_episodes(ffs, sub, expected_files, db):
+    n = len(ffs.listdir(sub.podcasts_subdir()))
+    assert sub.maxeps == n
+
+    for f in expected_files:
+        episode_title = ffs.path_join(sub.podcasts_subdir(), f)
+        assert ffs.path_exists(episode_title)
+        assert db.has(episode_title)
+
+
+def assert_episode_not_downloaded(ffs, sub, episode_id):
+    assert not ffs.path_exists(f"{sub.podcasts_subdir()}/{episode_id}")
+
+
 def test_downloading(sub, fdl, ffs, db):
     for n in range(0, 7):
         ffs.reset()
@@ -75,7 +126,9 @@ def test_downloading(sub, fdl, ffs, db):
 
 
 def download_and_test(sub, ffs, fdl, db, expected_files):
-    fdl.dodownload(db)
+    es = EpisodeSynchronizer(ffs, sub, fdl)
+    es.dodownload(db)
+
     n = len(ffs.listdir(sub.podcasts_subdir()))
     assert sub.maxeps == n
 
