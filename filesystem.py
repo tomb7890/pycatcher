@@ -18,6 +18,9 @@ class FileSystem:
     def path_join(self, a, b):
         return os.path.join(a, b)
 
+    def _full_path(self, podcasts_subdir, b):
+        return self.path_join(podcasts_subdir, b)
+
 
 class FakeFileSystem(FileSystem):
     def __init__(self):

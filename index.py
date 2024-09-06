@@ -12,6 +12,10 @@ import os
 FILE_EXTENSION = "idx"
 
 
+def episode_is_registered(db, episode):
+    return db.find(episode.guid)
+
+
 class Index:
 
     def __init__(self, filepath):

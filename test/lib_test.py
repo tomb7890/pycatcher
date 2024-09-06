@@ -1,3 +1,4 @@
+from episodesynchronizer import EpisodeSynchronizer
 import pytest
 
 from main import list_episodes, play_episode, subscribe_to_podcast
@@ -136,7 +137,8 @@ def test_list_episodes_with_non_integer_argument(allsubs, ffs, fdl):
 def select_subscription_download_and_verify(allsubs, fdl, ffs):
     subscription = allsubs[1]
     subscription.maxeps = 7
-    fdl.dodownload(subscription.database)
+    es = EpisodeSynchronizer(ffs, subscription, fdl)
+    es.dodownload(subscription.database)
     download_and_test(subscription, ffs, fdl)
     return subscription
 

@@ -19,6 +19,7 @@ from lib import (
     get_all_subscriptions,
 )
 
+from episodesynchronizer import EpisodeSynchronizer
 from downloader import Downloader
 from downloader import fetch
 from filesystem import FileSystem
@@ -122,9 +123,10 @@ def download_subscription_by_name(name, args):
     try:
         subscription = download_rss_file(name, args)
         db = subscription.get_db()
-        fs = FileSystem()
-        dl = Downloader(fs, subscription, args)
-        dl.dodownload(db)
+        filesystem = FileSystem()
+        downloader = Downloader(filesystem, subscription, args)
+        es = EpisodeSynchronizer(filesystem, subscription, downloader)
+        es.dodownload(db)
     except urllib.error.URLError as e:
         logging.info("app.py catching URLError: \n %s\n\n" % str(e))
 
