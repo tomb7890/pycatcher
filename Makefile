@@ -7,7 +7,7 @@ web:
 	cp report.html ~/public_html/report.html 
 
 lint:	tags
-	~/.local/bin/black *py
+	black *py
 	@python3 -m flake8
 
 tags:
