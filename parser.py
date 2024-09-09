@@ -1,8 +1,7 @@
 import xml.etree.ElementTree as ET
 import logging
 from episode import Episode
-import re
-import time
+from dateutil import parser as dateutil_parser
 
 
 class Parser:
@@ -22,33 +21,38 @@ class Parser:
         itunes_ns = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd"}
 
         episodes = []
-        root = self._fetch_root(filename)
-        elements = root.findall("./channel/item")
 
-        for el in elements:
-            episode = Episode()
-            self._pubdate_to_timestamp(el.find("pubDate").text, episode)
-            episode.title = el.find("title").text
-            episode.guid = el.find("guid").text
-            episode.description = el.find("description").text
-            episode.image = self._set_episode_image(episode, el, itunes_ns, yahoo_ns)
+        try:
+            root = self._fetch_root(filename)
+            elements = root.findall("./channel/item")
 
-            e = el.find("enclosure")
-            if e is not None:
-                episode.url = e.get("url")
-                episode.enclosure_length = e.get("length")
+            for el in elements:
+                episode = Episode()
+                self._pubdate_to_timestamp(el.find("pubDate").text, episode)
+                episode.title = el.find("title").text
+                episode.guid = el.find("guid").text
+                episode.description = el.find("description").text
+                episode.image = self._set_episode_image(el, itunes_ns, yahoo_ns)
 
-            if (
-                episode.pubDate
-                and hasattr(episode, "url")
-                and episode.title
-                and episode.guid
-            ):
-                episodes.append(episode)
+                e = el.find("enclosure")
+                if e is not None:
+                    episode.url = e.get("url")
+                    episode.enclosure_length = e.get("length")
+
+                if (
+                    episode.pubDate
+                    and hasattr(episode, "url")
+                    and episode.title
+                    and episode.guid
+                ):
+                    episodes.append(episode)
+
+        except ET.ParseError as pe:
+            logging.info(f"Can't parse file {filename} : {pe}")
 
         return episodes
 
-    def _set_episode_image(self, episode, el, itunes_ns, yahoo_ns):
+    def _set_episode_image(self, el, itunes_ns, yahoo_ns):
         x = None
         elements = el.findall("itunes:image", itunes_ns)
         if len(elements) > 0:
@@ -66,10 +70,14 @@ class Parser:
 
     def _pubdate_to_timestamp(self, timestamp, episode):
         try:
-            fmtstring = r"%a, %d %b %Y %H:%M:%S"
-            trimmed = self._trim_tzinfo(timestamp)
-            pd = time.strptime(trimmed, fmtstring)
-            episode.mktime = time.mktime(pd)  # seconds since the epoch
+            # For the time being, I will ignore time zone -- it is
+            # more trouble than it would be worth.  The utility of
+            # these timestamps in this application is limited to the
+            # ordering of the web report into a rough chrono order,
+            # and podcasts aren't published so frequently as to make
+            # this kind of precision necessary.
+            
+            episode.mktime = dateutil_parser.parse(timestamp, ignoretz=True)
             episode.pubDate = timestamp
         except ValueError as e:
 
@@ -78,25 +86,6 @@ class Parser:
                 %s using data %s from %s"
                 % (e, timestamp, episode.title)
             )
-
-    def _trim_tzinfo(self, t):
-
-        # [Sat, 29 Apr 2006 20:38:00]
-        # [Sat, 27 Feb 2010 06:00:00 EST]
-        # [Fri, 13 June 2008 22:00:00]
-        timezoneinfo = [
-            r"\s[+-]\d\d\d\d$",
-            r"\sGMT$",
-            r"\sEDT$",
-            r"\sCST$",
-            r"\sPST$",
-            r"\sEST$",
-            r"\s+PDT$",
-        ]
-
-        for j in timezoneinfo:
-            t = re.sub(j, "", t)
-        return t
 
 
 def dumpx(filepath):
