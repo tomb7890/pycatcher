@@ -64,8 +64,8 @@ class Subscription:
     def episodes(self, filename=None):
         if filename is None:
             filename = self.rssfile
-
-        return self.parser.items(filename)
+        self.parser.parse(filename)
+        return self.parser.episodes()
 
     def title(self):
         return self.title

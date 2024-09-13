@@ -60,8 +60,9 @@ def test_making_report():
 
         for s in subs:
             p = parser.Parser()
-            channel_image = p.channel_image(s.rssfile)
-            episodes = p.items(s.rssfile)
+            p.parse(s.rssfile)
+            channel_image = p.channel_image()
+            episodes = p.episodes()
             for e in episodes:
                 d = ReportDatum(e, s, channel_image)
                 data.append(d)

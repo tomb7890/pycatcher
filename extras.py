@@ -82,7 +82,8 @@ def dourlof(args):
 def scan(filename, userstring):
     "Search in an RSS file for an episode that has text in its string and print out its ID (guid) and text"
     p = Parser()
-    episodes = p.items(filename)
+    p.parse(filename)
+    episodes = p.episodes()
     items = []
     for e in episodes:
         if userstring in (e.description):

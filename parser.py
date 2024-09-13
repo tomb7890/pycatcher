@@ -10,34 +10,39 @@ class Parser:
         # this may be obsolete.
         self.strict = True
 
-    def channel_image(self, filename):
-        tree = ET.parse(filename)
-        x = tree.findall(".//image//url")
+    def parse(self, filename):
+        self.filename = filename
+        try:
+            self.tree = ET.parse(self.filename)
+        except ET.ParseError as pe:
+            logging.info(f"Can't parse file {self.filename} : {pe}")
+
+    def channel_image(self): 
+        x = self.tree.findall(".//image//url")
         if len(x) > 0:
             return x[0].text
 
-    def items(self, filename):
+    def episodes(self):
         yahoo_ns = {"media": "http://search.yahoo.com/mrss/"}
         itunes_ns = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd"}
 
         episodes = []
 
-        try:
-            root = self._fetch_root(filename)
-            elements = root.findall("./channel/item")
+        root = self._fetch_root()
+        elements = root.findall("./channel/item")
 
-            for el in elements:
-                episode = Episode()
-                self._pubdate_to_timestamp(el.find("pubDate").text, episode)
-                episode.title = el.find("title").text
-                episode.guid = el.find("guid").text
-                episode.description = el.find("description").text
-                episode.image = self._set_episode_image(el, itunes_ns, yahoo_ns)
+        for el in elements:
+            episode = Episode()
+            self._pubdate_to_timestamp(el.find("pubDate").text, episode)
+            episode.title = el.find("title").text
+            episode.guid = el.find("guid").text
+            episode.description = el.find("description").text
+            episode.image = self._set_episode_image(el, itunes_ns, yahoo_ns)
 
-                e = el.find("enclosure")
-                if e is not None:
-                    episode.url = e.get("url")
-                    episode.enclosure_length = e.get("length")
+            e = el.find("enclosure")
+            if e is not None:
+                episode.url = e.get("url")
+                episode.enclosure_length = e.get("length")
 
                 if (
                     episode.pubDate
@@ -46,10 +51,6 @@ class Parser:
                     and episode.guid
                 ):
                     episodes.append(episode)
-
-        except ET.ParseError as pe:
-            logging.info(f"Can't parse file {filename} : {pe}")
-
         return episodes
 
     def _set_episode_image(self, el, itunes_ns, yahoo_ns):
@@ -63,9 +64,8 @@ class Parser:
                 x = elements[0].get("url")
         return x
 
-    def _fetch_root(self, filename):
-        tree = ET.parse(filename)
-        root = tree.getroot()
+    def _fetch_root(self):
+        root = self.tree.getroot()
         return root
 
     def _pubdate_to_timestamp(self, timestamp, episode):
@@ -76,7 +76,7 @@ class Parser:
             # ordering of the web report into a rough chrono order,
             # and podcasts aren't published so frequently as to make
             # this kind of precision necessary.
-            
+
             episode.mktime = dateutil_parser.parse(timestamp, ignoretz=True)
             episode.pubDate = timestamp
         except ValueError as e:
@@ -90,7 +90,8 @@ class Parser:
 
 def dumpx(filepath):
     p = Parser()
-    eps = p.items(filepath)
+    p.parse(filepath)
+    eps = p.episodes
     for e in eps[0:200]:
         print(e.basename())
 

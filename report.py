@@ -70,8 +70,9 @@ def sort_reverse_chronologically(reportdata):
 
 def enumerate_all_downloaded_episodes(subscription, reportdata):
     p = parser.Parser()
-    channel_image = p.channel_image(subscription.rssfile)
-    episodes = p.items(subscription.rssfile)
+    p.parse(subscription.rssfile)
+    channel_image = p.channel_image()
+    episodes = p.episodes()
 
     for e in episodes:
         if subscription.database.find(e.guid):
