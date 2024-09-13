@@ -5,6 +5,7 @@ import xml.etree.ElementTree
 import parser
 from lib import initialize_subscription
 from subscription import Subscription
+import logging
 
 
 class ReportDatum:
@@ -70,14 +71,19 @@ def sort_reverse_chronologically(reportdata):
 
 def enumerate_all_downloaded_episodes(subscription, reportdata):
     p = parser.Parser()
-    p.parse(subscription.rssfile)
-    channel_image = p.channel_image()
-    episodes = p.episodes()
+    inputfile = subscription.rssfile
+    try:
+        p.parse(inputfile)
+        channel_image = p.channel_image()
+        episodes = p.episodes()
 
-    for e in episodes:
-        if subscription.database.find(e.guid):
-            d = ReportDatum(e, subscription, channel_image)
-            reportdata.append(d)
+        for e in episodes:
+            if subscription.database.find(e.guid):
+                d = ReportDatum(e, subscription, channel_image)
+                reportdata.append(d)
+
+    except xml.etree.ElementTree.ParseError as pe:
+        logging.info(f"Can't parse file {inputfile} : {pe}")
 
 
 def episode_href(episode):

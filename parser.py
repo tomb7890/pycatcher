@@ -9,15 +9,13 @@ class Parser:
     def __init__(self):
         # this may be obsolete.
         self.strict = True
+        self.tree = None
 
     def parse(self, filename):
         self.filename = filename
-        try:
-            self.tree = ET.parse(self.filename)
-        except ET.ParseError as pe:
-            logging.info(f"Can't parse file {self.filename} : {pe}")
+        self.tree = ET.parse(self.filename)
 
-    def channel_image(self): 
+    def channel_image(self):
         x = self.tree.findall(".//image//url")
         if len(x) > 0:
             return x[0].text
